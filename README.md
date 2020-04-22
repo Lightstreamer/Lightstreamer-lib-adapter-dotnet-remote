@@ -23,7 +23,7 @@ To build the library, follow below steps:
 
 ## Compatibility ##
 
-The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.8.
+The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.8.x.
 
 
 ## Documentation
