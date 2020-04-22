@@ -26,7 +26,7 @@ To build the library, follow below steps:
 The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.8.x.
 
 
-## Documentation
+## External Links
 
 - [NuGet package](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Adapters/)
 
@@ -34,7 +34,7 @@ The library is compatible with [Adapter Remoting Infrastructure](https://lightst
 
 - [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
 
-## Other GitHub projects using this library
+## Other GitHub Projects Using this Library
 
 - [Lightstreamer - Reusable Metadata Adapters - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-dotnet)
 
