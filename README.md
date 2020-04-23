@@ -10,7 +10,7 @@ The .NET Standard allows greater uniformity through the .NET ecosystem and works
 
 ### The ARI Architecture
 
-Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/remoting_base/Adapter%20Remoting%20Infrastructure.pdf). 
+Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the ![Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/remoting_base/Adapter%20Remoting%20Infrastructure.pdf). 
 
 *The Architecture of Adapter Remoting Infrastructure for .NET.*
 
@@ -40,25 +40,28 @@ To build the library, follow below steps:
 
 ## Compatibility
 
-The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.8.x.
+The library is compatible with ![Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.9.x.
 
 
 ## External Links
 
-- [NuGet package](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Adapters/)
+- ![NuGet package](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Adapters/)
 
-- [Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
+- ![Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
 
-- [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
+- ![API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
 
 ## Other GitHub Projects Using this Library
 
-- [Lightstreamer - Reusable Metadata Adapters - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-dotnet)
+- ![Lightstreamer - Reusable Metadata Adapters - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-dotnet)
+- ![Lightstreamer - "Hello World" Tutorial - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-HelloWorld-adapter-dotnet)
+- ![Lightstreamer - Stock-List Demo - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-Stocklist-adapter-dotnet)
+- ![Lightstreamer - Portfolio Demo - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-Portfolio-adapter-dotnet)
 
 ## Support
 
-For questions and support please use the [Official Forum](https://forums.lightstreamer.com/). The issue list of this page is **exclusively** for bug reports and feature requests.
+For questions and support please use the ![Official Forum](https://forums.lightstreamer.com/). The issue list of this page is **exclusively** for bug reports and feature requests.
 
 ## License
 
-[Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+![Apache 2.0](https://opensource.org/licenses/Apache-2.0)
