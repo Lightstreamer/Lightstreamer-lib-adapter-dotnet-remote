@@ -12,8 +12,6 @@ The .NET Standard allows greater uniformity through the .NET ecosystem and works
 
 Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/remoting_base/Adapter%20Remoting%20Infrastructure.pdf). 
 
-*The Architecture of Adapter Remoting Infrastructure for .NET.*
-
 ![architecture](generalarchitecture.PNG)
 
 ARI is simply made up of two types of Proxy Adapters and a *Network Protocol*. The two Proxy Adapters, one implementing the Data Adapter interface and the other implementing the Metadata Adapter interface, are meant to be plugged into Lightstreamer Kernel.
