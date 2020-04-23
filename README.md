@@ -35,6 +35,12 @@ To build the library, follow below steps:
 	- System.Configuration.ConfigurationManager
 5. Build the project
 
+### LiteralBasedProvider
+
+In the package we officially distribute through NuGet [Lightstreamer.DotNetStandard.Adapters](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Adapters/) the LiteralBasedProvider class is already included.
+But it is not included in this project since there is a dedicated project.
+It is used in some of our examples and in case you need it with your version of these adapters you should consider including this project [Lightstreamer - Reusable Metadata Adapters - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-dotnet).
+
 
 ## Compatibility
 
