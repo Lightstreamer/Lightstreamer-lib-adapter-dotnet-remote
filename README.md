@@ -3,7 +3,7 @@
 This project includes the source code of the Lightstreamer .Net Remote Adapter. This resource is needed to develop Remote Data Adapters and Remote Metadata Adapters for [Lightstreamer Server](http://www.lightstreamer.com/) in a .NET environment.
 
 Each Lightstreamer session requires the presence of an Adapter Set, which is made up of one Metadata Adapter and one or multiple Data Adapters. Multiple Adapter Sets can be plugged onto Lightstreamer Server.
-The adapters will run in a separate process, communicating with the Server through the Proxy Adapters.
+The adapters will run in a separate process, communicating with the Server through corresponding `Proxy Adapters` embedded in the Lightstreamer server.
 
 This SDK is designed for .NET Standard API Specifications 2.0 and greater.
 The .NET Standard allows greater uniformity through the .NET ecosystem and works seamlessly with .NET Core, .NET Framework, Mono, Unity, Xamarin and UWP apps.
@@ -22,7 +22,7 @@ Basically, a Proxy Adapter exposes the Adapter interface through TCP sockets. In
 But, if your remote Adapter is based on certain languages/technologies (such as Java, .NET, and Node.js), you can forget about direct socket programming, and leverage a ready-made library that exposes a higher level interface. Now, you will simply have to implement this higher level interface.<br>
 
 In this specific project we provide the full sorce code that makes up the <b>Lightstreamer .NET Standard Adapter API</b> library.
-So, let's recap... the Proxy Data Adapter converts from a Java interface to TCP sockets, and the .NET Standard library converts from TCP sockets to a .NET interface.
+So, let's recap... the Proxy Adapter converts from a Java interface to TCP sockets, and the .NET Standard library converts from TCP sockets to a .NET interface.
 
 ![architecture](architecture.png)
 
