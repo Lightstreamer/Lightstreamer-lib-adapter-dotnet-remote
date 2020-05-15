@@ -284,3 +284,44 @@ Removed the examples, which are now only hosted on GitHub and managed through
 the new "demos" site. Provided suitable references to find the examples there.
 
 Modified the SDK versioning, which now differs from the internal dll versioning.
+
+
+## 1.7 - Released on 20 Dec 2012
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.4.3</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Improved the performances under high update load.
+
+Relieved the restrictions on the use of the NotifyNewTables method,
+according with the locking policy change introduced in SDK for Java In-Process Adapters
+version 5.1.
+
+
+## 1.7 - Released on 3 Aug 2012
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.4</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Clarified the API documentation in several points.
+
+
+## 1.7 - Released on 6 Apr 2012
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.4</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Fixed a bug that affected the special Update method overloads based on the
+IItemEvent and IIndexedItemEvent interfaces. In case the "robust" version of the
+Proxy Data Adapter had been in use, the updates could have been discarded.
+
+Improved the extraction of HTTP headers supplied to NotifyUser.
+
+Clarified the API documentation in several points.
+
+
+## 1.7 - Released on 7 Jun 2011
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.4</i><br/>
+
+Introduction of Lightstreamer "Duomo" release (Server 4.0).
