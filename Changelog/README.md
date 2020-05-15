@@ -191,3 +191,97 @@ file in the new "conf" directory for details.
 Improved logging; now the keepalives can be excluded from the the detailed log of request, reply and notification messages.
 
 Fixed obsolete notes in the docs for DataProvider and MetadataProvider interfaces on the way implementations are supplied.
+
+
+## 1.9 - Released on 16 Jul 2015
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Improved logging; now the detailed log of request-reply messages not including notification messages (i.e. data updates) is possible.
+
+Reduced some long pathnames in the docs pages, which could cause issues on some systems.
+
+
+## 1.9 - Released on 21 Jan 2015
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
+
+Introduced the possibility to provide Adapter initialization parameters
+directly from the Proxy Adapter configuration; such parameters (to be
+supplied as explained in the Adapter Remoting Infrastructure documentation)
+will be added to those already received by the Metadata or Data Adapter
+Init method.<br/>
+As a consequence, the Init method of a Remote Adapter is no longer invoked
+upon Remote Server startup, but only after the connection with the Proxy
+Adapter has been established.<br/>
+<b>COMPATIBILITY NOTE:<b/>
+The move of initialization stuff performed in the Init method from before
+to after the connection attempt may be undesirable. If this is the case:
+<ul>
+- if the Remote Adapter is run through the supplied DotNetServer_N2.exe,
+the new /initonstart argument can be added to the command line, to restore
+the old behavior;
+- if the Remote Adapter is run by a custom launcher, the same can be
+achieved by creating the involved "MetadataProviderServer" or "DataProviderServer"
+with the new 1-argument constructor (see the docs);
+- alternatively, with a custom launcher, any initialization stuff that
+must precede the connection may be moved out of the Adapter Init method,
+into a custom method of the Adapter class that can be directly invoked
+by the launcher before the invocation of Start on the involved
+"MetadataProviderServer" or "DataProviderServer";
+this would keep the advantages of the extension.
+
+Extended the MetadataProvider interface to support the new
+Push Notification Service (aka MPN Module). When enabled, the new methods will be
+invoked in order to validate client requests related with the service. See the
+interface docs for details.<br/>
+<b>COMPATIBILITY NOTE:b/> Existing Remote Metadata Adapter
+source code has to be extended in order to be compiled with the new dll
+(the new methods could just throw a NotificationException),
+unless the Adapter class inherits from one of the supplied LiteralBasedProvider
+or MetadataProviderAdapter. In the latter case, the Adapter will accept
+any MPN-related request; however, MPN-related client requests can be satisfied
+only if the involved "app" has been properly configured.<br/>
+On the other hand, existing Remote Metadata Adapter binaries hosted by an old
+version of the .NET Adapter SDK still run with the new version of Lightstreamer
+Server and the Proxy Adapters, as long as the MPN Module is not enabled.
+
+Introduced the "ClearSnapshot" operations on the Remote Server's IItemEventListener,
+for clearing the state of an item in a single step (or, in DISTINCT mode, for
+notifying compatible clients that the update history should be discarded).
+See the interface docs for details.<br/>
+<b>COMPATIBILITY NOTE:<b/>
+Existing Data Adapters don't need to be extended or recompiled.
+
+Removed the dependency of the SDK library from log4net for its own logging.
+Custom launchers should use the new static SetLoggerProvider function in the
+"Server" class to provide suitable consumers, by implementing new dedicated
+interfaces (see the docs for details).<br/>
+<b>COMPATIBILITY NOTE:<b/> Existing custom launchers will still run with the new
+SDK library, but they won't print any log coming from the library itself;
+in order to print such log, they have to be extended.
+The supplied DotNetServer_N2.exe still leans on log4net, over which it
+forwards all library's log.<br/>
+Updated the included log4net dll to version 1.2.13; note that, according
+with the above change, the log4net library is no longer required in order
+to compile the Adapters, but only in order to run DotNetServer_N2.exe.
+
+Changed DotNetServer_N2.exe so that the /host command line argument is now
+mandatory; this disallows the use in combination with the "Piped" versions
+of the Proxy Adapters.<br/>
+<b>COMPATIBILITY NOTE:</b> this is just a consequence of the discontinuation of "Piped" versions brought
+by Adapter Remoting Infrastructure 1.7; see related notes.
+
+Fixed an error in the documentation of the WinIndex property in the TableInfo class;
+clarified how the field can be used to match subscription and unsubscription requests.
+
+Simplified the included documentation, to lean on the Adapter Remoting
+Infrastructure documentation for architectural aspects and on the available
+examples for the deployment aspects.
+
+Removed the examples, which are now only hosted on GitHub and managed through
+the new "demos" site. Provided suitable references to find the examples there.
+
+Modified the SDK versioning, which now differs from the internal dll versioning.
