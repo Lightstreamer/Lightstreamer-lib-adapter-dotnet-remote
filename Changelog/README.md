@@ -131,7 +131,7 @@ in NotifyMpnSubscriptionActivation. Now, simple instances of
 MpnSubscriptionInfo will be supplied and attribute information can be
 obtained through the new NotificationFormat property.
 See the MPN chapter on the General Concepts document for details on the
-characteristics of the Notification Format.
+characteristics of the Notification Format.<br/>
 <b>COMPATIBILITY NOTE:</b> Existing Remote Metadata Adapters
 leveraging NotifyMpnSubscriptionActivation and inspecting the supplied
 MpnSubscriptionInfo have to be ported to the new class contract.
