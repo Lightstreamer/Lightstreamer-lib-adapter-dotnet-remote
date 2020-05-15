@@ -1,8 +1,10 @@
 # Lightstreamer Changelog - Reusable Metadata Adapters - .NET Adapter
 
-## 1.12.1 <i>Released on 21 Jan 2020</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i>
+
+## 1.12.1 - <i>Released on 21 Jan 2020</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Fixed the default handling of parallelization of request processing, which was
@@ -15,7 +17,7 @@ Modified the handling of the keepalives when connected to a Proxy Adapter
 the preferred keepalive interval requested by the Proxy Adapter, when stricter
 than the configured one, is now obeyed (with a safety minimun of 1 second).
 Moreover, in that case, the default interval configuration is now 10 seconds
-instead of 1.
+instead of 1.<br/>
 <b>COMPATIBILITY NOTE:</b> If an existing installation relies
 on a very short keepalive interval to keep the connection alive due to intermediate
 nodes, the time should now be explcitly configured.
@@ -23,7 +25,7 @@ nodes, the time should now be explcitly configured.
 Deprecated the constructors of DataProviderServer and MetadataProviderServer
 that allow for the specification of initializeOnStart as true.
 These constructors will be removed in a future update, as the initializeOnStart
-flag was just meant as a temporary backward compatibility trick.
+flag was just meant as a temporary backward compatibility trick.<br/>
 <b>COMPATIBILITY NOTE:</b> Existing code and binaries
 using the deprecated constructors are still supported, but it is recommended
 to align the code. See the notes in the constructor documentations for details.
@@ -34,10 +36,10 @@ Added clarifications in the documentation of the exception handlers and fix
 a few obsolete notes.
 
 
-## 1.12.0 build 1030 <i>Released on 28 Jan 2019</i>
+## 1.12.0 - <i>Released on 28 Jan 2019</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i>
-<i>Compatible with code developed with the previous version.</i>
+<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
 <i>May not be compatible with the deployment structure of the previous version; see the compatibility notes below.</i>
 
 Renamed the SDK, which was named "SDK for .NET Adapters",
@@ -60,7 +62,7 @@ Made the library available through the NuGet online service. For previous versio
 the binaries were included in Lightstreamer distribution package.
 
 Removed the DotNetServer.exe utility, which allowed for the configuration and launch
-of single Remote Adapter instances, with a basic handling of connections and errors.
+of single Remote Adapter instances, with a basic handling of connections and errors.<br/>
 <b>COMPATIBILITY NOTE:</b> Current istallations that take
 advantage of the DotNetServer.exe utility should be integrated with a custom launcher;
 see the provided demos, which all include simple custom launchers for the adapters,
@@ -72,11 +74,11 @@ Credential check is an optional configuration of the Proxy Adapter; if not lever
 the credentials will be ignored.
 
 Added full support for ARI Protocol extensions introduced in Adapter Remoting Infrastructure
-version 1.9.
+version 1.9.<br/>
 <b>COMPATIBILITY NOTE:</b> If Adapter Remoting Infrastructure 1.8.x
 (corresponding to Server 7.0.x) is used and credentials to be sent to the Proxy Adapter
 are specified, they will obviously be ignored, but the Proxy Adapter will issue some
-log messages at WARN level on startup.
+log messages at WARN level on startup.<br/>
 <b>COMPATIBILITY NOTE:</b> Only in the very unlikely case
 that Adapter Remoting Infrastructure 1.8.x (corresponding to Server 7.0.x) were used
 and a custom remote parameter named "ARI.version" were defined in adapters.xml,
