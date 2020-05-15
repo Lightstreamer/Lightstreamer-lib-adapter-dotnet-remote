@@ -216,10 +216,9 @@ Init method.<br/>
 As a consequence, the Init method of a Remote Adapter is no longer invoked
 upon Remote Server startup, but only after the connection with the Proxy
 Adapter has been established.<br/>
-<b>COMPATIBILITY NOTE:<b/>
+<b>COMPATIBILITY NOTE:</b>
 The move of initialization stuff performed in the Init method from before
 to after the connection attempt may be undesirable. If this is the case:
-<ul>
 - if the Remote Adapter is run through the supplied DotNetServer_N2.exe,
 the new /initonstart argument can be added to the command line, to restore
 the old behavior;
@@ -237,7 +236,7 @@ Extended the MetadataProvider interface to support the new
 Push Notification Service (aka MPN Module). When enabled, the new methods will be
 invoked in order to validate client requests related with the service. See the
 interface docs for details.<br/>
-<b>COMPATIBILITY NOTE:<b/> Existing Remote Metadata Adapter
+<b>COMPATIBILITY NOTE:</b> Existing Remote Metadata Adapter
 source code has to be extended in order to be compiled with the new dll
 (the new methods could just throw a NotificationException),
 unless the Adapter class inherits from one of the supplied LiteralBasedProvider
@@ -252,14 +251,14 @@ Introduced the "ClearSnapshot" operations on the Remote Server's IItemEventListe
 for clearing the state of an item in a single step (or, in DISTINCT mode, for
 notifying compatible clients that the update history should be discarded).
 See the interface docs for details.<br/>
-<b>COMPATIBILITY NOTE:<b/>
+<b>COMPATIBILITY NOTE:</b>
 Existing Data Adapters don't need to be extended or recompiled.
 
 Removed the dependency of the SDK library from log4net for its own logging.
 Custom launchers should use the new static SetLoggerProvider function in the
 "Server" class to provide suitable consumers, by implementing new dedicated
 interfaces (see the docs for details).<br/>
-<b>COMPATIBILITY NOTE:<b/> Existing custom launchers will still run with the new
+<b>COMPATIBILITY NOTE:</b> Existing custom launchers will still run with the new
 SDK library, but they won't print any log coming from the library itself;
 in order to print such log, they have to be extended.
 The supplied DotNetServer_N2.exe still leans on log4net, over which it
