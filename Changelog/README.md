@@ -47,7 +47,7 @@ to "SDK for .NET Standard Adapters". The new name emphasizes that it is now
 compliant with .NET Standard API Specifications 2.0.
 The .NET Standard allows greater uniformity through the .NET
 ecosystem and works seamlessly with .NET Core, .NET Framework,
-Mono, and UWP apps.
+Mono, and UWP apps.<br/>
 <b>COMPATIBILITY NOTE:</b> Existing applications that target the following platforms:
 
 - .NET Framework (>=4.6)</li>
