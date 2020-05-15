@@ -99,8 +99,7 @@ Added clarifications on licensing matters in the docs.
 ## 1.11.0 - <i>Released on 20 Dec 2017</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
-<i>May not be compatible with code developed with the previous version;
-see compatibility notes below.</i>
+<i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
 
 Modified the interface in the part related to Mobile Push Notifications,
 after the full revision of Lightstreamer Server's MPN Module. In particular:
@@ -143,3 +142,52 @@ Added checks to protect the MetadataProviderServer and DataProviderServer object
 Clarified in the docs for notifySessionClose which race conditions with other methods can be expected.
 
 Aligned the documentation to comply with current licensing policies.
+
+
+## 1.10.0 - Released on 23 Jan 2017
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Improved the app configuration example, by showing how to configure the keepalive messages.
+
+
+## 1.10.0 - Released on 10 May 2016
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
+
+Dropped the compatibility with .NET environment versions prior to 4.0. 4.0 or later is now required.<br/>
+<b>COMPATIBILITY NOTE:</b> Check the .NET runtime
+environment in use before updating existing Remote Adapter installations.
+If the Remote Adapter is run by a custom launcher, and if the application
+had been compiled for an earlier .NET environment, the loading of the new
+library may fail. In this case, the application has to be recompiled and
+possibly ported to a 4.0 or later target environment.
+
+As a consequence of the new runtime requirements, the names of the provided
+exe and dll files have changed, to lose the _N2 suffix.<br/>
+<b>COMPATIBILITY NOTE:</b> Existing Remote Adapter
+installations may require some renaming within some custom script.
+If the Remote Adapter is run by a custom launcher, a rebuild of the
+application may be needed to refer to the new dll name.
+
+Introduced parallelization of the invocations of methods on the Remote
+Metadata Adapter; in fact, previously, the invocations were always done
+sequentially, with possible inefficient use of the available resources.
+Several policies are now available for both Metadata and Data Adapter method
+invocation, and can be configured through the application configuration;
+see the new sample file in the new "conf" directory for details.<br/>
+By default, the invocations to the Metadata Adapter methods are now done
+in parallel.<br/>
+<b>COMPATIBILITY NOTE:</b> If existing
+Remote Metadata Adapters don't support concurrent invocations, sequential
+invocations should be restored by configuration.
+
+Introduced the possibility to configure the keepalive time (which was fixed
+to one second) through the application configuration; see the new sample
+file in the new "conf" directory for details.
+
+Improved logging; now the keepalives can be excluded from the the detailed log of request, reply and notification messages.
+
+Fixed obsolete notes in the docs for DataProvider and MetadataProvider interfaces on the way implementations are supplied.
