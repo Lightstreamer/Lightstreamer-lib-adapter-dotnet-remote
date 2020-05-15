@@ -237,7 +237,7 @@ Extended the MetadataProvider interface to support the new
 Push Notification Service (aka MPN Module). When enabled, the new methods will be
 invoked in order to validate client requests related with the service. See the
 interface docs for details.<br/>
-<b>COMPATIBILITY NOTE:b/> Existing Remote Metadata Adapter
+<b>COMPATIBILITY NOTE:<b/> Existing Remote Metadata Adapter
 source code has to be extended in order to be compiled with the new dll
 (the new methods could just throw a NotificationException),
 unless the Adapter class inherits from one of the supplied LiteralBasedProvider
