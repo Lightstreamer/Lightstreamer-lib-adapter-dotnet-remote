@@ -86,3 +86,60 @@ this SDK would not be compatible with Lightstreamer Server, hence the Server sho
 (or a different parameter name should be used).
 
 Embedded the sample app.config file in the docs package, for convenience.
+
+
+## 1.11.0 - <i>Released on 28 Feb 2018</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Added clarifications on licensing matters in the docs.
+
+
+## 1.11.0 - <i>Released on 20 Dec 2017</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>May not be compatible with code developed with the previous version;
+see compatibility notes below.</i>
+
+Modified the interface in the part related to Mobile Push Notifications,
+after the full revision of Lightstreamer Server's MPN Module. In particular:
+ - Modified the signature of the NotifyMpnDeviceAccess and
+NotifyMpnDeviceTokenChange methods of the MetadataProvider interface,
+to add a session ID argument.<br/>
+<b>COMPATIBILITY NOTE:</b> Existing Remote Metadata Adapter
+source code has to be ported in order to be compiled with the new dll,
+unless the Adapter class inherits from the supplied MetadataProviderAdapter
+or LiteralBasedProvider and the above methods are not defined.<br/>
+On the other hand, existing Remote Metadata Adapter binaries still run
+with the new version of Lightstreamer Server and the Proxy Adapters,
+as long as they keep being hosted by an old version of the .NET Adapter SDK
+and the MPN Module is disabled.
+Otherwise, they should be ported to the new SDK version and recompiled.
+ - Revised the public constants defined in the MpnPlatformType class.
+The constants referring to the supported platforms have got new names and
+corresponding new values, whereas the constants for platforms not yet
+supported have been removed.<br/>
+<b>COMPATIBILITY NOTE:</b> Existing Remote Metadata Adapters
+explicitly referring to the constants have to be aligned.
+Even if just testing the values of the MpnPlatformType objects received
+as MpnDeviceInfo.Type, they still have to be aligned.
+ - Removed the subclasses of MpnSubscriptionInfo (namely
+MpnApnsSubscriptionInfo and MpnGcmSubscriptionInfo) that were used
+by the SDK library to supply the attributes of the MPN subscriptions
+in NotifyMpnSubscriptionActivation. Now, simple instances of
+MpnSubscriptionInfo will be supplied and attribute information can be
+obtained through the new NotificationFormat property.
+See the MPN chapter on the General Concepts document for details on the
+characteristics of the Notification Format.
+<b>COMPATIBILITY NOTE:</b> Existing Remote Metadata Adapters
+leveraging NotifyMpnSubscriptionActivation and inspecting the supplied
+MpnSubscriptionInfo have to be ported to the new class contract.
+ - Added equality checks based on the content in MpnDeviceInfo and MpnSubscriptionInfo.
+ - Improved the interface documentation in various parts.
+
+Added checks to protect the MetadataProviderServer and DataProviderServer objects from reuse, which is forbidden.
+
+Clarified in the docs for notifySessionClose which race conditions with other methods can be expected.
+
+Aligned the documentation to comply with current licensing policies.
