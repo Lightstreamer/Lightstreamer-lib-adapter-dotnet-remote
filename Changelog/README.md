@@ -1,4 +1,4 @@
-# Lightstreamer Changelog - Reusable Metadata Adapters - .NET Adapter
+# Lightstreamer Changelog - SDK for .NET Standard Adapters
 
 
 
