@@ -18,17 +18,18 @@ the preferred keepalive interval requested by the Proxy Adapter, when stricter
 than the configured one, is now obeyed (with a safety minimun of 1 second).
 Moreover, in that case, the default interval configuration is now 10 seconds
 instead of 1.<br/>
-<b>COMPATIBILITY NOTE:</b> If an existing installation relies
+<b>COMPATIBILITY NOTE:</b> <i>If an existing installation relies
 on a very short keepalive interval to keep the connection alive due to intermediate
-nodes, the time should now be explcitly configured.
+nodes, the time should now be explcitly configured.</i>
 
 Deprecated the constructors of DataProviderServer and MetadataProviderServer
 that allow for the specification of initializeOnStart as true.
 These constructors will be removed in a future update, as the initializeOnStart
 flag was just meant as a temporary backward compatibility trick.<br/>
-<b>COMPATIBILITY NOTE:</b> Existing code and binaries
+<b>COMPATIBILITY NOTE:</b> <i>Existing code and binaries
 using the deprecated constructors are still supported, but it is recommended
-to align the code. See the notes in the constructor documentations for details.
+to align the code. See the notes in the constructor documentations for details.</i>
+
 Improved the documentation of the Start method of the DataProviderServer and
 MetadataProviderServer classes, to clarify the behavior.
 
