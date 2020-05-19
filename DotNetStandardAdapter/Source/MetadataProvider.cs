@@ -15,14 +15,14 @@ using System.Collections;
 
 namespace Lightstreamer.Interfaces.Metadata {
 
-	// ////////////////////////////////////////////////////////////////////////
-	// Exceptions
+    // ////////////////////////////////////////////////////////////////////////
+    // Exceptions
 
-	/// <summary>
-	/// Thrown by the Init method in IMetadataProvider if there is some problem that prevents the correct
-	/// behavior of the Metadata Adapter. If this exception occurs, Lightstreamer Kernel must give up the startup.
-	/// </summary>
-	public class MetadataProviderException : MetadataException {
+    /// <summary>
+    /// Thrown by the Init method in <see cref="IMetadataProvider"/> if there is some problem that prevents the correct
+    /// behavior of the Metadata Adapter. If this exception occurs, Lightstreamer Kernel must give up the startup.
+    /// </summary>
+    public class MetadataProviderException : MetadataException {
 
 		/// <summary>
 		/// Constructs a MetadataProviderException with a supplied error message text.
@@ -31,11 +31,11 @@ namespace Lightstreamer.Interfaces.Metadata {
 		public MetadataProviderException(string msg) : base(msg) {}
 	}
 
-	/// <summary>
-	/// Thrown by the Notify* methods in IMetadataProvider if the supplied User is not recognized or
-	/// a functionality is not implemented for this User.
-	/// </summary>
-	public class AccessException : MetadataException {
+    /// <summary>
+    /// Thrown by the Notify* methods in <see cref="IMetadataProvider"/> if the supplied User is not recognized or
+    /// a functionality is not implemented for this User.
+    /// </summary>
+    public class AccessException : MetadataException {
 
 		/// <summary>
 		/// Constructs an AccessException with a supplied error message text.
@@ -44,13 +44,13 @@ namespace Lightstreamer.Interfaces.Metadata {
 		public AccessException(string msg) : base(msg) {}
 	}
 
-	/// <summary>
-	/// Thrown by the Notify* methods in IMetadataProvider if some functionality cannot be allowed
-	/// to the supplied User. This may occur if the user is not granted some resource or if the user
-	/// would exceed the granted amount. Different kinds of problems can be distinguished by an error code.
-	/// Both the error message detail and the error code will be forwarded by Lightstreamer Kernel to the Client.
-	/// </summary>
-	public class CreditsException : MetadataException {
+    /// <summary>
+    /// Thrown by the Notify* methods in <see cref="IMetadataProvider"/> if some functionality cannot be allowed
+    /// to the supplied User. This may occur if the user is not granted some resource or if the user
+    /// would exceed the granted amount. Different kinds of problems can be distinguished by an error code.
+    /// Both the error message detail and the error code will be forwarded by Lightstreamer Kernel to the Client.
+    /// </summary>
+    public class CreditsException : MetadataException {
 		private int _clientErrorCode;
 		private string _clientErrorMsg;
 
@@ -79,36 +79,36 @@ namespace Lightstreamer.Interfaces.Metadata {
 			_clientErrorMsg= userMsg;
 		}
 
-		/// <summary>
+		/// <value>
 		/// Readonly. The error code to be forwarded to the client.
-		/// </summary>
+		/// </value>
 		public int ClientErrorCode {
 			get {
 				return _clientErrorCode;
 			}
 		}
 
-		/// <summary>
+        /// <value>
         /// Readonly. The error detail message to be forwarded to the client.
         /// If the message is not in simple ASCII or is in multiline format,
         /// the real text sent to the client might be altered.
-		/// </summary>
-		public string ClientErrorMsg {
+        /// </value>
+        public string ClientErrorMsg {
 			get {
 				return _clientErrorMsg;
 			}
 		}
 	}
 
-	/// <summary>
-	/// <para>Thrown by the NotifyNewSession method of IMetadataProvider
-	/// if a User is not enabled to open a new Session but he would be enabled
-	/// as soon as another Session were closed. By using this exception,
-	/// the ID of the other Session is also supplied.</para>
-	/// <para>After receiving this exception, the Server may try to close
-	/// the specified session and invoke NotifyNewSession again.</para>
-	/// </summary>
-	public class ConflictingSessionException : CreditsException {
+    /// <summary>
+    /// <para>Thrown by the NotifyNewSession method of <see cref="IMetadataProvider"/>
+    /// if a User is not enabled to open a new Session but he would be enabled
+    /// as soon as another Session were closed. By using this exception,
+    /// the ID of the other Session is also supplied.</para>
+    /// <para>After receiving this exception, the Server may try to close
+    /// the specified session and invoke NotifyNewSession again.</para>
+    /// </summary>
+    public class ConflictingSessionException : CreditsException {
 		private string _conflictingSessionID;
 
 		/// <summary>
@@ -128,10 +128,10 @@ namespace Lightstreamer.Interfaces.Metadata {
 			_conflictingSessionID= conflictingSessionID;
 		}
 
-		/// <summary>
+		/// <value>
         /// Readonly. The ID of a Session that can be closed in order
         /// to eliminate the problem reported in this exception.
-		/// </summary>
+		/// </value>
 		public string ConflictingSessionID {
 			get {
 				return _conflictingSessionID;
@@ -139,11 +139,11 @@ namespace Lightstreamer.Interfaces.Metadata {
 		}
 	}
 
-	/// <summary>
-	/// Thrown by the GetItems and GetSchema methods in IMetadataProvider if the supplied
+    /// <summary>
+    /// Thrown by the GetItems and GetSchema methods in <see cref="IMetadataProvider"/> if the supplied
     /// Item Group name (or Item List specification) is not recognized or cannot be resolved.
-	/// </summary>
-	public class ItemsException : MetadataException {
+    /// </summary>
+    public class ItemsException : MetadataException {
 
 		/// <summary>
 		/// Constructs an ItemsException with a supplied error message text.
@@ -152,11 +152,11 @@ namespace Lightstreamer.Interfaces.Metadata {
 		public ItemsException(string msg) : base(msg) {}
 	}
 
-	/// <summary>
-	/// Thrown by the GetSchema method in IMetadataProvider if the supplied
+    /// <summary>
+    /// Thrown by the GetSchema method in <see cref="IMetadataProvider"/> if the supplied
     /// Field Schema name (or Field List specification) is not recognized or cannot be resolved.
-	/// </summary>
-	public class SchemaException : MetadataException {
+    /// </summary>
+    public class SchemaException : MetadataException {
 
 		/// <summary>
 		/// Constructs a SchemaException with a supplied error message text.
@@ -165,12 +165,12 @@ namespace Lightstreamer.Interfaces.Metadata {
 		public SchemaException(string msg) : base(msg) {}
 	}
 
-	/// <summary>
-	/// Thrown by the Notify* methods in IMetadataProvider if there is some inconsistency in the supplied
-	/// parameters. Lightstreamer Kernel ensures that such conditions will never occur, but they may
-	/// be checked for debugging or documentation reasons.
-	/// </summary>
-	public class NotificationException : MetadataException {
+    /// <summary>
+    /// Thrown by the Notify* methods in <see cref="IMetadataProvider"/> if there is some inconsistency in the supplied
+    /// parameters. Lightstreamer Kernel ensures that such conditions will never occur, but they may
+    /// be checked for debugging or documentation reasons.
+    /// </summary>
+    public class NotificationException : MetadataException {
 
 		/// <summary>
 		/// Constructs a NotificationException with a supplied error message text.
@@ -189,17 +189,17 @@ namespace Lightstreamer.Interfaces.Metadata {
 	/// </summary>
 	public class Mode {
 
-		/// <summary>The RAW Mode.</summary>
-		public static readonly Mode RAW= new Mode("RAW");
+        /// <value>The RAW Mode.</value>
+        public static readonly Mode RAW= new Mode("RAW");
 
-		/// <summary>The MERGE Mode.</summary>
-		public static readonly Mode MERGE= new Mode("MERGE");
+        /// <value>The MERGE Mode.</value>
+        public static readonly Mode MERGE= new Mode("MERGE");
 
-		/// <summary>The DISTINCT Mode.</summary>
-		public static readonly Mode DISTINCT= new Mode("DISTINCT");
+        /// <value>The DISTINCT Mode.</value>
+        public static readonly Mode DISTINCT= new Mode("DISTINCT");
 
-		/// <summary>The COMMAND Mode.</summary>
-		public static readonly Mode COMMAND= new Mode("COMMAND");
+        /// <value>The COMMAND Mode.</value>
+        public static readonly Mode COMMAND= new Mode("COMMAND");
 
 		private string _name;
 
@@ -279,7 +279,7 @@ namespace Lightstreamer.Interfaces.Metadata {
 			_selector= selector;
 		}
 
-		/// <summary>
+		/// <value>
         /// Readonly. Unique identifier of the client subscription request within the session.
         /// This allows for matching the corresponding subscription and unsubscription requests.
         /// Note that, for clients based on a very old version of a client library
@@ -289,67 +289,67 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// NotifyTablesClose. In this case, the value returned
         /// is the same for all these objects and the single Tables (i.e.: Subscriptions)
         /// can be identified by their relative position in the array.
-		/// </summary>
+		/// </value>
 		public int WinIndex {
 			get {
 				return _winIndex;
 			}
 		}
 
-		/// <summary>
-		/// Readonly. The publishing Mode for the Items in the Table (i.e. Subscription)
-		/// (it must be the same across all the Table).
-		/// </summary>
-		public Mode Mode {
+        /// <value>
+        /// Readonly. The publishing Mode for the Items in the Table (i.e. Subscription)
+        /// (it must be the same across all the Table).
+        /// </value>
+        public Mode Mode {
 			get {
 				return _mode;
 			}
 		}
 
-		/// <summary>
+        /// <value>
         /// Readonly. The name of the Item Group (or specification of the Item List)
         /// to which the subscribed Items belong.
-		/// </summary>
-		public string Id {
+        /// </value>
+        public string Id {
 			get {
 				return _group;
 			}
 		}
 
-		/// <summary>
+        /// <value>
         /// Readonly. The name of the Field Schema (or specification of the Field List)
         /// used for the subscribed Items.
-		/// </summary>
-		public string Schema {
+        /// </value>
+        public string Schema {
 			get {
 				return _schema;
 			}
 		}
 
-		/// <summary>
-		/// Readonly. The index of the first Item in the Group
-		/// to be considered in the Table (i.e. Subscription).
-		/// </summary>
-		public int Min {
+        /// <value>
+        /// Readonly. The index of the first Item in the Group
+        /// to be considered in the Table (i.e. Subscription).
+        /// </value>
+        public int Min {
 			get {
 				return _min;
 			}
 		}
 
-		/// <summary>
-		/// Readonly. The index of the last Item in the Group
-		/// to be considered in the Table (i.e. Subscription).
-		/// </summary>
-		public int Max {
+        /// <value>
+        /// Readonly. The index of the last Item in the Group
+        /// to be considered in the Table (i.e. Subscription).
+        /// </value>
+        public int Max {
 			get {
 				return _max;
 			}
 		}
 
-		/// <summary>
-		/// Readonly. The name of the optional Selector associated to the Table (i.e. Subscription).
-		/// </summary>
-		public string Selector {
+        /// <value>
+        /// Readonly. The name of the optional Selector associated to the Table (i.e. Subscription).
+        /// </value>
+        public string Selector {
 			get {
 				return _selector;
 			}
@@ -360,12 +360,12 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// <para>Identifies a Push Notifications platform type, used with MPN-related requests of the MetadataProvider.</para>
     /// <para>It is used by Lightstreamer to specify the platform associated with the notified client requests.</para>
     /// <para>The available constants refer to the platform types currently supported.</para>
-    /// </summary>
-    ///
-    /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
+    /// <br/>
+    /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
     /// available depending on Edition and License Type.
 	/// To know what features are enabled by your license, please see the License tab of the
-	/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
+	/// Monitoring Dashboard (by default, available at /dashboard).</para>
+    /// </summary>
     public class MpnPlatformType {
         private string _name;
 
@@ -377,27 +377,27 @@ namespace Lightstreamer.Interfaces.Metadata {
             _name= name;
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. The internal name of the platform type.
-        /// </summary>
+        /// </value>
         public string Name {
             get {
                 return _name;
             }
         }
 
-        /// <summary>
+        /// <value>
         /// <para>Readonly. Refers to Push Notifications for Apple platforms, such as iOS, macOS and tvOS.
         /// The back-end service for Apple platforms is APNs ("Apple Push Notification service").</para>
         /// <para>Apple, iOS, macOS and tvOS are registered trademarks of Apple, Inc.</para>
-        /// </summary>
+        /// </value>
         public static readonly MpnPlatformType Apple= new MpnPlatformType("Apple");
 
-        /// <summary>
+        /// <value>
         /// <para>Readonly. Refers to Push Notifications for Google platforms, such as Android and Chrome.
         /// The back-end service for Google platforms is FCM ("Firebase Cloud Messaging").</para>
         /// <para>Google, Android and Chrome are registered trademarks of Google Inc.</para>
-        /// </summary>
+        /// </value>
         public static readonly MpnPlatformType Google= new MpnPlatformType("Google");
 
         /// <summary>
@@ -415,6 +415,8 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// Indicates whether some other object is "equal to" this one.
         /// Two MpnPlatformType objects are equal if their internal names are equal.
         /// </summary>
+        /// <param name="other">The other object to be compared.</param>
+        /// <returns>true if the two objects are equal.</returns>
         public override bool Equals(object other) {
             MpnPlatformType platformType = other as MpnPlatformType;
             if (platformType == null) return false;
@@ -425,6 +427,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <summary>
         /// Returns a hash code value for the object.
         /// </summary>
+        /// <returns>Hash code value for the object.</returns>
         public override int GetHashCode() {
             return _name.GetHashCode();
         }
@@ -443,12 +446,12 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// <para>- The platform type.</para>
     /// <para>- The application ID.</para>
     /// <para>- The device token.</para>
-    /// </summary>
-    ///
-    /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
-    /// available depending on Edition and Lic<span>ense Ty</span>pe.
+    /// <br/>
+    /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
+    /// available depending on Edition and License Type.
 	/// To know what features are enabled by your license, please see the License tab of the
-	/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
+	/// Monitoring Dashboard (by default, available at /dashboard).</para>
+    /// </summary>
     public class MpnDeviceInfo {
         private MpnPlatformType _type;
         private string _applicationId;
@@ -470,27 +473,27 @@ namespace Lightstreamer.Interfaces.Metadata {
             _deviceToken = deviceToken;
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. Platform type of the device.
-        /// </summary>
+        /// </value>
         public MpnPlatformType Type {
             get {
                 return _type;
             }
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. Application ID, also known as the package name or bundle ID on some platforms.
-        /// </summary>
+        /// </value>
         public string ApplicationId {
             get {
                 return _applicationId;
             }
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. Token of the device, also know as the registration ID on some platforms.
-        /// </summary>
+        /// </value>
         public string DeviceToken {
             get {
                 return _deviceToken;
@@ -498,12 +501,12 @@ namespace Lightstreamer.Interfaces.Metadata {
         }
 
         /// <summary>
-        /// <para>Returns a string representation of the MpnDeviceInfo.
         /// An MpnDeviceInfo object is represented by a juxtaposition of its three properties
         /// platform type, application ID and device token, separated by a single "/" character.
-        /// E.g.:</para>
+        /// E.g.:
         /// <para>Apple/com.lightstreamer.ios.stocklist/8fac[...]fe12</para>
         /// </summary>
+        /// <returns>Returns a string representation of the MpnDeviceInfo.</returns>
         public override string ToString()
         {
             return _type.Name + "/" + _applicationId + "/" + _deviceToken;
@@ -513,6 +516,8 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// Indicates whether some other object is "equal to" this one.
         /// Two MpnDeviceInfo objects are equal if their three properties are equal.
         /// </summary>
+        /// <param name="other">The other object to be compared.</param>
+        /// <returns>true if the two objects are equal.</returns>
         public override bool Equals(object other)
         {
             MpnDeviceInfo deviceInfo = other as MpnDeviceInfo;
@@ -524,6 +529,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <summary>
         /// Returns a hash code value for the object.
         /// </summary>
+        /// <returns>Hash code value for the object.</returns>
         public override int GetHashCode()
         {
             return _type.GetHashCode() ^ _applicationId.GetHashCode() ^ _deviceToken.GetHashCode();
@@ -535,11 +541,12 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// <para>For the actual description of the subscription we rely on a generic descriptor accessible
     /// via the NotificationFormat property, where the structure of the descriptor depends on the platform.</para>
     /// </summary>
-    ///
-    /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
+    /// <br/>
+    /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
     /// available depending on Edition and License Type.
 	/// To know what features are enabled by your license, please see the License tab of the
-	/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
+	/// Monitoring Dashboard (by default, available at /dashboard).</para>
+    /// </summary>
     public class MpnSubscriptionInfo {
         private MpnDeviceInfo _device;
         private string _notification;
@@ -561,9 +568,9 @@ namespace Lightstreamer.Interfaces.Metadata {
             _trigger = trigger;
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. MPN device of this subscription.
-        /// </summary>
+        /// </value>
         public MpnDeviceInfo Device
         {
             get
@@ -572,11 +579,11 @@ namespace Lightstreamer.Interfaces.Metadata {
             }
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. The descriptor of the push notifications format of this subscription.
         /// The structure of the format descriptor depends on the platform type
         /// and it is represented in json.
-        /// </summary>
+        /// </value>
         public string NotificationFormat
         {
             get
@@ -585,9 +592,9 @@ namespace Lightstreamer.Interfaces.Metadata {
             }
         }
 
-        /// <summary>
+        /// <value>
         /// Readonly. Optional expression that triggers the delivery of push notification.
-        /// </summary>
+        /// </value>
         public String Trigger {
             get {
                 return _trigger;
@@ -595,14 +602,14 @@ namespace Lightstreamer.Interfaces.Metadata {
         }
 
         /// <summary>
-        /// <para>Returns a string representation of the MpnSubscriptionInfo.
         /// An MpnSubscriptionInfo object is represented by its three properties
         /// device, trigger and notification format, prefixed by their name and
-        /// on separate lines.E.g.:</para>
+        /// on separate lines.E.g.:
         /// <para>device=Apple/com.lightstreamer.ios.stocklist/8fac[...] fe12\n</para>
         /// <para>trigger=Double.parseDouble(${last_price}) >= 50.0\n</para>
         /// <para>notificationFormat={aps={badge=AUTO, alert=Price is over 50$, sound=Default}}\n</para>
         /// </summary>
+        /// <returns>Returns a string representation of the MpnSubscriptionInfo.</returns>
         public override string ToString()
         {
             return "device=" + _device + Environment.NewLine +
@@ -614,6 +621,8 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// Indicates whether some other object is "equal to" this one.
         /// Two MpnSubscriptionInfo objects are equal if their three properties are equal.
         /// </summary>
+        /// <param name="other">The other object to be compared.</param>
+        /// <returns>true if the two objects are equal.</returns>
         public override bool Equals(object other)
         {
             MpnSubscriptionInfo subscriptionInfo = other as MpnSubscriptionInfo;
@@ -625,6 +634,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <summary>
         /// Returns a hash code value for the object.
         /// </summary>
+        /// <returns>Hash code value for the object.</returns>
         public override int GetHashCode()
         {
             return _device.GetHashCode() ^ ((_trigger != null) ? _trigger.GetHashCode() : 0) ^ _notification.GetHashCode();
@@ -641,7 +651,7 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// through the launch of a Remote Server, based on configured class name and parameters.
     /// For this purpose, any Remote Metadata Adapter must provide a void constructor.
     /// Alternatively, an instance of a Remote Metadata Adapter is supplied to Lightstreamer
-    /// programmatically through a MetadataProviderServer instance.</para>
+    /// programmatically through a <see cref="MetadataProviderServer"/> instance.</para>
 	/// <para>A Metadata Provider is used by Lightstreamer Kernel
 	/// in combination with one or multiple Data Providers, uniquely associated with it; it is consulted
 	/// in order to manage the push Requests intended for the associated Data Providers.
@@ -676,19 +686,19 @@ namespace Lightstreamer.Interfaces.Metadata {
 	/// </summary>
 	public interface IMetadataProvider {
 
-		/// <summary>
+        /// <summary>
         /// <para>Called by the Remote Server to provide initialization information
-		/// to the Metadata Adapter.
-		/// If an exception occurs in this method, Lightstreamer Kernel can't complete the startup and must
-		/// exit. The initialization information can be supplied in different ways, depending on the way the
+        /// to the Metadata Adapter.
+        /// If an exception occurs in this method, Lightstreamer Kernel can't complete the startup and must
+        /// exit. The initialization information can be supplied in different ways, depending on the way the
         /// Remote Server is launched.</para>
         /// <para>The call must not be blocking; any polling cycle or similar must be
         /// started in a different thread. Any delay in returning from this call
         /// will in turn delay the Server initialization.
         /// If an exception occurs in this method, Lightstreamer Server can't
         /// complete the startup and must exit.</para>
-		/// </summary>
-		/// <param name="parameters">
+        /// </summary>
+        /// <param name="parameters">
         /// <para>An IDictionary-type value object that contains name-value pairs corresponding
         /// to the parameters elements supplied for the Metadata Adapter configuration.
         /// Both names and values are represented as String objects.</para>
@@ -697,12 +707,12 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <para>- If the Remote Server is launched through the provided DotNetServer executable:
         /// in the command line, as arguments of the form name=value;</para>
         /// <para>- If the Remote Server consists in a custom application that creates an instance
-        /// of the MetadataProviderServer class: through the "AdapterParams" dictionary property
-        /// of the MetadataProviderServer instance used.</para>
+        /// of the <see cref="Lightstreamer.DotNet.Server.MetadataProviderServer"/> class: through the "AdapterParams" dictionary property
+        /// of the <see cref="Lightstreamer.DotNet.Server.MetadataProviderServer"/> instance used.</para>
         /// <para>In both cases more parameters can be added by leveraging the "init_remote" parameter
         /// in the Proxy Adapter configuration.</para>
-		/// </param>
-		/// <param name="configFile">
+        /// </param>
+        /// <param name="configFile">
         /// <para>The path on the local disk of the Metadata Adapter configuration file.
         /// Can be null if not specified.</para>
         /// <para>The file path can be supplied in different ways, depending on the way the Remote
@@ -711,13 +721,13 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// in the command line, with two consecutive arguments, respectively valued with "/config"
         /// and the file path;</para>
         /// <para>- If the Remote Server consists in a custom application that creates an instance
-        /// of the MetadataProviderServer class: by assigning the "AdapterConfig" property of the
-        /// MetadataProviderServer instance used.</para>
-		/// </param>
+        /// of the <see cref="Lightstreamer.DotNet.Server.MetadataProviderServer"/> class: by assigning the "AdapterConfig" property of the
+        /// <see cref="Lightstreamer.DotNet.Server.MetadataProviderServer"/> instance used.</para>
+        /// </param>
         /// <exception cref="MetadataProviderException">
         /// in case an error occurs that prevents the correct behavior of the Metadata Adapter.
         /// </exception>
-		void Init(IDictionary parameters, string configFile);
+        void Init(IDictionary parameters, string configFile);
 
 		/// <summary>
 		/// <para>Called by Lightstreamer Kernel through the Remote Server
@@ -736,7 +746,6 @@ namespace Lightstreamer.Interfaces.Metadata {
 		/// element, if available.</para>
         /// <para>This method runs in the Server authentication thread pool, if defined.</para>
 		/// </summary>
-        ///
 		/// <param name="user">A User name.</param>
 		/// <param name="password">A password optionally required to validate the User.</param>
         /// <param name="httpHeaders"><para>An IDictionary-type value object that
@@ -770,13 +779,12 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// have no principal associated. In that case, if &lt;use_client_auth&gt;
         /// is set, this overload will still be invoked, with null principal.</para>
         /// <para>See the base 3-arguments version for other notes.</para>
-        /// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> https connections is an optional
+        /// <br/>
+        /// <para><B>Edition Note:</B> https connections is an optional
         /// feature, available depending on Edition and License Type.
 		/// To know what features are enabled by your license, please see the License tab of the
-		/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
+		/// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>
         /// <param name="user">A User name.</param>
         /// <param name="password">A password optionally required to validate the User.</param>
         /// <param name="httpHeaders">An IDictionary-type value object that
@@ -884,131 +892,132 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// </exception>
 		string [] GetSchema(string user, string sessionID, string id, string schema);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
         /// for the bandwidth level to be allowed to a User for a push Session.</para>
         /// <para>This method runs in the Server authentication thread pool, if defined.</para>
-		/// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Bandwidth Control is an optional
+        /// <br/>
+        /// <para><B>Edition Note:</B> Bandwidth Control is an optional
         /// feature, available depending on Edition and License Type.
         /// To know what features are enabled by your license, please see the License tab of the
-        /// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
+        /// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>
         /// <param name="user">A User name.</param>
-		/// <returns>The allowed bandwidth, in Kbit/sec. A zero return value means an unlimited bandwidth.</returns>
-		double GetAllowedMaxBandwidth(string user);
+        /// <returns>The allowed bandwidth, in Kbit/sec. A zero return value means an unlimited bandwidth.</returns>
+        double GetAllowedMaxBandwidth(string user);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
         /// for the ItemUpdate frequency to be allowed to a User for a
-		/// specific Item. An unlimited frequency can also be specified. Such filtering applies only to Items
-		/// requested with publishing Mode MERGE, DISTINCT and COMMAND (in the latter case, the frequency
-		/// limitation applies to the UPDATE events for each single key). If an Item is requested with publishing
-		/// Mode MERGE, DISTINCT or COMMAND and unfiltered dispatching has been specified, then returning any
-		/// limited maximum frequency will cause the refusal of the request by the Kernel.</para>
+        /// specific Item. An unlimited frequency can also be specified. Such filtering applies only to Items
+        /// requested with publishing <see cref="Mode"/> MERGE, DISTINCT and COMMAND (in the latter case, the frequency
+        /// limitation applies to the UPDATE events for each single key). If an Item is requested with publishing
+        /// <see cref="Mode"/> MERGE, DISTINCT or COMMAND and unfiltered dispatching has been specified, then returning any
+        /// limited maximum frequency will cause the refusal of the request by the Kernel.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
-		/// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> A further global frequency limit could also be imposed
+        /// <br/>
+        /// <para><B>Edition Note:</B> A further global frequency limit could also be imposed
         /// by the Server, depending on Edition and License Type; this specific limit also applies to RAW mode and
-		/// to unfiltered dispatching.
-		/// To know what features are enabled by your license, please see the License tab of the
-		/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
+        /// to unfiltered dispatching.
+        /// To know what features are enabled by your license, please see the License tab of the
+        /// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>
         /// <param name="user">A User name.</param>
-		/// <param name="item">An Item Name.</param>
-		/// <returns>The allowed Update frequency, in Updates/sec. A zero return value means no frequency
-		/// restriction.</returns>
-		double GetAllowedMaxItemFrequency(string user, string item);
+        /// <param name="item">An Item Name.</param>
+        /// <returns>The allowed Update frequency, in Updates/sec. A zero return value means no frequency
+        /// restriction.</returns>
+        double GetAllowedMaxItemFrequency(string user, string item);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
         /// for the maximum size allowed for the buffer internally used to
-		/// enqueue subsequent ItemUpdates for the same Item. If this buffer is more than 1 element deep, a short
-		/// burst of ItemEvents from the Data Adapter can be forwarded to the Client without losses, though with
-		/// some delay. The buffer size is specified in the Request. Its maximum allowed size can be different for
-		/// different Users. Such buffering applies only to Items requested with publishing Mode MERGE or DISTINCT.
-		/// However, if the Item has been requested with unfiltered dispatching, then the buffer size is always
-		/// unlimited and buffer size settings are ignored.</para>
+        /// enqueue subsequent ItemUpdates for the same Item. If this buffer is more than 1 element deep, a short
+        /// burst of ItemEvents from the Data Adapter can be forwarded to the Client without losses, though with
+        /// some delay. The buffer size is specified in the Request. Its maximum allowed size can be different for
+        /// different Users. Such buffering applies only to Items requested with publishing <see cref="Mode"/> MERGE or DISTINCT.
+        /// However, if the Item has been requested with unfiltered dispatching, then the buffer size is always
+        /// unlimited and buffer size settings are ignored.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// </summary>
-		/// <param name="user">A User name.</param>
-		/// <param name="item">An Item Name.</param>
-		/// <returns>The allowed buffer size. A zero return value means a potentially unlimited buffer.</returns>
-		int GetAllowedBufferSize(string user, string item);
+        /// <param name="user">A User name.</param>
+        /// <param name="item">An Item Name.</param>
+        /// <returns>The allowed buffer size. A zero return value means a potentially unlimited buffer.</returns>
+        int GetAllowedBufferSize(string user, string item);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
-        /// for the allowance of a publishing Mode for an Item.
-		/// A publishing Mode can or cannot be allowed depending on the User. The Metadata Adapter should
-		/// ensure that conflicting Modes are not both allowed for the same Item (even for different Users),
-		/// otherwise some Requests will be eventually refused by Lightstreamer Kernel. The conflicting Modes are
-		/// MERGE, DISTINCT and COMMAND.</para>
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// for the allowance of a publishing <see cref="Mode"/> for an Item.
+        /// A publishing <see cref="Mode"/> can or cannot be allowed depending on the User. The Metadata Adapter should
+        /// ensure that conflicting Modes are not both allowed for the same Item (even for different Users),
+        /// otherwise some Requests will be eventually refused by Lightstreamer Kernel. The conflicting Modes are
+        /// MERGE, DISTINCT and COMMAND.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// </summary>
-		/// <param name="user">A User name.</param>
-		/// <param name="item">An Item Name.</param>
-		/// <param name="mode">A publishing Mode.</param>
-		/// <returns>True if the publishing Mode is allowed.</returns>
-		bool IsModeAllowed(string user, string item, Mode mode);
+        /// <param name="user">A User name.</param>
+        /// <param name="item">An Item Name.</param>
+        /// <param name="mode">A publishing <see cref="Mode"/>.</param>
+        /// <returns>True if the publishing <see cref="Mode"/> is allowed.</returns>
+        bool IsModeAllowed(string user, string item, Mode mode);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
-        /// for the allowance of a publishing Mode for an Item (for at
-		/// least one User). The Metadata Adapter should ensure that conflicting Modes are not both allowed for
-		/// the same Item. The conflicting Modes are MERGE, DISTINCT and COMMAND.</para>
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// for the allowance of a publishing <see cref="Mode"/> for an Item (for at
+        /// least one User). The Metadata Adapter should ensure that conflicting Modes are not both allowed for
+        /// the same Item. The conflicting Modes are MERGE, DISTINCT and COMMAND.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// </summary>
-		/// <param name="item">An Item Name.</param>
-		/// <param name="mode">A publishing Mode.</param>
-		/// <returns>True if the publishing Mode is allowed.</returns>
-		bool ModeMayBeAllowed(string item, Mode mode);
+        /// <param name="item">An Item Name.</param>
+        /// <param name="mode">A publishing <see cref="Mode"/>.</param>
+        /// <returns>True if the publishing <see cref="Mode"/> is allowed.</returns>
+        bool ModeMayBeAllowed(string item, Mode mode);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
         /// for the minimum ItemEvent frequency from the Data Adapter at
-		/// which the events for an Item are guaranteed to be delivered to the Clients without loss of information.
-		/// In case of an incoming ItemEvent frequency greater than this value, Lightstreamer Kernel may prefilter
-		/// the events. Such prefiltering applies only for Items requested with publishing Mode MERGE or DISTINCT.
-		/// The frequency set should be greater than the ItemUpdate frequencies allowed to the different Users for
-		/// that Item. Moreover, because this filtering is made without buffers, the frequency set should be far
-		/// greater than the ItemUpdate frequencies allowed for that Item for which buffering of event bursts is
-		/// desired. If an Item is requested with publishing Mode MERGE or DISTINCT and unfiltered dispatching,
-		/// then specifying any limited source frequency will cause the refusal of the request by the Kernel.
-		/// This feature is just for ItemEventBuffers protection against Items with a very fast flow on the Data
-		/// Adapter and a very slow flow allowed to the Clients. If this is the case, but just a few Clients need
-		/// a fast or unfiltered flow for the same MERGE or DISTINCT Item, the use of two differently named Items
-		/// that receive the same flow from the Data Adapter is suggested.</para>
+        /// which the events for an Item are guaranteed to be delivered to the Clients without loss of information.
+        /// In case of an incoming ItemEvent frequency greater than this value, Lightstreamer Kernel may prefilter
+        /// the events. Such prefiltering applies only for Items requested with publishing <see cref="Mode"/> MERGE
+        /// or DISTINCT.
+        /// The frequency set should be greater than the ItemUpdate frequencies allowed to the different Users for
+        /// that Item. Moreover, because this filtering is made without buffers, the frequency set should be far
+        /// greater than the ItemUpdate frequencies allowed for that Item for which buffering of event bursts is
+        /// desired. If an Item is requested with publishing <see cref="Mode"/> MERGE or DISTINCT and 
+        /// unfiltered dispatching,
+        /// then specifying any limited source frequency will cause the refusal of the request by the Kernel.
+        /// This feature is just for ItemEventBuffers protection against Items with a very fast flow on the Data
+        /// Adapter and a very slow flow allowed to the Clients. If this is the case, but just a few Clients need
+        /// a fast or unfiltered flow for the same MERGE or DISTINCT Item, the use of two differently named Items
+        /// that receive the same flow from the Data Adapter is suggested.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// </summary>
-		/// <param name="item">An Item Name.</param>
-		/// <returns>The minimum ItemEvent frequency that must be processed without loss of information, in
-		/// ItemEvents/sec. A zero return value indicates that incoming ItemEvents must not be prefiltered. If the
-		/// ItemEvents frequency for the Item is known to be very low, returning zero allows Lightstreamer Kernel
-		/// to save any prefiltering effort.</returns>
-		double GetMinSourceFrequency(string item);
+        /// <param name="item">An Item Name.</param>
+        /// <returns>The minimum ItemEvent frequency that must be processed without loss of information, in
+        /// ItemEvents/sec. A zero return value indicates that incoming ItemEvents must not be prefiltered. If the
+        /// ItemEvents frequency for the Item is known to be very low, returning zero allows Lightstreamer Kernel
+        /// to save any prefiltering effort.</returns>
+        double GetMinSourceFrequency(string item);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to ask
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to ask
         /// for the maximum allowed length for a Snapshot of an Item that
-		/// has been requested with publishing Mode DISTINCT. In fact, in DISTINCT publishing Mode, the Snapshot
-		/// for an Item is made by the last events received for the Item and the Client can specify how many events
-		/// it would like to receive. Thus, Lightstreamer Kernel must always keep a buffer with some of the last
-		/// events received for the Item and the length of the buffer is limited by the value returned by this
-		/// method. The maximum Snapshot size cannot be unlimited.</para>
+        /// has been requested with publishing <see cref="Mode"/> DISTINCT.
+        /// In fact, in DISTINCT publishing <see cref="Mode"/>, the Snapshot
+        /// for an Item is made by the last events received for the Item and the Client can specify how many events
+        /// it would like to receive. Thus, Lightstreamer Kernel must always keep a buffer with some of the last
+        /// events received for the Item and the length of the buffer is limited by the value returned by this
+        /// method. The maximum Snapshot size cannot be unlimited.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// </summary>
-		/// <param name="item">An Item Name.</param>
-		/// <returns>The maximum allowed length for the Snapshot; a zero return value means that no Snapshot
-		/// information should be kept.</returns>
-		int GetDistinctSnapshotLength(string item);
+        /// <param name="item">An Item Name.</param>
+        /// <returns>The maximum allowed length for the Snapshot; a zero return value means that no Snapshot
+        /// information should be kept.</returns>
+        int GetDistinctSnapshotLength(string item);
 
 		/// <summary>
 		/// <para>Called by Lightstreamer Kernel through the Remote Server to forward
@@ -1030,10 +1039,10 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// </exception>
 		void NotifyUserMessage(string user, string sessionID, string message);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to check
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to check
         /// that a User is enabled to open a new push Session. If the check
-		/// succeeds, this also notifies the Metadata Adapter that the Session
+        /// succeeds, this also notifies the Metadata Adapter that the Session
         /// is being assigned to the User.</para>
         /// <para>Request context information is also available; this allows for
         /// differentiating group, schema and message management based on specific
@@ -1041,8 +1050,8 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <para>This method runs in the Server thread pool specific
         /// for the Adapter Set, if defined.</para>
         /// </summary>
-		/// <param name="user">A User name.</param>
-		/// <param name="sessionID">The ID of a new Session.</param>
+        /// <param name="user">A User name.</param>
+        /// <param name="sessionID">The ID of a new Session.</param>
         /// <param name="clientContext">
         /// <para>An IDictionary-type value object that contains name-value
         /// pairs with various information about the request context.
@@ -1067,17 +1076,18 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// of the client API in use.The signature may be only partially complete,
         /// or even null, for some old client APIs and for some custom clients</para>
         /// <para>- "REQUEST_ID" - the same id that has just been supplied
-        /// to NotifyUser for the current client request instance;
+        /// to <see cref="NotifyUser"/> for the current client request instance;
         /// this allows for using local authentication-related details for
-        /// the authorization task.
+        /// the authorization task.</para>
+        /// <br/>
         /// Note: the Remote Adapter is responsible for disposing any cached
         /// information in case NotifyNewSession is not called because of any
-        /// early error during request management.</para>
+        /// early error during request management.
         /// </param>
         /// <exception cref="CreditsException">
         /// in case the User is not enabled to open the new Session.
         /// If it's possible that the User would be enabled as soon as
-        /// another Session were closed, then a ConflictingSessionException
+        /// another Session were closed, then a <see cref="ConflictingSessionException"/>
         /// can be thrown, in which the ID of the other Session must be
         /// specified.
         /// In this case, a second invocation of the method with the same
@@ -1087,7 +1097,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// in case something is wrong in the parameters, such as the ID
         /// of a Session already open for this or a different User.
         /// </exception>
-		void NotifyNewSession(string user, string sessionID, IDictionary clientContext);
+        void NotifyNewSession(string user, string sessionID, IDictionary clientContext);
 
 		/// <summary>
 		/// <para>Called by Lightstreamer Kernel through the Remote Server to notify
@@ -1108,68 +1118,68 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// </exception>
         void NotifySessionClose(string sessionID);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to know
-		/// whether the Metadata Adapter must or must not be notified any time a Table
-		/// (i.e. Subscription) is added or removed from a push Session owned by a supplied User. If this method returns
-		/// false, the methods NotifyNewTables and NotifyTablesClose will never be called for this User, saving
-		/// some processing time. In this case, the User will be allowed to add to his Sessions any Tables
-		/// (i.e. Subscriptions) he wants.</para>
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to know
+        /// whether the Metadata Adapter must or must not be notified any time a Table
+        /// (i.e. Subscription) is added or removed from a push Session owned by a supplied User. If this method returns
+        /// false, the methods <see cref="NotifyNewTables"/> and <see cref="NotifyTablesClose"/> will never be called for this User, saving
+        /// some processing time. In this case, the User will be allowed to add to his Sessions any Tables
+        /// (i.e. Subscriptions) he wants.</para>
         /// <para>This method runs in the Server authentication thread pool, if defined.</para>
         /// </summary>
-		/// <param name="user">A User name.</param>
-		/// <returns>True if the Metadata Adapter must be notified any time a Table (i.e. Subscription)
-		/// is added or removed from a Session owned by the User.</returns>
-		bool WantsTablesNotification(string user);
+        /// <param name="user">A User name.</param>
+        /// <returns>True if the Metadata Adapter must be notified any time a Table (i.e. Subscription)
+        /// is added or removed from a Session owned by the User.</returns>
+        bool WantsTablesNotification(string user);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to check
-		/// that a User is enabled to add some Tables (i.e. Subscriptions) to a push Session.
-		/// If the check succeeds, this also notifies the Metadata Adapter that the Tables are being added to the
-		/// Session.</para>
-        /// <para>The method is invoked only if enabled for the User through WantsTablesNotification.</para>
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to check
+        /// that a User is enabled to add some Tables (i.e. Subscriptions) to a push Session.
+        /// If the check succeeds, this also notifies the Metadata Adapter that the Tables are being added to the
+        /// Session.</para>
+        /// <para>The method is invoked only if enabled for the User through <see cref="WantsTablesNotification"/>.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
-		/// </summary>
-		/// <param name="user">A User name.</param>
-		/// <param name="sessionID">The ID of a Session owned by the User.</param>
-		/// <param name="tables">An array of TableInfo instances, each of them containing the details of a Table
-		/// (i.e. Subscription) to be added to the Session.
+        /// </summary>
+        /// <param name="user">A User name.</param>
+        /// <param name="sessionID">The ID of a Session owned by the User.</param>
+        /// <param name="tables">An array of <see cref="TableInfo"/> instances, each of them containing the details of a Table
+        /// (i.e. Subscription) to be added to the Session.
         /// The elements in the array represent Tables (i.e.: Subscriptions) whose
         /// subscription is requested atomically by the client. A single element
         /// should be expected in the array, unless clients based on a very old
         /// version of a client library or text protocol may be in use.</param>
         /// <exception cref="CreditsException">
-		/// in case the User is not allowed to add the specified Tables (i.e. Subscriptions) to the Session.
+        /// in case the User is not allowed to add the specified Tables (i.e. Subscriptions) to the Session.
         /// </exception>
         /// <exception cref="NotificationException">
         /// in case something is wrong in the
-		/// parameters, such as the ID of a Session that is not currently open
-		/// or inconsistent information about a Table (i.e. Subscription).
+        /// parameters, such as the ID of a Session that is not currently open
+        /// or inconsistent information about a Table (i.e. Subscription).
         /// </exception>
-		void NotifyNewTables(string user, string sessionID, TableInfo [] tables);
+        void NotifyNewTables(string user, string sessionID, TableInfo [] tables);
 
-		/// <summary>
-		/// <para>Called by Lightstreamer Kernel through the Remote Server to notify
-		/// the Metadata Adapter that some Tables (i.e. Subscriptions) have been removed from
-		/// a push Session.</para>
-        /// <para>The method is invoked only if enabled for the User through WantsTablesNotification.</para>
+        /// <summary>
+        /// <para>Called by Lightstreamer Kernel through the Remote Server to notify
+        /// the Metadata Adapter that some Tables (i.e. Subscriptions) have been removed from
+        /// a push Session.</para>
+        /// <para>The method is invoked only if enabled for the User through <see cref="WantsTablesNotification"/>.</para>
         /// <para>This method is called by the Server asynchronously
         /// and does not consume a pooled thread on the Server.</para>
         /// </summary>
-		/// <param name="sessionID">A Session ID.</param>
-		/// <param name="tables">An array of TableInfo instances, each of them containing the details of a Table
-		/// (i.e. Subscription) that has been removed from the Session.
+        /// <param name="sessionID">A Session ID.</param>
+        /// <param name="tables">An array of <see cref="TableInfo"/> instances, each of them containing the details of a Table
+        /// (i.e. Subscription) that has been removed from the Session.
         /// The supplied array is in 1:1 correspondance with the array supplied by
-        /// NotifyNewTables in a previous call;
+        /// <see cref="NotifyNewTables"/> in a previous call;
         /// the correspondance can be recognized by matching the WinIndex property
-        /// of the included TableInfo objects (if multiple objects are included,
+        /// of the included <see cref="TableInfo"/> objects (if multiple objects are included,
         /// it must be the same for all of them).</param>
         /// <exception cref="NotificationException">
-		/// in case something is wrong in the parameters, such as the ID of a Session
-		/// that is not currently open or a Table (i.e. Subscription) that is not contained in the Session.
+        /// in case something is wrong in the parameters, such as the ID of a Session
+        /// that is not currently open or a Table (i.e. Subscription) that is not contained in the Session.
         /// </exception>
-		void NotifyTablesClose(string sessionID, TableInfo [] tables);
+        void NotifyTablesClose(string sessionID, TableInfo [] tables);
 
         /// <summary>
         /// <para>Called by Lightstreamer Kernel to check that a User is enabled to access
@@ -1177,19 +1187,19 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// a prerequisite for all MPN operations, including the activation of a
         /// subscription, the deactivation of a subscription, the change of a device
         /// token, etc. Some of these operations have a subsequent specific notification,
-        /// i.e. NotifyMpnSubscriptionActivation and NotifyMpnDeviceTokenChange.
+        /// i.e. <see cref="NotifyMpnSubscriptionActivation"/> and 
+        /// <see cref="NotifyMpnDeviceTokenChange"/>.
         /// </para>
         /// <para>Take particular precautions when authorizing device access, if
         /// possible ensure the user is entitled to the specific platform,
         /// device token and application ID.
         /// </para>
-        /// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
+        /// <br/>
+        /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
         /// available depending on Edition and License Type.
 		/// To know what features are enabled by your license, please see the License tab of the
-		/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
+		/// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>
         /// <param name="user">A User name.</param>
         /// <param name="sessionID">The ID of a Session owned by the User.</param>
         /// <param name="device">Specifies an MPN device.</param>
@@ -1212,22 +1222,21 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// validation mechanism based on regular expression that may also be used
         /// for this purpose.
         /// </para>
-        /// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
+        /// <br/>
+        /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
         /// available depending on Edition and License Type.
 		/// To know what features are enabled by your license, please see the License tab of the
-		/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
+		/// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>
         /// <param name="user">A User name.</param>
         /// <param name="sessionID">The ID of a Session owned by the User. The session ID is
         /// provided for a thorough validation of the Table information, but Push
         /// Notification subscriptions are persistent and survive the session. Thus,
         /// any association between this Session ID and this Push Notification
         /// subscription should be considered temporary.</param>
-        /// <param name="table">A TableInfo instance, containing the details of a Table
+        /// <param name="table">A <see cref="TableInfo"/> instance, containing the details of a Table
         /// (i.e.: Subscription) for which Push Notification have to be activated.</param>
-        /// <param name="mpnSubscription">An MpnSubscriptionInfo instance, containing the
+        /// <param name="mpnSubscription">An <see cref="MpnSubscriptionInfo"/> instance, containing the
         /// details of a Push Notification to be activated.</param>
         /// <exception cref="CreditsException">if the User is not allowed to activate the
         /// specified Push Notification in the Session.</exception>
@@ -1245,14 +1254,12 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <para>Take particular precautions when authorizing device token changes,
         /// if possible ensure the user is entitled to the new device token.
         /// </para>
-        /// </summary>
-        ///
-        /// <GENERAL_EDITION_NOTE><para><B>Edition Note:</B> Push Notifications is an optional feature,
+        /// <br/>
+        /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
         /// available depending on Edition and License Type.
-		/// To know what features are enabled by your license, please see the License tab of the
-		/// Monitoring Dashboard (by default, available at /dashboard).</para></GENERAL_EDITION_NOTE>
-        ///
-        /// <param name="user">A User name.</param>
+        /// To know what features are enabled by your license, please see the License tab of the
+        /// Monitoring Dashboard (by default, available at /dashboard).</para>
+        /// </summary>       /// <param name="user">A User name.</param>
         /// <param name="sessionID">A Session ID.</param>
         /// <param name="device">Specifies an MPN device.</param>
         /// <param name="newDeviceToken">The new token being assigned to the device.</param>

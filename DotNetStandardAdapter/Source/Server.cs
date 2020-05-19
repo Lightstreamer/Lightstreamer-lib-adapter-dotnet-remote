@@ -83,7 +83,7 @@ namespace Lightstreamer.DotNet.Server {
 	/// Further reuse of the same instance is not supported.</para>
 	/// <para>Some initialization parameters can be specified
 	/// in the application configuration file. See the provided
-	/// <exref target= "./app.config">sample configuration file</exref> for details.</para>
+	/// <see href="./app.config"/> sample configuration file for details.</para>
 	/// </summary>
 	public abstract class Server
 	{
@@ -96,9 +96,9 @@ namespace Lightstreamer.DotNet.Server {
             _impl = impl;
 		}
 
-		/// <summary>
+		/// <value>
 		/// A name for the Server instance; used for logging purposes. 
-		/// </summary>
+		/// </value>
 		public string Name
 		{
 			set
@@ -115,15 +115,13 @@ namespace Lightstreamer.DotNet.Server {
 			}
         }
 
-        /// <summary>
-        /// <para>
+        /// <value>
         /// The user-name credential to be sent to the Proxy Adapter upon connection.
         /// The credentials are needed only if the Proxy Adapter is configured
-        /// to require Remote Adapter authentication.
-        /// The credentials will be sent only if both are non-null.</para>
-        /// <para>
+        /// to require Remote Adapter authentication.<br/>
+        /// The credentials will be sent only if both are non-null.
         /// <para>The default value is null.</para>
-        /// </summary>
+        /// </value>
         public string RemoteUser
         {
             set
@@ -136,15 +134,14 @@ namespace Lightstreamer.DotNet.Server {
             }
         }
 
-        /// <summary>
+        /// <value>
         /// <para>
         /// The password credential to be sent to the Proxy Adapter upon connection.
         /// The credentials are needed only if the Proxy Adapter is configured
         /// to require Remote Adapter authentication.
         /// The credentials will be sent only if both are non-null.</para>
-        /// <para>
         /// <para>The default value is null.</para>
-        /// </summary>
+        /// </value>
         public string RemotePassword
         {
             set
@@ -157,10 +154,10 @@ namespace Lightstreamer.DotNet.Server {
             }
         }
 
-        /// <summary>
+        /// <value>
         /// The stream used by the Proxy Adapter in order to forward the requests
         /// to the Remote Adapter. 
-        /// </summary>
+        /// </value>
         public Stream RequestStream
 		{
 			set
@@ -177,10 +174,10 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		/// <summary>
+		/// <value>
 		/// The stream used by the Remote Adapter in order to forward the answers
 		/// to the Proxy Adapter. 
-		/// </summary>
+		/// </value>
 		public Stream ReplyStream
 		{
 			set
@@ -197,11 +194,11 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		/// <summary>
+		/// <value>
 		/// The stream used by the Remote Adapter in order to send asyncronous
 		/// data to the Remote Adapter. Currently not used and not needed
 		/// by the Remote Metadata Adapter.
-		/// </summary>
+		/// </value>
 		public Stream NotifyStream
 		{
 			set
@@ -218,11 +215,11 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		/// <summary>
+		/// <value>
 		/// A handler for error conditions occurring on the Remote Server.
 		/// By setting the handler, it's possible to override the default
 		/// exception handling.
-		/// </summary>
+		/// </value>
 		public IExceptionHandler ExceptionHandler
 		{
 			set
@@ -244,7 +241,7 @@ namespace Lightstreamer.DotNet.Server {
 		/// immediately, initialization will be triggered by the Proxy Adapter
 		/// and any initialization error will be just notified to the Proxy Adapter.
 		/// </summary>
-		/// <exception cref="Exception">An error occurred in the initialization
+		/// <exception cref="System.Exception">An error occurred in the initialization
 		/// phase. The adapter was not started. If the Adapter is initialized
 		/// immediately, Adapter initialization errors are also forwarded here.
 		/// </exception>
@@ -284,17 +281,17 @@ namespace Lightstreamer.DotNet.Server {
             _impl = null;
 		}
 
-        /// <summary>
-        /// <para>Sets the ILoggerProvider instance that will be used by the classes of the library to obtain ILogger instances
-        /// used to propagate internal logging. Providing a new provider to the library permits to consume the log produced through
-        /// custom ILogger implementation.</para>
-        /// <para>As soon as a new ILoggerProvider is provided all the instances of ILogger already in use in the
-        /// library are discarded and substituted with instanced obtained from this new instance. If a null value is provided,
-        /// the default consumers, that discard all the log, are enabled.
-        /// </para>
-        /// </summary>
-        /// <param name="loggerProvider">Will be responsible to provide ILogger instances to the various classes of the library.</param>
-        public static void SetLoggerProvider(ILoggerProvider loggerProvider)
+		/// <summary>
+		/// <para>Sets the <see cref="ILoggerProvider"/> instance that will be used by the classes of the library to obtain <see cref="ILogger"/> instances
+		/// used to propagate internal logging. Providing a new provider to the library permits to consume the log produced through
+		/// custom ILogger implementation.</para>
+		/// <para>As soon as a new <see cref="ILoggerProvider"/> is provided all the instances of <see cref="ILogger"/> already in use in the
+		/// library are discarded and substituted with instanced obtained from this new instance. If a null value is provided,
+		/// the default consumers, that discard all the log, are enabled.
+		/// </para>
+		/// </summary>
+		/// <param name="loggerProvider">Will be responsible to provide <see cref="ILogger"/> instances to the various classes of the library.</param>
+		public static void SetLoggerProvider(ILoggerProvider loggerProvider)
         {
             LogManager.SetLoggerProvider(loggerProvider);
         }

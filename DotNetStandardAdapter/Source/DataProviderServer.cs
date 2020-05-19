@@ -25,14 +25,14 @@ namespace Lightstreamer.DotNet.Server {
 	/// <summary>
 	/// <para>A Remote Server object which can run a Remote Data Adapter and connect it
 	/// to a Proxy Data Adapter running on Lightstreamer Server.</para>
-	/// <para>The object should be provided with a IDataProvider instance
+	/// <para>The object should be provided with a <see cref="IDataProvider"/> instance
 	/// and with suitable initialization parameters and established connections,
 	/// then activated through "Start" and finally disposed through "Stop".
 	/// Further reuse of the same instance is not supported.</para>
 	/// <para>By default, the invocations to the Data Adapter methods will be
 	/// done in dedicated short-lived threads; other options can be specified
 	/// in the application configuration file. See the provided
-	/// <exref target= "./app.config">sample configuration file</exref> for details.</para>
+	/// <see href="./app.config"/> sample configuration file for details.</para>
 	/// </summary>
 	public class DataProviderServer : Server
 	{
@@ -43,12 +43,12 @@ namespace Lightstreamer.DotNet.Server {
 		/// Creates an empty server still to be configured and started.
 		/// The Init method of the Remote Adapter will be invoked only upon
 		/// a Proxy Adapter request.
-        /// </summary>
-        /// <exception>
-        /// in case something wrong is supplied in the application configuration
-        /// for Data Adapter processing.
-        /// </exception>
-        public DataProviderServer()
+		/// </summary>
+		/// <exception cref="System.Exception"> in case something wrong is
+		/// supplied in the application configuration
+		/// for Data Adapter processing.
+		/// </exception>
+		public DataProviderServer()
 		{
 			_impl = new DataProviderServerImpl(false);
 			init(_impl);
@@ -64,24 +64,22 @@ namespace Lightstreamer.DotNet.Server {
 		/// which will start only after the return of Init; on the other hand,
 		/// any initialization parameters supplied by the Proxy Adapter will
 		/// not be available.</param>
-		/// <exception>
-		/// in case something wrong is supplied in the application configuration
+		/// <exception cref="System.Exception">in case something wrong is
+		/// supplied in the application configuration
 		/// for Data Adapter processing.
 		/// </exception>
-		/// <remarks>
-		/// This constructor is deprecated, because the setting
+		/// <remarks>This constructor is deprecated, because the setting
 		/// of initializeOnStart as true is going to be no longer supported.
 		/// Use the other constructor, which implies initializeOnStart as false.
 		/// As a consequence of this replacement, the Init method of the
-		/// IDataProvider implementation object would be invoked only after
+		/// <see cref="IDataProvider"/> implementation object would be invoked only after
 		/// the connection and it would receive additional parameters sent by
-		/// the Proxy Adapter.
-		/// If any initialization stuff on the IDataProvider implementation
+		/// the Proxy Adapter. <br/>
+		/// If any initialization stuff on the <see cref="IDataProvider"/> implementation
 		/// object has to be performed earlier, it should be done through
 		/// a dedicated method before invoking Start. As another consequence,
 		/// the Start method would no longer throw a DataAdapterException;
-		/// any related catch block could safely be removed.
-		/// <remarks>
+		/// any related catch block could safely be removed.</remarks>
 		[Obsolete("This constructor is deprecated; see remarks in method documentation.")] 
         public DataProviderServer(bool initializeOnStart)
         {
@@ -89,9 +87,9 @@ namespace Lightstreamer.DotNet.Server {
             init(_impl);
         }
 
-		/// <summary>
+		/// <value>
 		/// The Remote Data Adapter instance to be run.
-		/// </summary>
+		/// </value>
 		public IDataProvider Adapter
 		{
 			set
@@ -104,14 +102,12 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		/// <summary>
-		/// <para>
-        /// An IDictionary-type value object to be passed to the Init method
-        /// of the Remote Data Adapter, to supply optional parameters.</para>
-		/// <para>
-		/// <para>The default value is an empty Hashtable.</para>
-        /// <para>See Init in IDataProvider for details.</para>
-        /// </summary>
+		/// <value>
+		/// An IDictionary-type value object to be passed to the Init method
+		/// of the Remote Data Adapter, to supply optional parameters. <br/>
+		/// The default value is an empty Hashtable. <br/>
+		/// See Init in <see cref="IDataProvider"/> for details.
+		/// </value>
 		public IDictionary AdapterParams
 		{
 			set
@@ -124,14 +120,12 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		/// <summary>
-		/// <para>
+		/// <value>
 		/// The pathname of an optional configuration file for the Remote
-		/// Data Adapter, to be passed to the Init method.</para>
-		/// <para>
-		/// <para>The default value is null.</para>
-        /// <para>See Init in IDataProvider for details.</para>
-        /// </summary>
+		/// Data Adapter, to be passed to the Init method. <br/>
+		/// The default value is null. <br/>
+		/// See Init in <see cref="IDataProvider"/> for details.
+		/// </value>
 		public string AdapterConfig
 		{
 			set

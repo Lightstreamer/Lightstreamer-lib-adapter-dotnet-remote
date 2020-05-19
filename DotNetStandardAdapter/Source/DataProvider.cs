@@ -65,33 +65,33 @@ namespace Lightstreamer.Interfaces.Data {
 	public class DataProviderConstants
 	{
 		
-		/// <summary>
+		/// <value>
 		/// Constant that can be used as field name for the "key" field in Items to be processed in COMMAND mode.
-		/// </summary>
+		/// </value>
 		public const string KEY_FIELD = "key";
 
-		/// <summary>
+		/// <value>
 		/// Constant that can be used as field name for the "command" field in Items to be processed in 
 		/// COMMAND mode.
-		/// </summary>
+		/// </value>
 		public const string COMMAND_FIELD = "command";
 		
-		/// <summary>
+		/// <value>
 		/// Constant that can be used as the "ADD" value for the "command" fields of Items to be processed in 
 		/// COMMAND mode.
-		/// </summary>
+		/// </value>
 		public const string ADD_COMMAND = "ADD";
 
-		/// <summary>
+		/// <value>
 		/// Constant that can be used as the "UPDATE" value for the "command" fields of Items to be processed 
 		/// in COMMAND mode.
-		/// </summary>
+		/// </value>
 		public const string UPDATE_COMMAND = "UPDATE";
 
-		/// <summary>
+		/// <value>
 		/// Constant that can be used as the "DELETE" value for the "command" fields of Items to be processed 
 		/// in COMMAND mode.
-		/// </summary>
+		/// </value>
 		public const string DELETE_COMMAND = "DELETE";
 	}
 
@@ -128,16 +128,16 @@ namespace Lightstreamer.Interfaces.Data {
 		/// <returns>A String or a byte array containing the Field value, or null.</returns>
 		Object GetValue(string name);
 	}
-	
+
 	/// <summary>
 	/// Provides to the Data Adapter an alternative interface for creating Item Events
-    /// in order to send updates to Lightstreamer Kernel.
-    /// In this event, a name-index association is defined for all fields. These 
+	/// in order to send updates to Lightstreamer Kernel.
+	/// In this event, a name-index association is defined for all fields. These 
 	/// indexes will also be used to iterate through all the fields. Some indexes may not be associated to 
 	/// fields in the event, but the number of such holes should be small. The name-index associations are local 
 	/// to the event and may be different even across events belonging to the same Item. Using this kind of 
 	/// events allows a particularly efficient management of events that belong to Items requested in RAW, 
-	/// DISTINCT or COMMAND Mode. All implementation methods should be nonblocking.
+	/// DISTINCT or COMMAND <see cref="Lightstreamer.Interfaces.Metadata.Mode"/>. All implementation methods should be nonblocking.
 	/// </summary>
 	public interface IIndexedItemEvent {
 
@@ -181,16 +181,17 @@ namespace Lightstreamer.Interfaces.Data {
 	/// <summary>
 	/// <para>Used by Lightstreamer Kernel to receive the Item Events and any asynchronous severe error notification 
 	/// from the Data Adapter. The listener instance is supplied to the Data Adapter by Lightstreamer Kernel
-    /// (through the Remote Server) 
-	/// through a SetListener call. The listener can manage multiple kinds of Item Events: IItemEvent objects, 
-	/// IIndexedItemEvent objects and IDictionary objects. The common characteristics of all these kinds of 
+	/// (through the Remote Server) 
+	/// through a SetListener call. The listener can manage multiple kinds of Item Events: <see cref="IItemEvent"/> objects, 
+	/// <see cref="IIndexedItemEvent"/> objects and IDictionary objects. The common characteristics of all these kinds of 
 	/// Item Event objects are that:</para>
 	/// <para>- they contain the new values and, in some cases, the current values of the Fields of an Item; the 
 	/// Item name is not directly asked to the object;</para>
 	/// <para>- they provide an enumerator that supplies the names of all the Fields reported in the Item 
 	/// Event;</para>
 	/// <para>- they provide a method for getting the value of a Field by name; the value can be expressed either 
-	/// as a String or as a byte array (the special mandatory fields for COMMAND Mode named "key" and "command" 
+	/// as a String or as a byte array (the special mandatory fields for COMMAND
+	/// <see cref="Lightstreamer.Interfaces.Metadata.Mode"/> named "key" and "command" 
 	/// must be encoded as String).</para>
 	/// <para>When an Item Event instance has been sent to the listener, it is totally owned by Lightstreamer 
 	/// and it must not be furtherly changed by the Data Adapter. The Remote Server may also hold the 
@@ -201,7 +202,7 @@ namespace Lightstreamer.Interfaces.Data {
 
 		/// <summary>
 		/// <para>Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
-		/// implemented as an IItemEvent instance.</para>
+		/// implemented as an <see cref="IItemEvent"/> instance.</para>
 		/// <para>The Remote Adapter should ensure that, after an Unsubscribe call
 		/// for the Item has returned, no more Update calls are issued, until
 		/// requested by a new subscription for the same Item.
@@ -213,7 +214,7 @@ namespace Lightstreamer.Interfaces.Data {
 		/// a custom lock.</para>
 		/// </summary>
 		/// <param name="itemName">The name of the Item whose values are carried by the Item Event.</param>
-		/// <param name="itemEvent">An IItemEvent instance.</param>
+		/// <param name="itemEvent">An <see cref="IItemEvent"/> instance.</param>
 		/// <param name="isSnapshot">True if the Item Event carries the Item Snapshot.</param>
 		void Update(string itemName, IItemEvent itemEvent, bool isSnapshot);
 
@@ -240,7 +241,7 @@ namespace Lightstreamer.Interfaces.Data {
 
 		/// <summary>
 		/// <para>Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
-		/// implemented as an IIndexedItemEvent instance.</para>
+		/// implemented as an <see cref="IIndexedItemEvent"/> instance.</para>
 		/// <para>The Remote Adapter should ensure that, after an Unsubscribe call
 		/// for the Item has returned, no more Update calls are issued, until
 		/// requested by a new subscription for the same Item.
@@ -252,7 +253,7 @@ namespace Lightstreamer.Interfaces.Data {
 		/// a custom lock.</para>
 		/// </summary>
 		/// <param name="itemName">The name of the Item whose values are carried by the Item Event.</param>
-		/// <param name="itemEvent">An IIndexedItemEvent instance.</param>
+		/// <param name="itemEvent">An <see cref="IIndexedItemEvent"/> instance.</param>
 		/// <param name="isSnapshot">True if the Item Event carries the Item Snapshot.</param>
 		void Update(string itemName, IIndexedItemEvent itemEvent, bool isSnapshot);
 
@@ -317,87 +318,87 @@ namespace Lightstreamer.Interfaces.Data {
 		void Failure(Exception exception);
 	}
 
-    /// <summary>
-    /// <para>Provides an interface to be implemented by a Remote Data Adapter in order
-    /// to attach a Data Provider to Lightstreamer.
-    /// A single instance of a Remote Data Adapter is created by Lightstreamer
-    /// through the launch of a Remote Server, based on configured class name and parameters.
-    /// For this purpose, any Remote Data Adapter must provide a void constructor.
-    /// Alternatively, an instance of a Remote Data Adapter is supplied to Lightstreamer
-    /// programmatically through a DataProviderServer instance.
-    /// After initialization, Lightstreamer sets itself
-    /// as the Remote Data Adapter listener, by calling the setListener method.</para>
-    /// <para>Data Providers are used by Lightstreamer Kernel to obtain all data to be
-    /// pushed to the Clients. Any Item requested by a Client must refer to one
-    /// supplied by the configured Data Adapters.</para>
-    /// <para>A Data Provider supplies data in a publish/subscribe way. Lightstreamer
-    /// asks for data by calling the subscribe and unsubscribe methods for
-    /// various Items and the Data Adapter sends ItemEvents to its listener
-    /// in an asynchronous way.</para>
-    /// <para>A Data Adapter can also support Snapshot management. Upon subscription
-    /// to an Item, the current state of the Item data can be sent to the Server
-    /// before the updates. This allows the Server to maintain the Item state,
-    /// by integrating the new ItemEvents into the state (in a way that depends
-    /// on the Item type) and to make this state available to the Clients.</para>
-    /// <para>Note that the interaction between the Server and the Data Adapter and the
-    /// interaction between the Server and any Client are independent activities.
-    /// As a consequence, the very first ItemEvents sent by the Data Adapter to
-    /// the Server for an Item just subscribed to might be processed before the
-    /// Server starts feeding any client, even the client that caused the
-    /// subscription to the Item to be invoked;
-    /// then, such events would not be forwarded to any client.
-    /// If it is desirable that a client receives all the ItemEvents that have
-    /// been produced for an Item by the Data Adapter since subscription time,
-    /// then the support for the Item Snapshot can be leveraged.</para>
-    /// <para>Lightstreamer ensures that calls to subscribe and unsubscribe for
-    /// the same Item will be interleaved, without redundant calls; whenever
-    /// subscribe throws an exception, the corresponding unsubscribe call is not
-    /// issued.</para>
-    /// </summary>
-    public interface IDataProvider {
-	
+	/// <summary>
+	/// <para>Provides an interface to be implemented by a Remote Data Adapter in order
+	/// to attach a Data Provider to Lightstreamer.
+	/// A single instance of a Remote Data Adapter is created by Lightstreamer
+	/// through the launch of a Remote Server, based on configured class name and parameters.
+	/// For this purpose, any Remote Data Adapter must provide a void constructor.
+	/// Alternatively, an instance of a Remote Data Adapter is supplied to Lightstreamer
+	/// programmatically through a <see cref="DataProviderServer"/> instance.
+	/// After initialization, Lightstreamer sets itself
+	/// as the Remote Data Adapter listener, by calling the setListener method.</para>
+	/// <para>Data Providers are used by Lightstreamer Kernel to obtain all data to be
+	/// pushed to the Clients. Any Item requested by a Client must refer to one
+	/// supplied by the configured Data Adapters.</para>
+	/// <para>A Data Provider supplies data in a publish/subscribe way. Lightstreamer
+	/// asks for data by calling the subscribe and unsubscribe methods for
+	/// various Items and the Data Adapter sends ItemEvents to its listener
+	/// in an asynchronous way.</para>
+	/// <para>A Data Adapter can also support Snapshot management. Upon subscription
+	/// to an Item, the current state of the Item data can be sent to the Server
+	/// before the updates. This allows the Server to maintain the Item state,
+	/// by integrating the new ItemEvents into the state (in a way that depends
+	/// on the Item type) and to make this state available to the Clients.</para>
+	/// <para>Note that the interaction between the Server and the Data Adapter and the
+	/// interaction between the Server and any Client are independent activities.
+	/// As a consequence, the very first ItemEvents sent by the Data Adapter to
+	/// the Server for an Item just subscribed to might be processed before the
+	/// Server starts feeding any client, even the client that caused the
+	/// subscription to the Item to be invoked;
+	/// then, such events would not be forwarded to any client.
+	/// If it is desirable that a client receives all the ItemEvents that have
+	/// been produced for an Item by the Data Adapter since subscription time,
+	/// then the support for the Item Snapshot can be leveraged.</para>
+	/// <para>Lightstreamer ensures that calls to subscribe and unsubscribe for
+	/// the same Item will be interleaved, without redundant calls; whenever
+	/// subscribe throws an exception, the corresponding unsubscribe call is not
+	/// issued.</para>
+	/// </summary>
+	public interface IDataProvider {
+
 		/// <summary>
 		/// <para>Called by the Remote Server to provide
-        /// initialization information to the Data Adapter.
+		/// initialization information to the Data Adapter.
 		/// The call must not be blocking; any polling cycle or similar must be started in a different thread.
 		/// If an exception occurs in this method, Lightstreamer Kernel can't complete the startup and must
 		/// exit. The initialization information can be supplied in different ways, depending on the way the
 		/// Remote Server is launched.</para>
-        /// <para>The call must not be blocking; any polling cycle or similar must be
-        /// started in a different thread. Any delay in returning from this call
-        /// will in turn delay the Server initialization.
-        /// If an exception occurs in this method, Lightstreamer Server can't
-        /// complete the startup and must exit.</para>
-        /// </summary>
+		/// <para>The call must not be blocking; any polling cycle or similar must be
+		/// started in a different thread. Any delay in returning from this call
+		/// will in turn delay the Server initialization.
+		/// If an exception occurs in this method, Lightstreamer Server can't
+		/// complete the startup and must exit.</para>
+		/// </summary>
 		/// <param name="parameters">
-        /// <para>An IDictionary-type value object that contains name-value pairs corresponding
-        /// to the parameters elements supplied for the Data Adapter configuration.
-        /// Both names and values are represented as String objects.</para>
+		/// <para>An IDictionary-type value object that contains name-value pairs corresponding
+		/// to the parameters elements supplied for the Data Adapter configuration.
+		/// Both names and values are represented as String objects.</para>
 		/// <para>The parameters can be supplied in different ways, depending on the way the Remote
-        /// Adapters are hosted:</para>
-        /// <para>- If the Remote Server is launched through the provided DotNetServer executable:
-        /// in the command line, as arguments of the form name=value;</para>
-        /// <para>- If the Remote Server consists in a custom application that creates an instance
-        /// of the DataProviderServer class: through the "AdapterParams" dictionary property
-        /// of the DataProviderServer instance used.</para>
-        /// <para>In both cases more parameters can be added by leveraging the "init_remote" parameter
-        /// in the Proxy Adapter configuration.</para>
-        /// </param>
+		/// Adapters are hosted:</para>
+		/// <para>- If the Remote Server is launched through the provided DotNetServer executable:
+		/// in the command line, as arguments of the form name=value;</para>
+		/// <para>- If the Remote Server consists in a custom application that creates an instance
+		/// of the <see cref="DataProviderServer"/> class: through the "AdapterParams" dictionary property
+		/// of the <see cref="DataProviderServer"/> instance used.</para>
+		/// <para>In both cases more parameters can be added by leveraging the "init_remote" parameter
+		/// in the Proxy Adapter configuration.</para>
+		/// </param>
 		/// <param name="configFile">
 		/// <para>The path on the local disk of the Data Adapter configuration file.
-        /// Can be null if not specified.</para>
+		/// Can be null if not specified.</para>
 		/// <para>The file path can be supplied in different ways, depending on the way the Remote
-        /// Adapters are hosted:</para>
-        /// <para>- If the Remote Server is launched through the provided DotNetServer executable:
-        /// in the command line, with two consecutive arguments, respectively valued with "/config"
-        /// and the file path;</para>
-        /// <para>- If the Remote Server consists in a custom application that creates an instance
-        /// of the DataProviderServer class: by assigning the "AdapterConfig" property of the
-        /// DataProviderServer instance used.</para>
+		/// Adapters are hosted:</para>
+		/// <para>- If the Remote Server is launched through the provided DotNetServer executable:
+		/// in the command line, with two consecutive arguments, respectively valued with "/config"
+		/// and the file path;</para>
+		/// <para>- If the Remote Server consists in a custom application that creates an instance
+		/// of the <see cref="DataProviderServer"/> class: by assigning the "AdapterConfig" property of the
+		/// <see cref="DataProviderServer"/> instance used.</para>
 		/// </param>
-        /// <exception cref="DataProviderException">
+		/// <exception cref="DataProviderException">
 		/// in case an error occurs that prevents the correct behavior of the Data Adapter.
-        /// </exception>
+		/// </exception>
 		void Init(IDictionary parameters, string configFile);
 
 		/// <summary>
@@ -427,14 +428,14 @@ namespace Lightstreamer.Interfaces.Data {
 		/// <para>- EOS represents an EndOfSnapshot call</para>
 		/// <para>- UPD represents an Update call with the isSnapshot flag set to false;
 		/// in this case, the special ClearSnapshot call can also be issued.</para>
-		/// <para> The composition of the snapshot depends on the Mode in which the Item
+		/// <para> The composition of the snapshot depends on the <see cref="Lightstreamer.Interfaces.Metadata.Mode"/> in which the Item
 		/// is to be processed. In particular, for MERGE mode, the snapshot
 		/// consists of one event and the first part of the rule becomes:
 		/// <code>
 		///		   [SNAP] [EOS] UPD*
 		/// </code>
 		/// where a missing snapshot is considered as an empty snapshot.</para>
-		/// <para>If an Item can be requested only in RAW mode, then IsSnapshotAvailable
+		/// <para>If an Item can be requested only in RAW mode, then <see cref="IsSnapshotAvailable"/>
 		/// should always return false; anyway, when an Item is requested in
 		/// RAW mode, any snapshot is discarded.</para>
 		/// <para>Note that calling EndOfSnapshot is not mandatory; however, not
@@ -453,18 +454,18 @@ namespace Lightstreamer.Interfaces.Data {
 		/// hence some Subscribe calls may be delayed.</para>
 		/// </summary>
 		/// <param name="itemName">Name of an Item.</param>
-        /// <exception cref="SubscriptionException">
-        /// in case the request cannot be satisfied.
-        /// </exception>
-        /// <exception cref="FailureException">
-        /// in case the method execution has caused
+		/// <exception cref="SubscriptionException">
+		/// in case the request cannot be satisfied.
+		/// </exception>
+		/// <exception cref="FailureException">
+		/// in case the method execution has caused
 		/// a severe problem that can compromise future operation of the Data Adapter.
-        /// </exception>
+		/// </exception>
 		void Subscribe(string itemName);
 
 		/// <summary>
 		/// <para>Called by Lightstreamer Kernel through the Remote Server
-        /// to end a previous request of data for an Item.
+		/// to end a previous request of data for an Item.
 		/// After the call has returned, no more ItemEvents for the Item
 		/// should be sent to the listener until requested by a new subscription
 		/// for the same Item.</para>
@@ -473,16 +474,16 @@ namespace Lightstreamer.Interfaces.Data {
 		/// subsequent subscribe-unsubscribe-subscribe-unsubscribe requests
 		/// can still be issued by Lightstreamer Server to the Proxy Adapter.
 		/// When this happens, the requests may be queued on the Remote Adapter,
-		/// hence some Subscribe calls may be delayed.</para>
+		/// hence some <see cref="Subscribe"/> calls may be delayed.</para>
 		/// </summary>
 		/// <param name="itemName">Name of an Item.</param>
-        /// <exception cref="SubscriptionException">
-        /// in case the request cannot be satisfied.
-        /// </exception>
-        /// <exception cref="FailureException">
-        /// in case the method execution has caused
-        /// a severe problem that can compromise future operation of the Data Adapter.
-        /// </exception>
+		/// <exception cref="SubscriptionException">
+		/// in case the request cannot be satisfied.
+		/// </exception>
+		/// <exception cref="FailureException">
+		/// in case the method execution has caused
+		/// a severe problem that can compromise future operation of the Data Adapter.
+		/// </exception>
 		void Unsubscribe(string itemName);
 
 		/// <summary>

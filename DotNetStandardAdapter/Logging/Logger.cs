@@ -3,7 +3,7 @@ namespace Lightstreamer.DotNet.Server.Log
 {
     /// <summary>
     /// <para>Interface to be implemented to consume log from the library.</para>
-    /// <para>Instances of implemented classes are obtained by the library through the ILoggerProvider instance set on Server.SetLoggerProvider.</para>
+    /// <para>Instances of implemented classes are obtained by the library through the <see cref="ILoggerProvider"/> instance set on Server.SetLoggerProvider.</para>
     /// </summary>
     public interface ILogger
     {
@@ -103,56 +103,56 @@ namespace Lightstreamer.DotNet.Server.Log
         /// </param>
         void Fatal(string line, Exception exception);
 
-        /// <summary>
+        /// <value>
         /// <para>Checks if this logger is enabled for the Debug level.</para>
         /// <para>The property should be true if this logger is enabled for Debug events, false otherwise.</para> 
         /// <para>This property is intended to lessen the computational cost of disabled log Debug statements. Note 
         /// that even if the property is false, Debug log lines may be received anyway by the Debug methods.</para>
-        /// </summary>
+        /// </value>
         bool IsDebugEnabled
         {
             get;
         }
 
-        /// <summary>
+        /// <value>
         /// <para>Checks if this logger is enabled for the Info level.</para>
         /// <para>The property should be true if this logger is enabled for Info events, false otherwise.</para> 
         /// <para>This property is intended to lessen the computational cost of disabled log Info statements. Note 
         /// that even if the property is false, Info log lines may be received anyway by the Info methods.</para>
-        /// </summary>
+        /// </value>
         bool IsInfoEnabled
         {
             get;
         }
 
-        /// <summary>
+        /// <value>
         /// <para>Checks if this logger is enabled for the Warn level.</para>
         /// <para>The property should be true if this logger is enabled for Warn events, false otherwise.</para> 
         /// <para>This property is intended to lessen the computational cost of disabled log Warn statements. Note 
         /// that even if the property is false, Warn log lines may be received anyway by the Warn methods.</para>
-        /// </summary>
+        /// </value>
         bool IsWarnEnabled
         {
             get;
         }
 
-        /// <summary>
+        /// <value>
         /// <para>Checks if this logger is enabled for the Error level.</para>
         /// <para>The property should be true if this logger is enabled for Error events, false otherwise.</para> 
         /// <para>This property is intended to lessen the computational cost of disabled log Error statements. Note 
         /// that even if the property is false, Error log lines may be received anyway by the Error methods.</para>
-        /// </summary>
+        /// </value>
         bool IsErrorEnabled
         {
             get;
         }
 
-        /// <summary>
+        /// <value>
         /// <para>Checks if this logger is enabled for the Fatal level.</para>
         /// <para>The property should be true if this logger is enabled for Fatal events, false otherwise.</para> 
         /// <para>This property is intended to lessen the computational cost of disabled log Fatal statements. Note 
         /// that even if the property is false, Fatal log lines may be received anyway by the Fatal methods.</para>
-        /// </summary>
+        /// </value>
         bool IsFatalEnabled
         {
             get;

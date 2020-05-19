@@ -99,7 +99,8 @@ namespace Lightstreamer.Interfaces.Metadata {
 namespace Lightstreamer.Interfaces.Data
 {
 
-    /// <summary> Base class for all exceptions directly thrown by the Data Adapter.
+    /// <summary>
+    /// Base class for all exceptions directly thrown by the Data Adapter.
     /// </summary>
     public class DataException : ApplicationException
     {
