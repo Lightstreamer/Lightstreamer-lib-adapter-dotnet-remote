@@ -44,7 +44,7 @@ It is used in some of our examples and in case you need it with your version of 
 
 ## Compatibility
 
-The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.9.x.
+The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf) since version 1.9.x.
 
 Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/Changelog
 
