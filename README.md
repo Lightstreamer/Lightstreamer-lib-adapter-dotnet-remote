@@ -44,7 +44,7 @@ It is used in some of our examples and in case you need it with your version of 
 
 ## Compatibility
 
-The library is compatible with Adapter Remoting Infrastructure since Server version 7.1.
+The library is compatible with Adapter Remoting Infrastructure since Server version 7.0.
 
 Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/Changelog
 
