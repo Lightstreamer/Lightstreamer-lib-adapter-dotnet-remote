@@ -44,7 +44,7 @@ It is used in some of our examples and in case you need it with your version of 
 
 ## Compatibility
 
-The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf) since version 1.9.x.
+The library is compatible with Adapter Remoting Infrastructure since Server version 7.1.
 
 Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/Changelog
 
@@ -55,6 +55,8 @@ Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotne
 - [Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
 
 - [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
+
+- [Adapter Remoting Infrastructure Network Protocol Specification](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf)
 
 ## Other GitHub Projects Using this Library
 
