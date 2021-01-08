@@ -10,7 +10,7 @@ The .NET Standard allows greater uniformity through the .NET ecosystem and works
 
 ### The ARI Architecture
 
-Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/remoting_base/Adapter%20Remoting%20Infrastructure.pdf). 
+Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/ls-ARI/latest/Adapter%20Remoting%20Infrastructure.pdf). 
 
 ![architecture](generalarchitecture.PNG)
 
@@ -48,7 +48,7 @@ The LiteralBasedProvider can be configured through suitable initialization param
 
 ## Compatibility
 
-The library is compatible with [Adapter Remoting Infrastructure](https://lightstreamer.com/docs/adapter_generic_base/ARI%20Protocol.pdf) since version 1.9.x.
+The library is compatible with Adapter Remoting Infrastructure since Server version 7.0.
 
 Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/Changelog
 
@@ -59,6 +59,8 @@ Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotne
 - [Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
 
 - [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
+
+- [Adapter Remoting Infrastructure Network Protocol Specification](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf)
 
 ## Other GitHub Projects Using this Library
 

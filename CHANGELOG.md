@@ -2,6 +2,14 @@
 
 
 
+## [current state]
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Reformulated the compatibility constraint with respect to the Server version.
+
+
 ## 1.12.1 - <i>Released on 21 Jan 2020</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
