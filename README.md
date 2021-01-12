@@ -50,7 +50,7 @@ The LiteralBasedProvider can be configured through suitable initialization param
 
 The library is compatible with Adapter Remoting Infrastructure since Server version 7.0.
 
-Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/Changelog
+Full changelog: [CHANGELOG.md](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/blob/master/CHANGELOG.md)
 
 ## External Links
 
@@ -64,7 +64,6 @@ Full changelog: https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotne
 
 ## Other GitHub Projects Using this Library
 
-- [Lightstreamer - Reusable Metadata Adapters - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-ReusableMetadata-adapter-dotnet)
 - [Lightstreamer - "Hello World" Tutorial - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-HelloWorld-adapter-dotnet)
 - [Lightstreamer - Stock-List Demo - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-Stocklist-adapter-dotnet)
 - [Lightstreamer - Portfolio Demo - .NET Adapter](https://github.com/Lightstreamer/Lightstreamer-example-Portfolio-adapter-dotnet)
