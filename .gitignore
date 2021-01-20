@@ -1,1 +1,10 @@
-/DotNetAdapters_GitHub
+###############
+#    folder   #
+###############
+/**/DROP/
+/**/TEMP/
+/**/packages/
+/**/bin/
+/**/obj/
+_site
+*.yml
