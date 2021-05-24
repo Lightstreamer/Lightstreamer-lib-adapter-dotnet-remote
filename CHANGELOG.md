@@ -7,12 +7,13 @@
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
-Reformulated the compatibility constraint with respect to the Server version.
+Reformulated the compatibility constraint with respect to the Server version,
+instead of the Adapter Remoting Infrastructure version.
 
 
 ## 1.12.1 - <i>Released on 21 Jan 2020</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.8 (corresponding to Server 7.0).</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Fixed the default handling of parallelization of request processing, which was
@@ -21,7 +22,7 @@ to the default system task scheduling pool. This may have caused a significant
 overload in cases of high request rate.
 
 Modified the handling of the keepalives when connected to a Proxy Adapter
-(i.e. Adapter Remoting Infrastructure) version 1.9 or higher:
+(i.e. Adapter Remoting Infrastructure) version 1.9 (corresponding to Server 7.1) or higher:
 the preferred keepalive interval requested by the Proxy Adapter, when stricter
 than the configured one, is now obeyed (with a safety minimun of 1 second).
 Moreover, in that case, the default interval configuration is now 10 seconds
@@ -47,7 +48,7 @@ a few obsolete notes.
 
 ## 1.12.0 - <i>Released on 28 Jan 2019</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.8 (corresponding to Server 7.0).</i><br/>
 <i>Compatible with code developed with the previous version.</i><br/>
 <i>May not be compatible with the deployment structure of the previous version; see the compatibility notes below.</i>
 
@@ -83,7 +84,7 @@ Credential check is an optional configuration of the Proxy Adapter; if not lever
 the credentials will be ignored.
 
 Added full support for ARI Protocol extensions introduced in Adapter Remoting Infrastructure
-version 1.9.<br/>
+version 1.9 (corresponding to Server 7.1).<br/>
 <b>COMPATIBILITY NOTE:</b> <i>If Adapter Remoting Infrastructure 1.8.x
 (corresponding to Server 7.0.x) is used and credentials to be sent to the Proxy Adapter
 are specified, they will obviously be ignored, but the Proxy Adapter will issue some
@@ -99,7 +100,7 @@ Embedded the sample app.config file in the docs package, for convenience.
 
 ## 1.11.0 - <i>Released on 28 Feb 2018</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.8 (corresponding to Server 7.0).</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Added clarifications on licensing matters in the docs.
@@ -107,7 +108,7 @@ Added clarifications on licensing matters in the docs.
 
 ## 1.11.0 - <i>Released on 20 Dec 2017</i>
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.8.</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.8 (corresponding to Server 7.0).</i><br/>
 <i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
 
 Modified the interface in the part related to Mobile Push Notifications,
@@ -155,7 +156,7 @@ Aligned the documentation to comply with current licensing policies.
 
 ## 1.10.0 - Released on 23 Jan 2017
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.7 (corresponding to Server 6.0).</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Improved the app configuration example, by showing how to configure the keepalive messages.
@@ -163,7 +164,7 @@ Improved the app configuration example, by showing how to configure the keepaliv
 
 ## 1.10.0 - Released on 10 May 2016
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.7 (corresponding to Server 6.0).</i><br/>
 <i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
 
 Dropped the compatibility with .NET environment versions prior to 4.0. 4.0 or later is now required.<br/>
@@ -204,7 +205,7 @@ Fixed obsolete notes in the docs for DataProvider and MetadataProvider interface
 
 ## 1.9 - Released on 16 Jul 2015
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.7 (corresponding to Server 6.0).</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Improved logging; now the detailed log of request-reply messages not including notification messages (i.e. data updates) is possible.
@@ -214,7 +215,7 @@ Reduced some long pathnames in the docs pages, which could cause issues on some 
 
 ## 1.9 - Released on 21 Jan 2015
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.7</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.7 (corresponding to Server 6.0).</i><br/>
 <i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
 
 Introduced the possibility to provide Adapter initialization parameters
@@ -280,7 +281,7 @@ Changed DotNetServer_N2.exe so that the /host command line argument is now
 mandatory; this disallows the use in combination with the "Piped" versions
 of the Proxy Adapters.<br/>
 <b>COMPATIBILITY NOTE:</b> <i>this is just a consequence of the discontinuation of "Piped" versions brought
-by Adapter Remoting Infrastructure 1.7; see related notes.</i>
+by Adapter Remoting Infrastructure 1.7 (corresponding to Server 6.0); see related notes.</i>
 
 Fixed an error in the documentation of the WinIndex property in the TableInfo class;
 clarified how the field can be used to match subscription and unsubscription requests.
@@ -297,7 +298,7 @@ Modified the SDK versioning, which now differs from the internal dll versioning.
 
 ## 1.7 - Released on 20 Dec 2012
 
-<i>Compatible with Adapter Remoting Infrastructure since 1.4.3</i><br/>
+<i>Compatible with Adapter Remoting Infrastructure since 1.4.3 (corresponding to Server 5.1).</i><br/>
 <i>Compatible with code developed with the previous version.</i>
 
 Improved the performances under high update load.
