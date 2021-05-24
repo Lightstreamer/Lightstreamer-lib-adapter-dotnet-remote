@@ -10,6 +10,9 @@
 Reformulated the compatibility constraint with respect to the Server version,
 instead of the Adapter Remoting Infrastructure version.
 
+Added the source code of the sample LiteralBasedProvider, whose binary was already included
+in the generated library.
+
 
 ## 1.12.1 - <i>Released on 21 Jan 2020</i>
 
