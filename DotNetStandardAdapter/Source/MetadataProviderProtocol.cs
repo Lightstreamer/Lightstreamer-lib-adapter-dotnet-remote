@@ -23,7 +23,7 @@ using Lightstreamer.DotNet.Utils;
 
 namespace Lightstreamer.DotNet.Server {
 
-	internal class MetadataProviderProtocol : RemotingProtocol {
+	internal class MetadataProviderProtocol : BaseProtocol {
 
 		public const char TYPE_MODES= 'M';
 		public const char TYPE_MODE_RAW= 'R';
@@ -148,31 +148,6 @@ namespace Lightstreamer.DotNet.Server {
 			sb.Append(EncodeString(exception.Message));
 
 			return sb.ToString();
-		}
-
-        // ////////////////////////////////////////////////////////////////////////
-        // REMOTE CREDENTIALS
-
-		public static string WriteRemoteCredentials(IDictionary arguments) {
-			// protocol version 1.8.2 and above
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(METHOD_REMOTE_CREDENTIALS);
-
-            IDictionaryEnumerator iter = arguments.GetEnumerator();
-            while (iter.MoveNext())
-            {
-                sb.Append(SEP);
-                sb.Append(TYPE_STRING);
-                sb.Append(SEP);
-                sb.Append(EncodeString((string)iter.Entry.Key));
-                sb.Append(SEP);
-                sb.Append(TYPE_STRING);
-                sb.Append(SEP);
-                sb.Append(EncodeString((string)iter.Entry.Value));
-            }
-
-            return sb.ToString();
 		}
 
 		///////////////////////////////////////////////////////////////////////////

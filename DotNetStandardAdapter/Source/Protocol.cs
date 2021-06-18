@@ -43,11 +43,6 @@ namespace Lightstreamer.DotNet.Server {
 		public const char TYPE_DOUBLE= 'D';
 		public const char TYPE_EXCEPTION= 'E';
 
-        public const string METHOD_KEEPALIVE = "KEEPALIVE";
-        public const string METHOD_REMOTE_CREDENTIALS = "RAC";
-
-        public const string AUTH_REQUEST_ID = "1";
-
 		protected static string EncodeString(string str) {
 			if (str == null) return VALUE_NULL;
 			if (str.Length == 0) return VALUE_EMPTY;
@@ -97,6 +92,41 @@ namespace Lightstreamer.DotNet.Server {
 				throw new RemotingException("Unknown error while base64-decoding bytes", e);
 			}
 		}
+	}
+
+	internal class BaseProtocol : RemotingProtocol {
+
+		public const string METHOD_KEEPALIVE = "KEEPALIVE";
+		public const string METHOD_REMOTE_CREDENTIALS = "RAC";
+
+		public const string AUTH_REQUEST_ID = "1";
+
+		// ////////////////////////////////////////////////////////////////////////
+		// REMOTE CREDENTIALS
+
+		public static string WriteRemoteCredentials(IDictionary arguments)
+		{
+			// protocol version 1.8.2 and above
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(METHOD_REMOTE_CREDENTIALS);
+
+			IDictionaryEnumerator iter = arguments.GetEnumerator();
+			while (iter.MoveNext())
+			{
+				sb.Append(SEP);
+				sb.Append(TYPE_STRING);
+				sb.Append(SEP);
+				sb.Append(EncodeString((string)iter.Entry.Key));
+				sb.Append(SEP);
+				sb.Append(TYPE_STRING);
+				sb.Append(SEP);
+				sb.Append(EncodeString((string)iter.Entry.Value));
+			}
+
+			return sb.ToString();
+		}
+
 	}
 
 }

@@ -232,7 +232,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
                     if (_queue.Count == 0) {
                         // the timeout (real or simulated) has fired
-                        notifies.AddLast(RemotingProtocol.METHOD_KEEPALIVE);
+                        notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
 
                     } else {
                         while (_queue.Count > 0) {
@@ -251,7 +251,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 				try {
 					foreach (string notify in notifies) {
                         if (getProperLogger().IsDebugEnabled) {
-                            if (notify != RemotingProtocol.METHOD_KEEPALIVE) {
+                            if (notify != BaseProtocol.METHOD_KEEPALIVE) {
                                 getProperLogger().Debug(getProperType() + " line: " + notify);
                             } else {
                                 getProperKeepaliveLogger().Debug(getProperType() + " line: " + notify);
