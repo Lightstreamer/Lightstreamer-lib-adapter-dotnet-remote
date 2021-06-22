@@ -114,6 +114,7 @@ namespace Lightstreamer.DotNet.Server {
 		private static ILog _log= LogManager.GetLogger("Lightstreamer.DotNet.Server.DataProviderServer");
 
 		private bool _initExpected;
+		private bool _closeExpected;
 		private IDataProvider _adapter;
 		private IDictionary _adapterParams;
 		private string _adapterConfig;
@@ -121,6 +122,8 @@ namespace Lightstreamer.DotNet.Server {
 
         public DataProviderServerImpl() {
 			_initExpected = true;
+			_closeExpected = true;
+				// we start with the current version of the protocol, which does not conflict with earlier versions
 			_adapter= null;
 			_adapterParams= new Hashtable();
 			_adapterConfig= null;
@@ -159,7 +162,12 @@ namespace Lightstreamer.DotNet.Server {
             
 			base.Start();
 
-            lock (this) {
+			IDictionary credentials = getCredentialParams(_closeExpected);
+			if (credentials != null) {
+				SendRemoteCredentials(credentials);
+			}
+
+			lock (this) {
                 if (_notifySender == null)
                     throw new RemotingException("Notification channel not established: can't start (please check that a valid notification TCP port has been specified)");
             }
@@ -283,7 +291,7 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		};
 
-        protected override void SendRemoteCredentials(IDictionary credentials) {
+        protected void SendRemoteCredentials(IDictionary credentials) {
             String notify = DataProviderProtocol.WriteRemoteCredentials(credentials);
             NotifySender currNotifySender;
             RequestReceiver currRequestReceiver;
@@ -310,6 +318,20 @@ namespace Lightstreamer.DotNet.Server {
 			string method= request.Substring(0, sep);
 			
 			try {
+				if (method.Equals(DataProviderProtocol.METHOD_CLOSE) && _closeExpected) {
+					// this can also precede the init request
+					if (! requestId.Equals(DataProviderProtocol.CLOSE_REQUEST_ID)) {
+						throw new RemotingException("Unexpected id found while parsing a " + DataProviderProtocol.METHOD_CLOSE + " request");
+					}
+					IDictionary closeParams = DataProviderProtocol.ReadClose(request.Substring(sep + 1));
+					String closeReason = (string)closeParams[DataProviderProtocol.KEY_CLOSE_REASON];
+					if (closeReason != null) {
+						throw new RemotingException("Close requested by the counterpart with reason: " + closeReason);
+					} else {
+						throw new RemotingException("Close requested by the counterpart");
+					}
+				}
+
 				bool isInitRequest = method.Equals(DataProviderProtocol.METHOD_DATA_INIT);
 				if (isInitRequest && ! _initExpected) {
 					throw new RemotingException("Unexpected late " + DataProviderProtocol.METHOD_DATA_INIT + " request");
@@ -328,6 +350,20 @@ namespace Lightstreamer.DotNet.Server {
                         string advertisedVersion = getSupportedVersion(proxyVersion);
                             // this may prevent the initialization
                         bool is180 = (advertisedVersion == null);
+                        bool is182 = (advertisedVersion != null && advertisedVersion.Equals("1.8.2"));
+
+                        if (is180 || is182) {
+                            if (_closeExpected) {
+                                // WARNING: these versions don't provide for the CLOSE message,
+                                // but we previously asked for the CLOSE message with the RAC message;
+                                // hence we should no longer expect a CLOSE message, but only after
+                                // the client receives this answer, which confirms the protocol;
+                                // however, assuming that the Proxy Adapter only supports these versions,
+                                // we expect that it has ignored our request in the RAC message,
+                                // hence we can already stop expecting a CLOSE message.
+                            }
+                            _closeExpected = false; 
+                        }
 
                         if (! is180) {
                             // protocol version 1.8.2 and above

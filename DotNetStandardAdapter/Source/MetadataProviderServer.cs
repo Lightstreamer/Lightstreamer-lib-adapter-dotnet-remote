@@ -118,6 +118,7 @@ namespace Lightstreamer.DotNet.Server {
 		private static ILog _log= LogManager.GetLogger("Lightstreamer.DotNet.Server.MetadataProviderServer");
 
 		private bool _initExpected;
+		private bool _closeExpected;
 		private IMetadataProvider _adapter;
 		private IDictionary _adapterParams;
 		private string _adapterConfig;
@@ -133,6 +134,8 @@ namespace Lightstreamer.DotNet.Server {
 
 		public MetadataProviderServerImpl() {
 			_initExpected = true;
+			_closeExpected = true;
+				// we start with the current version of the protocol, which does not conflict with earlier versions
 			_adapter= null;
 			_adapterParams= new Hashtable();
 			_adapterConfig= null;
@@ -181,9 +184,14 @@ namespace Lightstreamer.DotNet.Server {
             _log.Info("Managing Metadata Adapter " + Name + " with concurrency policy: " + _concurrencyPolicy.ToString());
 
 			base.Start();
+
+			IDictionary credentials = getCredentialParams(_closeExpected);
+			if (credentials != null) {
+				SendRemoteCredentials(credentials);
+			}
 		}
 
-        protected override void SendRemoteCredentials(IDictionary credentials) {
+		protected void SendRemoteCredentials(IDictionary credentials) {
             String notify = MetadataProviderProtocol.WriteRemoteCredentials(credentials);
             RequestReceiver currRequestReceiver;
             lock (this) {
@@ -204,6 +212,20 @@ namespace Lightstreamer.DotNet.Server {
 			string method= request.Substring(0, sep);
 
 			try {
+				if (method.Equals(MetadataProviderProtocol.METHOD_CLOSE) && _closeExpected) {
+					// this can also precede the init request
+					if (! requestId.Equals(MetadataProviderProtocol.CLOSE_REQUEST_ID)) {
+						throw new RemotingException("Unexpected id found while parsing a " + MetadataProviderProtocol.METHOD_CLOSE + " request");
+					}
+					IDictionary closeParams = MetadataProviderProtocol.ReadClose(request.Substring(sep + 1));
+					String closeReason = (string)closeParams[MetadataProviderProtocol.KEY_CLOSE_REASON];
+					if (closeReason != null) {
+						throw new RemotingException("Close requested by the counterpart with reason: " + closeReason);
+					} else {
+						throw new RemotingException("Close requested by the counterpart");
+					}
+				}
+
 				bool isInitRequest = method.Equals(MetadataProviderProtocol.METHOD_METADATA_INIT);
 				if (isInitRequest && ! _initExpected) {
 					throw new RemotingException("Unexpected late " + MetadataProviderProtocol.METHOD_METADATA_INIT + " request");
@@ -222,6 +244,20 @@ namespace Lightstreamer.DotNet.Server {
                         string advertisedVersion = getSupportedVersion(proxyVersion);
                             // this may prevent the initialization
                         bool is180 = (advertisedVersion == null);
+                        bool is182 = (advertisedVersion != null && advertisedVersion.Equals("1.8.2"));
+
+                        if (is180 || is182) {
+                            if (_closeExpected) {
+                                // WARNING: these versions don't provide for the CLOSE message,
+                                // but we previously asked for the CLOSE message with the RAC message;
+                                // hence we should no longer expect a CLOSE message, but only after
+                                // the client receives this answer, which confirms the protocol;
+                                // however, assuming that the Proxy Adapter only supports these versions,
+                                // we expect that it has ignored our request in the RAC message,
+                                // hence we can already stop expecting a CLOSE message.
+                            }
+                            _closeExpected = false; 
+                        }
 
                         if (! is180) {
                             // protocol version 1.8.2 and above

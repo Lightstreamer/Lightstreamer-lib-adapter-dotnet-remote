@@ -98,8 +98,12 @@ namespace Lightstreamer.DotNet.Server {
 
 		public const string METHOD_KEEPALIVE = "KEEPALIVE";
 		public const string METHOD_REMOTE_CREDENTIALS = "RAC";
+		public const string METHOD_CLOSE= "CLOSE";
+
+	    public const string KEY_CLOSE_REASON = "reason";
 
 		public const string AUTH_REQUEST_ID = "1";
+		public const string CLOSE_REQUEST_ID = "0";
 
 		// ////////////////////////////////////////////////////////////////////////
 		// REMOTE CREDENTIALS
@@ -125,6 +129,55 @@ namespace Lightstreamer.DotNet.Server {
 			}
 
 			return sb.ToString();
+		}
+
+		// ////////////////////////////////////////////////////////////////////////
+		// CLOSE
+
+		public static IDictionary ReadClose(string request)
+		{
+			StringTokenizer tokenizer = new StringTokenizer(request, "" + SEP);
+
+			IDictionary parameters = new Hashtable();
+
+			String typ = null;
+			while (tokenizer.HasMoreTokens())
+			{
+				string headerName;
+				string headerValue;
+
+				typ = tokenizer.NextToken();
+
+				switch (typ.ToCharArray()[0])
+				{
+
+					case TYPE_STRING:
+						string val = tokenizer.NextToken();
+						headerName = DecodeString(val);
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_CLOSE + " request");
+				}
+
+				typ = tokenizer.NextToken();
+
+				switch (typ.ToCharArray()[0])
+				{
+
+					case TYPE_STRING:
+						string val = tokenizer.NextToken();
+						headerValue = DecodeString(val);
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_CLOSE + " request");
+				}
+
+				parameters[headerName] = headerValue;
+			}
+
+			return parameters;
 		}
 
 	}

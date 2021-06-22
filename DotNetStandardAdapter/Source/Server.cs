@@ -118,14 +118,14 @@ namespace Lightstreamer.DotNet.Server {
 			}
         }
 
-        /// <value>
-        /// The user-name credential to be sent to the Proxy Adapter upon connection.
-        /// The credentials are needed only if the Proxy Adapter is configured
-        /// to require Remote Adapter authentication.<br/>
-        /// The credentials will be sent only if both are non-null.
-        /// <para>The default value is null.</para>
-        /// </value>
-        public string RemoteUser
+		/// <value>
+		/// <para>
+		/// The user-name credential to be sent to the Proxy Adapter upon connection.
+		/// The credentials are needed only if the Proxy Adapter is configured
+		/// to require Remote Adapter authentication.</para>
+		/// <para>The default value is null.</para>
+		/// </value>
+		public string RemoteUser
         {
             set
             {
@@ -141,8 +141,7 @@ namespace Lightstreamer.DotNet.Server {
         /// <para>
         /// The password credential to be sent to the Proxy Adapter upon connection.
         /// The credentials are needed only if the Proxy Adapter is configured
-        /// to require Remote Adapter authentication.
-        /// The credentials will be sent only if both are non-null.</para>
+        /// to require Remote Adapter authentication.</para>
         /// <para>The default value is null.</para>
         /// </value>
         public string RemotePassword
@@ -306,6 +305,8 @@ namespace Lightstreamer.DotNet.Server {
 
 		private string _name;
 
+		private string _maxVersion = "1.8.3";
+
 		private Stream _requestStream;
 		private Stream _replyStream;
 		private Stream _notifyStream;
@@ -319,6 +320,7 @@ namespace Lightstreamer.DotNet.Server {
         public static string KEEPALIVE_HINT_PARAM = "keepalive_hint.millis";
         public static string USER_PARAM = "user";
         public static string PASSWORD_PARAM = "password";
+		public static string OUTCOME_PARAM = "enableClosePacket";
 
 		public static int MIN_KEEPALIVE_MILLIS = 1000;
 			// protection limit; it might be made configurable;
@@ -427,42 +429,63 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
         protected string getSupportedVersion(string proxyVersion) {
-            if (proxyVersion == null) {
-                // protocol version 1.8.0 or earlier;
-                // we cannot support a lower version;
-                // if we supported a version higher than 1.8.x, we should fail here;
-                // we currently support 1.8.x
-                // this could still be higher and incompatible with the proxy version,
-                // but we cannot know that and fail;
-                // version advertisement not available here
-                return null;
-            } else {
+			Debug.Assert(_maxVersion.Equals("1.8.3")); // to be kept aligned when upgrading
+
+			if (proxyVersion == null) {
+				// protocol version 1.8.0 or earlier;
+				// if we supported a version higher than 1.8.x, we should fail here;
+				// but we currently support 1.8.x;
+				// however, we don't support any version lower than 1.8.0,
+				// so we could still be incompatible with the proxy version,
+				// but we cannot distinguish the case and fail
+				_log.Info("Received no Proxy Adapter protocol version information; assuming 1.8.0: accepted.");
+				return null;    // version advertisement not available here
+					// downgrade to 1.8.0 to be taken care by the caller
+			}
+			else {
                 // protocol version specified in proxyVersion (must be 1.8.2 or later);
                 // if we supported a lower version, we could advertise it
                 // and hope that the proxy supports it as well;
                 // if we supported a higher version, we could fail here,
                 // but we can still advertise it and let the proxy refuse
-                if (proxyVersion.Equals("1.8.1")) {
-                    // temporary version that was used internally but never published
-                    throw new Exception("Unsupported reserved protocol version number: " + proxyVersion);
-                }
-                // we currently support 1.8.x so no problem
-                return "1.8.2";
+				if (proxyVersion.Equals("1.8.0")) {
+					throw new Exception("Unexpected protocol version number: " + proxyVersion);
+					// note: in principle, we should also refuse for inconsistency
+					// any protocol lower than 1.8.0 received through a remote init
+				} else if (proxyVersion.Equals("1.8.1")) {
+					// temporary version that was used internally but never published
+					throw new Exception("Unsupported reserved protocol version number: " + proxyVersion);
+				} else if (proxyVersion.Equals("1.8.2")) {
+					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": accepted the downgrade.");
+					return "1.8.2";
+						// downgrade to 1.8.2 to be taken care by the caller
+				} else if (proxyVersion.Equals(_maxVersion)) {
+					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": versions match.");
+					return _maxVersion;
+				} else {
+					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": requesting " + _maxVersion + ".");
+					return _maxVersion;
+				}
             }
         }
 
-        private IDictionary getCredentialParams() {
-            if (_remoteUser != null && _remotePassword != null) {
+        protected IDictionary getCredentialParams(bool requestOutcome) {
+            if (_remoteUser != null || _remotePassword != null || requestOutcome) {
                 IDictionary _proxyParams = new Hashtable();
-                _proxyParams.Add(USER_PARAM, _remoteUser);
-                _proxyParams.Add(PASSWORD_PARAM, _remotePassword);
+                if (_remoteUser != null) {
+                    _proxyParams.Add(USER_PARAM, _remoteUser);
+                }
+                if (_remotePassword != null) {
+                    _proxyParams.Add(PASSWORD_PARAM, _remotePassword);
+                }
+                if (requestOutcome) {
+                    _proxyParams.Add(OUTCOME_PARAM, "true");
+                }
                 return _proxyParams;
             } else { 
                 return null;
             }
         }
-
-        protected abstract void SendRemoteCredentials(IDictionary credentials);
 
 		private void ChangeKeepalive(int keepaliveTime) {
 			NotifySender currNotifySender;
@@ -545,6 +568,7 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
         virtual public void Start() {
+			_log.Info("Remote Adapter " + _name + " starting with protocol version " + _maxVersion);
 			int keepaliveMillis;
 			if (_configuredKeepaliveMillis == null) {
 				keepaliveMillis = DEFAULT_KEEPALIVE_MILLIS;
@@ -570,11 +594,6 @@ namespace Lightstreamer.DotNet.Server {
 
             if (currNotifySender != null) currNotifySender.Start();
             currRequestReceiver.Start();
-
-            IDictionary credentials = getCredentialParams();
-            if (credentials != null) {
-                SendRemoteCredentials(credentials);
-            }
         }
 
 		public void Stop() {
