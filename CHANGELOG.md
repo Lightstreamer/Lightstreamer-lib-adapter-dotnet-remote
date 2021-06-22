@@ -2,6 +2,27 @@
 
 
 
+## [current state]
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
+<i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
+
+Introduced full support for Server version 7.2. Now the library can log any message
+sent by the Proxy Adapter when forcibly closing the connection.
+
+Modified the behavior when incomplete credentials are configured: now they are sent
+to the Proxy Adapter, whereas previously they were not sent.
+Note that, if the Proxy Adapter has credentials configured, they cannot be incomplete;
+hence the Proxy Adapter is expected to refuse the connection in all cases.
+
+Removed the constructors of MetadataProviderServer and DataProviderServer that required
+a "initializeOnStart" argument, which were deprecated since 1.12.1, as they were only
+introduced to ensure backward compatibility with Server versions earlier than 6.0.<br/>
+<b>COMPATIBILITY NOTE:</b> <i>Existing source or binary code still relying on the
+deprecated constructors should be ported: code supplying the "false" value should just
+use the empty constructors; code supplying the "true" value should be revised.</i>
+
+
 ## 1.12.2 - <i>Released on 25 May 2021</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
