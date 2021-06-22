@@ -29,8 +29,11 @@ namespace Lightstreamer.DotNet.Server {
 	/// <para>A Remote Server object which can run a Remote Metadata Adapter and connect it
 	/// to a Proxy Metadata Adapter running on Lightstreamer Server.</para>
 	/// <para>The object should be provided with a <see cref="IMetadataProvider"/> instance
-	/// and with suitable initialization parameters and established connections,
+	/// and with suitable local initialization parameters and established connections,
 	/// then activated through "Start" and finally disposed through "Stop".
+	/// If any preliminary initialization on the supplied <see cref="IMetadataProvider"/>
+	/// implementation object has to be performed, it should be done through a custom,
+	/// dedicated method before invoking "Start".
 	/// Further reuse of the same instance is not supported.</para>
 	/// <para>By default, the invocations to the Metadata Adapter methods
 	/// will be done in the System Thread Pool; other options can be specified
@@ -53,44 +56,9 @@ namespace Lightstreamer.DotNet.Server {
 		/// </exception>
 		public MetadataProviderServer()
 		{
-			_impl = new MetadataProviderServerImpl(false);
+			_impl = new MetadataProviderServerImpl();
 			init(_impl);
 		}
-
-		/// <summary>
-		/// Creates an empty server still to be configured and started.
-		/// </summary>
-		/// <param name="initializeOnStart">If true, the Init method of the
-		/// Remote Adapter will be invoked immediately rather than upon
-		/// a Proxy Adapter request. The Proxy Adapter request will then just
-		/// receive a successful answer. This can shorten the connection phase,
-		/// which will start only after the return of Init; on the other hand,
-		/// any initialization parameters supplied by the Proxy Adapter will
-		/// not be available.</param>
-		/// <exception cref="System.Exception">in case something wrong is
-		/// supplied in the application configuration
-		/// for Metadata Adapter processing.
-		/// </exception>
-		/// <remarks>
-		/// This constructor is deprecated, because the setting
-		/// of initializeOnStart as true is going to be no longer supported.
-		/// Use the other constructor, which implies initializeOnStart as false.
-		/// As a consequence of this replacement, the Init method of the
-		/// <see cref="IMetadataProvider"/> implementation object would be invoked only after
-		/// the connection and it would receive additional parameters sent by
-		/// the Proxy Adapter.<br/>
-		/// If any initialization stuff on the <see cref="IMetadataProvider"/> implementation
-		/// object has to be performed earlier, it should be done through
-		/// a dedicated method before invoking Start. As another consequence,
-		/// the Start method would no longer throw a MetadataAdapterException;
-		/// any related catch block could safely be removed.
-		/// </remarks>
-		[Obsolete("This constructor is deprecated; see remarks in method documentation.")] 
-        public MetadataProviderServer(bool initializeOnStart)
-        {
-            _impl = new MetadataProviderServerImpl(initializeOnStart);
-            init(_impl);
-        }
 
 		/// <value>
 		/// The Remote Metadata Adapter instance to be run.
@@ -150,7 +118,6 @@ namespace Lightstreamer.DotNet.Server {
 		private static ILog _log= LogManager.GetLogger("Lightstreamer.DotNet.Server.MetadataProviderServer");
 
 		private bool _initExpected;
-		private bool _initializeOnStart;
 		private IMetadataProvider _adapter;
 		private IDictionary _adapterParams;
 		private string _adapterConfig;
@@ -164,9 +131,7 @@ namespace Lightstreamer.DotNet.Server {
 
         private ConcurrencyPolicies _concurrencyPolicy;
 
-		public MetadataProviderServerImpl(bool initializeOnStart) {
-			_initializeOnStart = initializeOnStart;
-				// set to true to force the old behavior (for an old Proxy Adapter)
+		public MetadataProviderServerImpl() {
 			_initExpected = true;
 			_adapter= null;
 			_adapterParams= new Hashtable();
@@ -215,11 +180,6 @@ namespace Lightstreamer.DotNet.Server {
 		public override void Start() {
             _log.Info("Managing Metadata Adapter " + Name + " with concurrency policy: " + _concurrencyPolicy.ToString());
 
-            if (_initializeOnStart) {
-				// requires to start already initialized (old behavior)
-				_adapter.Init(_adapterParams, _adapterConfig);
-			}
-				
 			base.Start();
 		}
 
@@ -248,88 +208,52 @@ namespace Lightstreamer.DotNet.Server {
 				if (isInitRequest && ! _initExpected) {
 					throw new RemotingException("Unexpected late " + MetadataProviderProtocol.METHOD_METADATA_INIT + " request");
 				} else if (! isInitRequest && _initExpected) {
-					if (! _initializeOnStart) {
-						throw new RemotingException("Unexpected request " + request + " while waiting for a " + MetadataProviderProtocol.METHOD_METADATA_INIT + " request");
-					} else {
-						_initExpected = false; // init request not received, but now no longer possible
-					}
+					throw new RemotingException("Unexpected request " + request + " while waiting for a " + MetadataProviderProtocol.METHOD_METADATA_INIT + " request");
 				}
 
                 if (isInitRequest) {
                     _log.Debug("Processing request: " + requestId);
-                    string reply;
                     _initExpected = false;
                     string keepaliveHint = null;
-                    // NOTE: compacting the two branches below is more complicated than it seems
-                    if (! _initializeOnStart) {
-                        IDictionary initParams = MetadataProviderProtocol.ReadInit(request.Substring(sep + 1));
-                        try {
-                            string proxyVersion = (string)initParams[PROTOCOL_VERSION_PARAM];
-                            string advertisedVersion = getSupportedVersion(proxyVersion);
-                                // this may prevent the initialization
-                            bool is180 = (advertisedVersion == null);
+                    string reply;
+                    IDictionary initParams = MetadataProviderProtocol.ReadInit(request.Substring(sep + 1));
+                    try {
+                        string proxyVersion = (string)initParams[PROTOCOL_VERSION_PARAM];
+                        string advertisedVersion = getSupportedVersion(proxyVersion);
+                            // this may prevent the initialization
+                        bool is180 = (advertisedVersion == null);
 
-                            if (! is180) {
-                                // protocol version 1.8.2 and above
-                                keepaliveHint = (string)initParams[KEEPALIVE_HINT_PARAM];
-                                if (keepaliveHint == null) {
-                                    keepaliveHint = "0";
-                                }
-                                initParams.Remove(PROTOCOL_VERSION_PARAM);
-                                initParams.Remove(KEEPALIVE_HINT_PARAM);
-                                    // the version and keepalive hint are internal parameters, not to be sent to the custom Adapter
+                        if (! is180) {
+                            // protocol version 1.8.2 and above
+                            keepaliveHint = (string)initParams[KEEPALIVE_HINT_PARAM];
+                            if (keepaliveHint == null) {
+                                keepaliveHint = "0";
                             }
-
-                            IEnumerator paramIter = _adapterParams.Keys.GetEnumerator();
-                            while (paramIter.MoveNext()) {
-                                string param = (string)paramIter.Current;
-                                initParams.Add(param, _adapterParams[param]);
-                            }
-                            _adapter.Init(initParams, _adapterConfig);
-
-                            if (! is180) {
-                                // protocol version 1.8.2 and above
-                                IDictionary _proxyParams = new Hashtable();
-                                _proxyParams.Add(PROTOCOL_VERSION_PARAM, advertisedVersion);
-                                reply = MetadataProviderProtocol.WriteInit(_proxyParams);
-                            } else {
-                                // protocol version 1.8.0
-                                reply = MetadataProviderProtocol.WriteInit((IDictionary)null);
-                            }
+                            initParams.Remove(PROTOCOL_VERSION_PARAM);
+                            initParams.Remove(KEEPALIVE_HINT_PARAM);
+                                // the version and keepalive hint are internal parameters, not to be sent to the custom Adapter
                         }
-                        catch (Exception e) {
-                            reply = MetadataProviderProtocol.WriteInit(e);
+
+                        IEnumerator paramIter = _adapterParams.Keys.GetEnumerator();
+                        while (paramIter.MoveNext()) {
+                            string param = (string)paramIter.Current;
+                            initParams.Add(param, _adapterParams[param]);
                         }
-                    } else {
-                        _log.Warn("Received Metadata Adapter initialization request; parameters ignored");
-                        IDictionary initParams = MetadataProviderProtocol.ReadInit(request.Substring(sep + 1));
+                        _adapter.Init(initParams, _adapterConfig);
 
-                        try {
-                            string proxyVersion = (string)initParams[PROTOCOL_VERSION_PARAM];
-                            string advertisedVersion = getSupportedVersion(proxyVersion);
-                            bool is180 = (advertisedVersion == null);
-
-                            if (! is180) {
-                                // protocol version 1.8.2 and above
-                                keepaliveHint = (string)initParams[KEEPALIVE_HINT_PARAM];
-                                if (keepaliveHint == null) {
-                                    keepaliveHint = "0";
-                                }
-                                IDictionary _proxyParams = new Hashtable();
-                                _proxyParams.Add(PROTOCOL_VERSION_PARAM, advertisedVersion);
-                                reply = MetadataProviderProtocol.WriteInit(_proxyParams);
-                            } else {
-                                // protocol version 1.8.0
-                                reply = MetadataProviderProtocol.WriteInit((IDictionary)null);
-                            }
-                        } catch (Exception e) {
-                            reply = MetadataProviderProtocol.WriteInit(e);
-                            // here the Remote Adapter is already initialized
-                            // and we should notify custom code of the issue;
-                            // but now the Proxy Adapter will terminate the connection and we lean on that
+                        if (! is180) {
+                            // protocol version 1.8.2 and above
+                            IDictionary _proxyParams = new Hashtable();
+                            _proxyParams.Add(PROTOCOL_VERSION_PARAM, advertisedVersion);
+                            reply = MetadataProviderProtocol.WriteInit(_proxyParams);
+                        } else {
+                            // protocol version 1.8.0
+                            reply = MetadataProviderProtocol.WriteInit((IDictionary)null);
                         }
                     }
-
+                    catch (Exception e) {
+                        reply = MetadataProviderProtocol.WriteInit(e);
+                    }
                     UseKeepaliveHint(keepaliveHint);
                     sendReply(requestId, reply);
 

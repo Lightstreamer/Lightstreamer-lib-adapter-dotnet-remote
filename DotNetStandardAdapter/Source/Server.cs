@@ -78,8 +78,11 @@ namespace Lightstreamer.DotNet.Server {
 	/// <para>A generic Remote Server object, which can run a Remote Data or Metadata Adapter
 	/// and connect it to the Proxy Adapter running on Lightstreamer Server.</para>
 	/// <para>The object should be provided with a suitable Adapter instance
-	/// and with suitable initialization parameters and established connections,
+	/// and with suitable local initialization parameters and established connections,
 	/// then activated through "Start" and finally disposed through "Stop".
+	/// If any preliminary initialization on the supplied Adapter implementation
+	/// object has to be performed, it should be done through a custom,
+	/// dedicated method before invoking "Start".
 	/// Further reuse of the same instance is not supported.</para>
 	/// <para>Some initialization parameters can be specified
 	/// in the application configuration file. See the provided
@@ -234,16 +237,14 @@ namespace Lightstreamer.DotNet.Server {
 
 		/// <summary>
 		/// Starts the communication between the Remote Adapter and the Proxy Adapter
-		/// through the supplied streams. If requested by the initializeOnStart flag
-		/// in the instance constructor, the Remote Adapter is initialized immediately.
+		/// through the supplied streams.
 		/// Then, requests issued by the Proxy Adapter are received and forwarded
-		/// to the Remote Adapter. If the Remote Adapter is not initialized
-		/// immediately, initialization will be triggered by the Proxy Adapter
+		/// to the Remote Adapter. Note that the Remote Adapter initialization
+		/// is not done now, but it will be triggered by the Proxy Adapter
 		/// and any initialization error will be just notified to the Proxy Adapter.
 		/// </summary>
 		/// <exception cref="System.Exception">An error occurred in the initialization
-		/// phase. The adapter was not started. If the Adapter is initialized
-		/// immediately, Adapter initialization errors are also forwarded here.
+		/// phase. The adapter was not started.
 		/// </exception>
 		public void Start()
 		{
