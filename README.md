@@ -10,7 +10,7 @@ The .NET Standard allows greater uniformity through the .NET ecosystem and works
 
 ### The ARI Architecture
 
-Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/ls-ARI/latest/Adapter%20Remoting%20Infrastructure.pdf). 
+Lightstreamer Server exposes native Java Adapter interfaces. The .NET interfaces are added through the [Lightstreamer Adapter Remoting Infrastructure (**ARI**)](https://lightstreamer.com/docs/ls-server/latest/Adapter%20Remoting%20Infrastructure.pdf). 
 
 ![architecture](generalarchitecture.PNG)
 
