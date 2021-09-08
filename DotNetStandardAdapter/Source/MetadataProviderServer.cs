@@ -219,6 +219,7 @@ namespace Lightstreamer.DotNet.Server {
 					}
 					IDictionary closeParams = MetadataProviderProtocol.ReadClose(request.Substring(sep + 1));
 					String closeReason = (string)closeParams[MetadataProviderProtocol.KEY_CLOSE_REASON];
+					Dispose();
 					if (closeReason != null) {
 						throw new RemotingException("Close requested by the counterpart with reason: " + closeReason);
 					} else {
