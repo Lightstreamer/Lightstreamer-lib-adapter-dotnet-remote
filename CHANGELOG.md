@@ -2,7 +2,7 @@
 
 
 
-## [current state]
+## 1.13.0 - <i>Released on 24 Sep 2021</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
 <i>May not be compatible with code developed with the previous version; see compatibility notes below.</i>
