@@ -58,7 +58,7 @@ Full changelog: [CHANGELOG.md](https://github.com/Lightstreamer/Lightstreamer-li
 
 - [Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
 
-- [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/)
+- [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-adapter/latest/index.html)
 
 - [Adapter Remoting Infrastructure Network Protocol Specification](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf)
 
