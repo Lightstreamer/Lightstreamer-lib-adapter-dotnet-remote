@@ -32,7 +32,7 @@ To build the library, follow below steps:
 2. Remove auto created class.cs source file
 3. Add all the existing resources contained in the `DotNetStandardAdapter` folder
 4. Add NuGet references for:
-	- System.Configuration.ConfigurationManager
+	- System.Configuration.ConfigurationManager (>= 4.7.0)
 5. Build the project
 
 ### LiteralBasedProvider

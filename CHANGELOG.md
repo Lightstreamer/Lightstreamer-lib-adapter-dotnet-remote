@@ -2,6 +2,12 @@
 
 
 
+## 1.13.1 - <i>Released on 28 Dec 2021</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
+
+Fix dependency version for System.Configuration.ConfigurationManager (4.7.0)
+
 ## 1.13.0 - <i>Released on 24 Sep 2021</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
