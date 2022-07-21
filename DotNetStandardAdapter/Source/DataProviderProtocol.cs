@@ -33,8 +33,6 @@ namespace Lightstreamer.DotNet.Server {
 		public const string METHOD_UNSUBSCRIBE= "USB";
 		public const string METHOD_FAILURE= "FAL";
 		public const string METHOD_END_OF_SNAPSHOT= "EOS";
-		// public const string METHOD_UPDATE_BY_INDEXED_EVENT= "UD1";
-		// public const string METHOD_UPDATE_BY_EVENT= "UD2";
 		public const string METHOD_UPDATE_BY_MAP= "UD3";
 		public const string METHOD_CLEAR_SNAPSHOT = "CLS";
 		
