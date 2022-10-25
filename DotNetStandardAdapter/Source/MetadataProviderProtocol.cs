@@ -915,10 +915,12 @@ namespace Lightstreamer.DotNet.Server {
 				int winIndex= -1;
 				Mode mode= null;
 				string id= null;
+				string dataAdapter = null;
 				string schema= null;
 				int min= -1;
 				int max= -1;
 				string selector= null;
+				int numItems = 0;
 
 				typ= tokenizer.NextToken();
 
@@ -957,6 +959,21 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						id= DecodeString(tokenizer.NextToken());
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+				switch (typ.ToCharArray()[0]) {
+
+					case TYPE_STRING:
+						dataAdapter= DecodeString(tokenizer.NextToken());
 						break;
 
 					default:
@@ -1023,7 +1040,40 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
 				}
 
-				TableInfo table= new TableInfo(winIndex, mode, id, schema, min, max, selector);
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+				switch (typ.ToCharArray()[0]) {
+
+					case TYPE_INT:
+						numItems= Int32.Parse(tokenizer.NextToken());
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+
+				string [] itemNames = new string[numItems];
+				for (int i = 0; i < numItems; i++) {
+					try {
+						typ= tokenizer.NextToken();
+					} catch (IndexOutOfRangeException) {
+						throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+					}
+					switch (typ.ToCharArray()[0]) {
+
+						case TYPE_STRING:
+							itemNames[i]= DecodeString(tokenizer.NextToken());
+							break;
+
+						default:
+							throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+					}
+				}
+
+				TableInfo table = new TableInfo(winIndex, mode, id, dataAdapter, schema, min, max, selector, itemNames);
 				tableList.Add(table);
 
 			}
@@ -1095,10 +1145,12 @@ namespace Lightstreamer.DotNet.Server {
 				int winIndex = -1;
 				Mode mode= null;
 				string id= null;
+				string dataAdapter= null;
 				string schema= null;
 				int min= -1;
 				int max= -1;
 				string selector= null;
+				int numItems= 0;
 
 				typ = tokenizer.NextToken();
 
@@ -1137,6 +1189,21 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						id= DecodeString(tokenizer.NextToken());
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
+				}
+
+				try {
+					typ = tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
+				}
+				switch (typ.ToCharArray()[0]) {
+
+					case TYPE_STRING:
+						dataAdapter = DecodeString(tokenizer.NextToken());
 						break;
 
 					default:
@@ -1203,7 +1270,40 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
 				}
 
-				TableInfo table= new TableInfo(winIndex, mode, id, schema, min, max, selector);
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+				switch (typ.ToCharArray()[0]) {
+
+					case TYPE_INT:
+						numItems= Int32.Parse(tokenizer.NextToken());
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+				}
+
+				string [] itemNames = new string[numItems];
+				for (int i = 0; i < numItems; i++) {
+					try {
+						typ= tokenizer.NextToken();
+					} catch (IndexOutOfRangeException) {
+						throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+					}
+					switch (typ.ToCharArray()[0]) {
+
+						case TYPE_STRING:
+							itemNames[i]= DecodeString(tokenizer.NextToken());
+							break;
+
+						default:
+							throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
+					}
+				}
+
+				TableInfo table = new TableInfo(winIndex, mode, id, dataAdapter, schema, min, max, selector, itemNames);
 				tableList.Add(table);
 
 			}
@@ -1366,6 +1466,13 @@ namespace Lightstreamer.DotNet.Server {
 
                 string id = DecodeString(tokenizer.NextToken());
 
+				// Table info: data adapter
+				typ = tokenizer.NextToken();
+				if (typ.ToCharArray()[0] != TYPE_STRING)
+					throw new RemotingException("Unexpected type '" + typ + "' found while parsing a " + METHOD_NOTIFY_MPN_SUBSCRIPTION_ACTIVATION + " request");
+
+				string dataAdapter = DecodeString(tokenizer.NextToken());
+
 				// Table info: schema
 				typ = tokenizer.NextToken();
                 if (typ.ToCharArray() [0] != TYPE_STRING)
@@ -1387,7 +1494,24 @@ namespace Lightstreamer.DotNet.Server {
 
                 int max = Int32.Parse(tokenizer.NextToken());
 
-                TableInfo table = new TableInfo(winIndex, mode, id, schema, min, max, null);
+				// Table info: number of following item names
+				typ = tokenizer.NextToken();
+				if (typ.ToCharArray()[0] != TYPE_INT)
+					throw new RemotingException("Unexpected type '" + typ + "' found while parsing a " + METHOD_NOTIFY_MPN_SUBSCRIPTION_ACTIVATION + " request");
+
+				int numItems = Int32.Parse(tokenizer.NextToken());
+
+				// Table info: item names
+				string[] itemNames = new string[numItems];
+				for (int i = 0; i < numItems; i++) {
+					typ = tokenizer.NextToken();
+					if (typ.ToCharArray()[0] != TYPE_STRING)
+						throw new RemotingException("Unexpected type '" + typ + "' found while parsing a " + METHOD_NOTIFY_MPN_SUBSCRIPTION_ACTIVATION + " request");
+
+					itemNames[i]= DecodeString(tokenizer.NextToken());
+				}
+
+				TableInfo table = new TableInfo(winIndex, mode, id, dataAdapter, schema, min, max, null, itemNames);
 				data.Table = table;
 
 				// Platform type

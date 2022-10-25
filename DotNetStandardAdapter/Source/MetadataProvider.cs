@@ -247,36 +247,43 @@ namespace Lightstreamer.Interfaces.Metadata {
 		private int _winIndex;
 		private Mode _mode;
 		private string _group;
+        private string _dataAdapter;
 		private string _schema;
 		private int _min;
 		private int _max;
 		private string _selector;
+        private string [] _itemNames;
 
-		/// <summary>
+        /// <summary>
         /// Used by Lightstreamer to creates a TableInfo instance,
         /// collecting the various attributes of a Table (i.e.: Subscription).
-		/// </summary>
+        /// </summary>
         /// <param name="winIndex">Unique identifier of the client subscription request
         /// within the session.</param>
-		/// <param name="mode">Publishing Mode for the Items in the Table (i.e. Subscription)
-		/// (it must be the same across all the Table).</param>
+        /// <param name="mode">Publishing Mode for the Items in the Table (i.e. Subscription)
+        /// (it must be the same across all the Table).</param>
         /// <param name="group">The name of the Item Group (or specification of the Item List)
         /// to which the subscribed Items belong.</param>
+        /// <param name="dataAdapter">The name of the Data Adapter to which the Table
+        /// (i.e. Subscription) refers.</param>
         /// <param name="schema">The name of the Field Schema (or specification of the Field List)
         /// used for the subscribed Items.</param>
-		/// <param name="min">The 1-based index of the first Item in the Group to be considered in the
-		/// Table (i.e. Subscription).</param>
-		/// <param name="max">The 1-based index of the last Item in the Group to be considered in the
-		/// Table (i.e. Subscription).</param>
-		/// <param name="selector">The name of the optional Selector associated to the table (i.e. Subscription).</param>
-		public TableInfo(int winIndex, Mode mode, string group, string schema, int min, int max, string selector) {
+        /// <param name="min">The 1-based index of the first Item in the Group to be considered in the
+        /// Table (i.e. Subscription).</param>
+        /// <param name="max">The 1-based index of the last Item in the Group to be considered in the
+        /// Table (i.e. Subscription).</param>
+        /// <param name="selector">The name of the optional Selector associated to the table (i.e. Subscription).</param>
+        /// <param name="itemNames">The array of Item names involved in this Table (i.e. Subscription).</param>
+        public TableInfo(int winIndex, Mode mode, string group, string dataAdapter, string schema, int min, int max, string selector, string [] itemNames) {
 			_winIndex= winIndex;
 			_mode= mode;
-			_group = group;
+			_group= group;
+            _dataAdapter= dataAdapter;
 			_schema= schema;
 			_min= min;
 			_max= max;
 			_selector= selector;
+            _itemNames= itemNames;
 		}
 
 		/// <value>
@@ -317,6 +324,17 @@ namespace Lightstreamer.Interfaces.Metadata {
 		}
 
         /// <value>
+        /// Readonly. The name of the Data Adapter to which the Table (i.e. Subscription) refers.
+        /// </value>
+        public string DataAdapter
+        {
+            get
+            {
+                return _dataAdapter;
+            }
+        }
+
+        /// <value>
         /// Readonly. The name of the Field Schema (or specification of the Field List)
         /// used for the subscribed Items.
         /// </value>
@@ -353,8 +371,22 @@ namespace Lightstreamer.Interfaces.Metadata {
 			get {
 				return _selector;
 			}
-		}
-	}
+        }
+
+        /// <value>
+        /// Readonly. The array of the Item names involved in this Table (i.e. Subscription).
+        /// The sequence of names is the same one returned by GetItems in <see cref="IMetadataProvider"/> 
+        /// when decoding of the group name, but restricted, in case a first and/or last
+        /// Item was specified in the client request(see <see cref="Min"/> and <see cref="Max"/>). 
+        /// </value>
+        public string [] SubscribedItems
+        {
+            get
+            {
+                return _itemNames;
+            }
+        }
+    }
 
     /// <summary>
     /// <para>Identifies a Push Notifications platform type, used with MPN-related requests of the MetadataProvider.</para>
@@ -678,7 +710,7 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// management of the client requests should be properly set, through the
     /// "server_pool_max_size" flag, in the Server configuration file.</para>
     /// <para>Alternatively, a dedicated pool, properly sized, can be defined
-    /// for the involved Adapter Set in “adapters.xml”. Still more restricted
+    /// for the involved Adapter Set in ï¿½adapters.xmlï¿½. Still more restricted
     /// dedicated pools can be defined for the authorization-related calls
     /// and for each Data Adapter in the Adapter Set. The latter pool would also
     /// run any Metadata Adapter method related to the items supplied by the
@@ -754,7 +786,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <para>For headers defined multiple times, a unique name-value pair is reported,
 		/// where the value is a concatenation of all the supplied header values,
 		/// separated by a ",".</para>
-        /// <para>One pair is added by Lightstreamer Server; the name is “REQUEST_ID”
+        /// <para>One pair is added by Lightstreamer Server; the name is ï¿½REQUEST_IDï¿½
         /// and the value is a unique id assigned to the client request.</para>
         /// </param>
         /// <exception cref="AccessException">
@@ -1091,7 +1123,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// can be thrown, in which the ID of the other Session must be
         /// specified.
         /// In this case, a second invocation of the method with the same
-        /// “REQUEST_ID” and a different Session ID will be received.
+        /// ï¿½REQUEST_IDï¿½ and a different Session ID will be received.
         /// </exception>
         /// <exception cref="NotificationException">
         /// in case something is wrong in the parameters, such as the ID
