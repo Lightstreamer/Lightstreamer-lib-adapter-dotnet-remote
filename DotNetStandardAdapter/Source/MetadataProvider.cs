@@ -237,13 +237,13 @@ namespace Lightstreamer.Interfaces.Metadata {
 		}
 	}
 
-	/// <summary>
+    /// <summary>
     /// Used by IMetadataProvider to provide value objects to the calls
-    /// to methods NotifyNewTables and NotifyTablesClose.
+    /// to methods NotifyNewTables, NotifyTablesClose, and NotifyMpnSubscriptionActivation.
     /// The attributes of every Table (i.e.: Subscription) to be added or removed
     /// to a Session have to be written to a TableInfo instance.
-	/// </summary>
-	public class TableInfo {
+    /// </summary>
+    public class TableInfo {
 		private int _winIndex;
 		private Mode _mode;
 		private string _group;
