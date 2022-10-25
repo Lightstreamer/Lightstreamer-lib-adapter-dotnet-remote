@@ -978,11 +978,11 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
 				}
 
-				if (! tokenizer.HasMoreTokens()) {
-					break;
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
 				}
-				typ= tokenizer.NextToken();
-
 				switch (typ.ToCharArray()[0]) {
 
 					case TYPE_INT:
@@ -993,11 +993,11 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
 				}
 
-				if (! tokenizer.HasMoreTokens()) {
-					break;
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_NEW_TABLES + " request");
 				}
-				typ = tokenizer.NextToken();
-
 				switch (typ.ToCharArray()[0]) {
 
 					case TYPE_INT:
@@ -1158,11 +1158,11 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
 				}
 
-				if (! tokenizer.HasMoreTokens()) {
-					break;
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
 				}
-				typ = tokenizer.NextToken();
-
 				switch (typ.ToCharArray()[0]) {
 
 					case TYPE_INT:
@@ -1173,11 +1173,11 @@ namespace Lightstreamer.DotNet.Server {
 						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
 				}
 
-				if (! tokenizer.HasMoreTokens()) {
-					break;
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
 				}
-				typ = tokenizer.NextToken();
-
 				switch (typ.ToCharArray()[0]) {
 
 					case TYPE_INT:
@@ -1366,8 +1366,8 @@ namespace Lightstreamer.DotNet.Server {
 
                 string id = DecodeString(tokenizer.NextToken());
 
-                // Table info: schema
-                typ = tokenizer.NextToken();
+				// Table info: schema
+				typ = tokenizer.NextToken();
                 if (typ.ToCharArray() [0] != TYPE_STRING)
                     throw new RemotingException("Unexpected type '" + typ + "' found while parsing a " + METHOD_NOTIFY_MPN_SUBSCRIPTION_ACTIVATION + " request");
 
@@ -1388,10 +1388,10 @@ namespace Lightstreamer.DotNet.Server {
                 int max = Int32.Parse(tokenizer.NextToken());
 
                 TableInfo table = new TableInfo(winIndex, mode, id, schema, min, max, null);
-                data.Table = table;
+				data.Table = table;
 
-                // Platform type
-                typ = tokenizer.NextToken();
+				// Platform type
+				typ = tokenizer.NextToken();
                 if (typ.ToCharArray() [0] != TYPE_MPN_PLATFORM)
                     throw new RemotingException("Unexpected type '" + typ + "' found while parsing a " + METHOD_NOTIFY_MPN_SUBSCRIPTION_ACTIVATION + " request");
 
