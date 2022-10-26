@@ -49,7 +49,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		public RequestReceiver(string name, Stream requestStream, Stream replyStream, int keepaliveMillis, IRequestListener requestListener, IExceptionListener exceptionListener) {
 			_name= name;
 
-			_reader= new StreamReader(requestStream);
+			_reader= new StreamReader(requestStream, Encoding.UTF8);
 
 			_replySender= new NotifySender(name, replyStream, true, keepaliveMillis, exceptionListener);
 
@@ -176,7 +176,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			_jan1_1970_utc_ticks= jan1_1970_utc.Ticks;
 
 			_queue= new LinkedList<string>();
-			_writer= new StreamWriter(notifyStream);
+			_writer= new StreamWriter(notifyStream, Encoding.UTF8);
 			_repliesNotNotifies= repliesNotNotifies;
 			_keepaliveMillis= keepaliveMillis;
 

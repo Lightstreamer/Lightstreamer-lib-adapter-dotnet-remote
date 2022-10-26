@@ -43,7 +43,7 @@ namespace Lightstreamer.DotNet.Server {
 		public const char TYPE_DOUBLE= 'D';
 		public const char TYPE_EXCEPTION= 'E';
 
-		protected static string EncodeString(string str) {
+		protected static string EncodeStringOld(string str) {
 			if (str == null) return VALUE_NULL;
 			if (str.Length == 0) return VALUE_EMPTY;
 
@@ -55,7 +55,7 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		protected static string DecodeString(string str) {
+		protected static string DecodeStringOld(string str) {
 			if (str.Equals(VALUE_NULL)) return null;
 			if (str.Equals(VALUE_EMPTY)) return "";
 
@@ -65,6 +65,28 @@ namespace Lightstreamer.DotNet.Server {
 			} catch (Exception e) {
 				throw new RemotingException("Unknown error while url-decoding string", e);
 			}
+		}
+
+		protected static string EncodeString(String str) {
+			// temporarily, we lean on the available urlEncode function to apply
+			// the percent encoding, although in this way we lose all the benefits
+			// of the new protocol, which requires percent encoding only on a few
+			// characters; otherwise, we should implement the encoding manually
+			// 
+			// however, since the new encoding specifications exclude the
+			// space-to-'+' rule, we need to correct only this case manually
+			string oldEnc = DecodeStringOld(str);
+			return oldEnc.Replace('+', ' '); // only allocates if '+' is found
+									// (i.e. space is found in the original value)
+		}
+
+		protected static string DecodeString(String str) {
+			// since the new encoding specifications suppress the '+' character
+			// and since the UrlDecode algorithm supports unencoded characters,
+			// we can use UrlDecode also with the new encoding;
+			// we rely on the Proxy Adapter to obey the protocol, so we don't check
+			// that indeed str doesn't contain the '+' character
+			return DecodeStringOld(str);
 		}
 
 		// private static Encoding isoLatin = Encoding.Latin1; // since .NET 5
@@ -119,11 +141,11 @@ namespace Lightstreamer.DotNet.Server {
 				sb.Append(SEP);
 				sb.Append(TYPE_STRING);
 				sb.Append(SEP);
-				sb.Append(EncodeString((string)iter.Entry.Key));
+				sb.Append(EncodeStringOld((string)iter.Entry.Key));
 				sb.Append(SEP);
 				sb.Append(TYPE_STRING);
 				sb.Append(SEP);
-				sb.Append(EncodeString((string)iter.Entry.Value));
+				sb.Append(EncodeStringOld((string)iter.Entry.Value));
 			}
 
 			return sb.ToString();
@@ -151,7 +173,7 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						string val = tokenizer.NextToken();
-						headerName = DecodeString(val);
+						headerName = DecodeStringOld(val);
 						break;
 
 					default:
@@ -165,7 +187,7 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						string val = tokenizer.NextToken();
-						headerValue = DecodeString(val);
+						headerValue = DecodeStringOld(val);
 						break;
 
 					default:

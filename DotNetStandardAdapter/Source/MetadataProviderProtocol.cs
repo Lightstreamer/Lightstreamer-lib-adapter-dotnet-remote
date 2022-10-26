@@ -79,7 +79,7 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						string val = tokenizer.NextToken();
-						headerName = DecodeString(val);
+						headerName = DecodeStringOld(val);
 						break;
 
 					default:
@@ -93,7 +93,7 @@ namespace Lightstreamer.DotNet.Server {
 
 					case TYPE_STRING:
 						string val = tokenizer.NextToken();
-						headerValue = DecodeString(val);
+						headerValue = DecodeStringOld(val);
 						break;
 
 					default:
@@ -121,11 +121,11 @@ namespace Lightstreamer.DotNet.Server {
                     sb.Append(SEP);
                     sb.Append(TYPE_STRING);
                     sb.Append(SEP);
-                    sb.Append(EncodeString((string) iter.Entry.Key));
+                    sb.Append(EncodeStringOld((string) iter.Entry.Key));
                     sb.Append(SEP);
                     sb.Append(TYPE_STRING);
                     sb.Append(SEP);
-                    sb.Append(EncodeString((string) iter.Entry.Value));
+                    sb.Append(EncodeStringOld((string) iter.Entry.Value));
                 }
             }
             else {
@@ -145,7 +145,7 @@ namespace Lightstreamer.DotNet.Server {
 			sb.Append(TYPE_EXCEPTION);
 			if (exception is MetadataProviderException) sb.Append(SUBTYPE_METADATAPROVIDER_EXCEPTION);
 			sb.Append(SEP);
-			sb.Append(EncodeString(exception.Message));
+			sb.Append(EncodeStringOld(exception.Message));
 
 			return sb.ToString();
 		}
