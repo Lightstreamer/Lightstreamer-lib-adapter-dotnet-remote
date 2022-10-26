@@ -305,7 +305,7 @@ namespace Lightstreamer.DotNet.Server {
 
 		private string _name;
 
-		private string _maxVersion = "1.8.3";
+		protected string _maxVersion = "1.9.0";
 
 		private Stream _requestStream;
 		private Stream _replyStream;
@@ -429,18 +429,11 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
         protected string getSupportedVersion(string proxyVersion) {
-			Debug.Assert(_maxVersion.Equals("1.8.3")); // to be kept aligned when upgrading
+			Debug.Assert(_maxVersion.Equals("1.9.0")); // to be kept aligned when upgrading
 
 			if (proxyVersion == null) {
-				// protocol version 1.8.0 or earlier;
-				// if we supported a version higher than 1.8.x, we should fail here;
-				// but we currently support 1.8.x;
-				// however, we don't support any version lower than 1.8.0,
-				// so we could still be incompatible with the proxy version,
-				// but we cannot distinguish the case and fail
-				_log.Info("Received no Proxy Adapter protocol version information; assuming 1.8.0: accepted.");
-				return null;    // version advertisement not available here
-					// downgrade to 1.8.0 to be taken care by the caller
+				// protocol version 1.8.0 or earlier, not supported and not negotiable
+				throw new Exception("Unsupported protocol version");
 			}
 			else {
                 // protocol version specified in proxyVersion (must be 1.8.2 or later);
@@ -455,10 +448,10 @@ namespace Lightstreamer.DotNet.Server {
 				} else if (proxyVersion.Equals("1.8.1")) {
 					// temporary version that was used internally but never published
 					throw new Exception("Unsupported reserved protocol version number: " + proxyVersion);
-				} else if (proxyVersion.Equals("1.8.2")) {
-					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": accepted the downgrade.");
-					return "1.8.2";
-						// downgrade to 1.8.2 to be taken care by the caller
+	            } else if (proxyVersion.Equals("1.8.2") || proxyVersion.Equals("1.8.3")) {
+	                _log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": no longer supported.");
+	                return _maxVersion;
+	                    // the upgrade will probably be refused by the caller
 				} else if (proxyVersion.Equals(_maxVersion)) {
 					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": versions match.");
 					return _maxVersion;

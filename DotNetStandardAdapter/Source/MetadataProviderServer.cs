@@ -13,6 +13,7 @@
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -118,7 +119,6 @@ namespace Lightstreamer.DotNet.Server {
 		private static ILog _log= LogManager.GetLogger("Lightstreamer.DotNet.Server.MetadataProviderServer");
 
 		private bool _initExpected;
-		private bool _closeExpected;
 		private IMetadataProvider _adapter;
 		private IDictionary _adapterParams;
 		private string _adapterConfig;
@@ -134,8 +134,6 @@ namespace Lightstreamer.DotNet.Server {
 
 		public MetadataProviderServerImpl() {
 			_initExpected = true;
-			_closeExpected = true;
-				// we start with the current version of the protocol, which does not conflict with earlier versions
 			_adapter= null;
 			_adapterParams= new Hashtable();
 			_adapterConfig= null;
@@ -185,7 +183,7 @@ namespace Lightstreamer.DotNet.Server {
 
 			base.Start();
 
-			IDictionary credentials = getCredentialParams(_closeExpected);
+			IDictionary credentials = getCredentialParams(true);
 			if (credentials != null) {
 				SendRemoteCredentials(credentials);
 			}
@@ -212,7 +210,7 @@ namespace Lightstreamer.DotNet.Server {
 			string method= request.Substring(0, sep);
 
 			try {
-				if (method.Equals(MetadataProviderProtocol.METHOD_CLOSE) && _closeExpected) {
+				if (method.Equals(MetadataProviderProtocol.METHOD_CLOSE)) {
 					// this can also precede the init request
 					if (! requestId.Equals(MetadataProviderProtocol.CLOSE_REQUEST_ID)) {
 						throw new RemotingException("Unexpected id found while parsing a " + MetadataProviderProtocol.METHOD_CLOSE + " request");
@@ -240,36 +238,24 @@ namespace Lightstreamer.DotNet.Server {
                     string keepaliveHint = null;
                     string reply;
                     IDictionary initParams = MetadataProviderProtocol.ReadInit(request.Substring(sep + 1));
+
                     try {
                         string proxyVersion = (string)initParams[PROTOCOL_VERSION_PARAM];
                         string advertisedVersion = getSupportedVersion(proxyVersion);
-                            // this may prevent the initialization
-                        bool is180 = (advertisedVersion == null);
-                        bool is182 = (advertisedVersion != null && advertisedVersion.Equals("1.8.2"));
+						// this may prevent the initialization
 
-                        if (is180 || is182) {
-                            if (_closeExpected) {
-                                // WARNING: these versions don't provide for the CLOSE message,
-                                // but we previously asked for the CLOSE message with the RAC message;
-                                // hence we should no longer expect a CLOSE message, but only after
-                                // the client receives this answer, which confirms the protocol;
-                                // however, assuming that the Proxy Adapter only supports these versions,
-                                // we expect that it has ignored our request in the RAC message,
-                                // hence we can already stop expecting a CLOSE message.
-                            }
-                            _closeExpected = false; 
-                        }
+						// we can support multiple versions based on the request of the counterparty
+						// and the version for this connection is indicated by advertisedVersion, 
+						// but currently we only support the latest version
+						Debug.Assert(advertisedVersion.Equals(_maxVersion));
 
-                        if (! is180) {
-                            // protocol version 1.8.2 and above
-                            keepaliveHint = (string)initParams[KEEPALIVE_HINT_PARAM];
-                            if (keepaliveHint == null) {
-                                keepaliveHint = "0";
-                            }
-                            initParams.Remove(PROTOCOL_VERSION_PARAM);
-                            initParams.Remove(KEEPALIVE_HINT_PARAM);
-                                // the version and keepalive hint are internal parameters, not to be sent to the custom Adapter
+                        keepaliveHint = (string)initParams[KEEPALIVE_HINT_PARAM];
+                        if (keepaliveHint == null) {
+                            keepaliveHint = "0";
                         }
+                        initParams.Remove(PROTOCOL_VERSION_PARAM);
+                        initParams.Remove(KEEPALIVE_HINT_PARAM);
+                            // the version and keepalive hint are internal parameters, not to be sent to the custom Adapter
 
                         IEnumerator paramIter = _adapterParams.Keys.GetEnumerator();
                         while (paramIter.MoveNext()) {
@@ -278,17 +264,11 @@ namespace Lightstreamer.DotNet.Server {
                         }
                         _adapter.Init(initParams, _adapterConfig);
 
-                        if (! is180) {
-                            // protocol version 1.8.2 and above
-                            IDictionary _proxyParams = new Hashtable();
-                            _proxyParams.Add(PROTOCOL_VERSION_PARAM, advertisedVersion);
-                            reply = MetadataProviderProtocol.WriteInit(_proxyParams);
-                        } else {
-                            // protocol version 1.8.0
-                            reply = MetadataProviderProtocol.WriteInit((IDictionary)null);
-                        }
-                    }
-                    catch (Exception e) {
+                        IDictionary _proxyParams = new Hashtable();
+                        _proxyParams.Add(PROTOCOL_VERSION_PARAM, advertisedVersion);
+                        reply = MetadataProviderProtocol.WriteInit(_proxyParams);
+
+                    } catch (Exception e) {
                         reply = MetadataProviderProtocol.WriteInit(e);
                     }
                     UseKeepaliveHint(keepaliveHint);
