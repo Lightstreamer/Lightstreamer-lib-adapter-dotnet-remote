@@ -178,17 +178,13 @@ namespace Lightstreamer.Interfaces.Data {
 	}
 
 	/// <summary>
-	/// <para>Used by Lightstreamer Kernel to receive the update events and any asynchronous severe error notification 
+	/// Used by Lightstreamer Kernel to receive the update events and any asynchronous severe error notification 
 	/// from the Data Adapter. The listener instance is supplied to the Data Adapter by Lightstreamer Kernel
 	/// (through the Remote Server) through a SetListener call.
 	/// Update events are specified through maps (i.e. IDictionary) that associate fields and values.
 	/// Depending on the kind of subscription, the mapping for fields unchanged since the previous update can be omitted.
 	/// Some alternative methods to supply update events are available, but they have been deprecated.
-	/// Field values should be expressed as String; the use of byte arrays is also allowed, but it has been deprecated.</para>
-	/// <para>When an Item Event instance has been sent to the listener, it is totally owned by Lightstreamer 
-	/// and it must not be furtherly changed by the Data Adapter. The Remote Server may also hold the 
-	/// object for some time after the listener call has returned. When Item Events are implemented as wrappers of 
-	/// the data objects received from the external feed (like JMS Messages), this has to be considered.</para>
+	/// Field values should be expressed as String; the use of byte arrays is also allowed, but it has been deprecated.
 	/// </summary>
 	public interface IItemEventListener {
 
