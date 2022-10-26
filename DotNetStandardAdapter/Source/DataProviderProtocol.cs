@@ -309,9 +309,9 @@ namespace Lightstreamer.DotNet.Server {
 
 				} else if (value is byte []) {
 					sb.Append(SEP);
-					sb.Append(TYPE_BYTES);
+					sb.Append(TYPE_STRING);
 					sb.Append(SEP);
-					sb.Append(EncodeBytes((byte []) value));
+					sb.Append(EncodeBytesAsString((byte []) value));
 				
 				} else throw new RemotingException("Found value '" + value.ToString() + "' of an unsupported type while building a " + METHOD_UPDATE_BY_MAP + " request");
 			}
@@ -362,9 +362,9 @@ namespace Lightstreamer.DotNet.Server {
 
 				} else if (value is byte []) {
 					sb.Append(SEP);
-					sb.Append(TYPE_BYTES);
+					sb.Append(TYPE_STRING);
 					sb.Append(SEP);
-					sb.Append(EncodeBytes((byte []) value));
+					sb.Append(EncodeBytesAsString((byte[])value));
 				
 				} else throw new RemotingException("Found value '" + value.ToString() + "' of an unsupported type while building a " + METHOD_UPDATE_BY_MAP + " request");
 			}
@@ -415,9 +415,9 @@ namespace Lightstreamer.DotNet.Server {
 
 				} else if (value is byte []) {
 					sb.Append(SEP);
-					sb.Append(TYPE_BYTES);
+					sb.Append(TYPE_STRING);
 					sb.Append(SEP);
-					sb.Append(EncodeBytes((byte []) value));
+					sb.Append(EncodeBytesAsString((byte []) value));
 
 				} else throw new RemotingException("Found value '" + value.ToString() + "' of an unsupported type while building a " + METHOD_UPDATE_BY_MAP + " request");
 			}

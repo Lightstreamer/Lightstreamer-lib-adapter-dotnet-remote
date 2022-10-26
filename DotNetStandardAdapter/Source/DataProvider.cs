@@ -116,10 +116,11 @@ namespace Lightstreamer.Interfaces.Data {
 
 		/// <summary>
 		/// Returns the value of a named Field (null is a legal value too). Returns null if the Field is not 
-		/// reported in the Item Event. The value can be expressed as either a String or a byte array, the latter 
-		/// case being the most efficient, though restricted to the ISO-8859-1 (ISO-LATIN-1) character set. 
+		/// reported in the Item Event. The value should be expressed as a String;
+		/// the use of a byte array, to supply a string encoded in the ISO-8859-1 (ISO-LATIN-1)
+		/// character set, is also allowed, but it has been deprecated.
 		/// Lightstreamer Kernel, through the Remote Server, will call this method
-        /// at most once for each Field (unless events logging is 
+		/// at most once for each Field (unless events logging is 
 		/// enabled) and may not call this method at all for some Fields. So, if performing any data conversion is 
 		/// required in order to extract Field values, it may be convenient to do it on demand rather than doing 
 		/// it in advance.
@@ -169,9 +170,9 @@ namespace Lightstreamer.Interfaces.Data {
 
 		/// <summary>
 		/// Returns the value of a field whose index is supplied (null is a legal value too). Returns null if 
-		/// the Field is not reported in the Item Event. The value can be expressed as either a String or a byte 
-		/// array, the latter case being the most efficient, though restricted to the ISO-8859-1 (ISO-LATIN-1) 
-		/// character set.
+		/// the Field is not reported in the Item Event. The value should be expressed as a String;
+		/// the use of a byte array, to supply a string encoded in the ISO-8859-1 (ISO-LATIN-1)
+		/// character set, is also allowed, but it has been deprecated.
 		/// </summary>
 		/// <param name="index">A Field index.</param>
 		/// <returns>A String or a byte array containing the Field value, or null.</returns>
@@ -189,10 +190,8 @@ namespace Lightstreamer.Interfaces.Data {
 	/// Item name is not directly asked to the object;</para>
 	/// <para>- they provide an enumerator that supplies the names of all the Fields reported in the Item 
 	/// Event;</para>
-	/// <para>- they provide a method for getting the value of a Field by name; the value can be expressed either 
-	/// as a String or as a byte array (the special mandatory fields for COMMAND
-	/// <see cref="Lightstreamer.Interfaces.Metadata.Mode"/> named "key" and "command" 
-	/// must be encoded as String).</para>
+	/// <para>- they provide a method for getting the value of a Field by name; the value should be expressed
+	/// as a String; the use of a byte array is also allowed, but it has been deprecated.</para>
 	/// <para>When an Item Event instance has been sent to the listener, it is totally owned by Lightstreamer 
 	/// and it must not be furtherly changed by the Data Adapter. The Remote Server may also hold the 
 	/// object for some time after the listener call has returned. When Item Events are implemented as wrappers of 
@@ -233,9 +232,9 @@ namespace Lightstreamer.Interfaces.Data {
 		/// </summary>
 		/// <param name="itemName">The name of the Item whose values are carried by the Item Event.</param>
 		/// <param name="itemEvent">A IDictionary instance, in which Field names are associated to Field values. 
-		/// A value can be expressed as either a String or a byte array, the latter case being the most efficient, 
-		/// though restricted to the ISO-8859-1 (ISO-LATIN-1) character set. A Field value can be null or missing 
-		/// if the Field is not to be reported in the event.</param>
+		/// A value should be expressed as a String; the use of a byte array, to supply a string encoded
+		/// in the ISO-8859-1 (ISO-LATIN-1) character set, is also allowed, but it has been deprecated.
+		/// A Field value can be null or missing if the Field is not to be reported in the event.</param>
 		/// <param name="isSnapshot">True if the Item Event carries the Item Snapshot.</param>
 		void Update(string itemName, IDictionary itemEvent, bool isSnapshot);
 

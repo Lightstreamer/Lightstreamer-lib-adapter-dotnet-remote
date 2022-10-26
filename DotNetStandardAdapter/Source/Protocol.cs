@@ -17,6 +17,7 @@ using System.Text;
 
 using Lightstreamer.Interfaces.Data;
 using Lightstreamer.DotNet.Utils;
+using System.Runtime.InteropServices;
 
 namespace Lightstreamer.DotNet.Server {
 
@@ -37,7 +38,6 @@ namespace Lightstreamer.DotNet.Server {
 		
 		public const char TYPE_VOID= 'V';
 		public const char TYPE_STRING= 'S';
-		public const char TYPE_BYTES= 'Y';
 		public const char TYPE_BOOLEAN= 'B';
 		public const char TYPE_INT= 'I';
 		public const char TYPE_DOUBLE= 'D';
@@ -67,30 +67,28 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		protected static string EncodeBytes(byte [] bytes) {
-			if (bytes == null) return VALUE_NULL;
-			if (bytes.Length == 0) return VALUE_EMPTY;
-
+		// private static Encoding isoLatin = Encoding.Latin1; // since .NET 5
+		private static Encoding isoLatin;
+		static RemotingProtocol() {
 			try {
-				Base64Encoder encoder= new Base64Encoder(bytes);
-				return new string(encoder.GetEncoded());
-			
+				isoLatin = Encoding.GetEncoding("iso-8859-1");
 			} catch (Exception e) {
-				throw new RemotingException("Unknown error while base64-encoding bytes", e);
+				isoLatin = null;
 			}
 		}
 
-		protected static byte [] DecodeBytes(string str) {
-			if (str.Equals(VALUE_NULL)) return null;
-			if (str.Equals(VALUE_EMPTY)) return new byte [0];
+		protected static string EncodeBytesAsString(byte[] bytes) {
+	        if (bytes == null) return VALUE_NULL;
+		    if (bytes.Length == 0) return VALUE_EMPTY;
 
-			try {
-				Base64Decoder decoder= new Base64Decoder(str.ToCharArray());
-				return decoder.GetDecoded();
-			
-			} catch (Exception e) {
-				throw new RemotingException("Unknown error while base64-decoding bytes", e);
+			if (isoLatin == null) {
+                throw new RemotingException("Missing support for iso-latin conversion");
 			}
+			char[] latinChars = new char[isoLatin.GetCharCount(bytes, 0, bytes.Length)];
+			isoLatin.GetChars(bytes, 0, bytes.Length, latinChars, 0);
+			string equivalentStr = new string(latinChars);
+
+			return EncodeString(equivalentStr);
 		}
 	}
 
