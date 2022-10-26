@@ -126,7 +126,7 @@ namespace Lightstreamer.Interfaces.Data {
 		/// it in advance.
 		/// </summary>
 		/// <param name="name">A Field name.</param>
-		/// <returns>A String or a byte array containing the Field value, or null.</returns>
+		/// <returns>A String containing the Field value, or null. A byte array is also accepted, but deprecated.</returns>
 		Object GetValue(string name);
 	}
 
@@ -175,7 +175,7 @@ namespace Lightstreamer.Interfaces.Data {
 		/// character set, is also allowed, but it has been deprecated.
 		/// </summary>
 		/// <param name="index">A Field index.</param>
-		/// <returns>A String or a byte array containing the Field value, or null.</returns>
+		/// <returns>A String containing the Field value, or null. A byte array is also accepted, but deprecated.</returns>
 		Object GetValue(int index);
 	}
 
