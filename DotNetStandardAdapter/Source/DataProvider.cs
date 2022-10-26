@@ -100,12 +100,14 @@ namespace Lightstreamer.Interfaces.Data {
 
 	/// <summary>
 	/// Provides to the Data Adapter a base interface for creating Item Events
-    /// in order to send updates to Lightstreamer Kernel.
-    /// An Item Event object contains the new values and, in some cases, the current 
-	/// values of the Fields of an Item. The interfaces IIndexedItemEvent and IDictionary may 
-	/// also be used to define events. Events of all these kinds may be freely mixed, even if they belong to the 
-	/// same Item. All implementation methods should be nonblocking.
+	/// in order to send updates to Lightstreamer Kernel.
+	/// An IItemEvent object contains the new values and, in some cases, the current 
+	/// values of the Fields of an Item. All implementation methods should be nonblocking.
 	/// </summary>
+	/// <remarks>
+	/// The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.
+	/// </remarks>
+	[Obsolete("The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.")]
 	public interface IItemEvent {
 	
 		/// <summary>
@@ -140,6 +142,10 @@ namespace Lightstreamer.Interfaces.Data {
 	/// events allows a particularly efficient management of events that belong to Items requested in RAW, 
 	/// DISTINCT or COMMAND <see cref="Lightstreamer.Interfaces.Metadata.Mode"/>. All implementation methods should be nonblocking.
 	/// </summary>
+	/// <remarks>
+	/// The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.
+	/// </remarks>
+	[Obsolete("The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.")]
 	public interface IIndexedItemEvent {
 
 		/// <summary>
@@ -180,18 +186,13 @@ namespace Lightstreamer.Interfaces.Data {
 	}
 
 	/// <summary>
-	/// <para>Used by Lightstreamer Kernel to receive the Item Events and any asynchronous severe error notification 
+	/// <para>Used by Lightstreamer Kernel to receive the update events and any asynchronous severe error notification 
 	/// from the Data Adapter. The listener instance is supplied to the Data Adapter by Lightstreamer Kernel
-	/// (through the Remote Server) 
-	/// through a SetListener call. The listener can manage multiple kinds of Item Events: <see cref="IItemEvent"/> objects, 
-	/// <see cref="IIndexedItemEvent"/> objects and IDictionary objects. The common characteristics of all these kinds of 
-	/// Item Event objects are that:</para>
-	/// <para>- they contain the new values and, in some cases, the current values of the Fields of an Item; the 
-	/// Item name is not directly asked to the object;</para>
-	/// <para>- they provide an enumerator that supplies the names of all the Fields reported in the Item 
-	/// Event;</para>
-	/// <para>- they provide a method for getting the value of a Field by name; the value should be expressed
-	/// as a String; the use of a byte array is also allowed, but it has been deprecated.</para>
+	/// (through the Remote Server) through a SetListener call.
+	/// Update events are specified through maps (i.e. IDictionary) that associate fields and values.
+	/// Depending on the kind of subscription, the mapping for fields unchanged since the previous update can be omitted.
+	/// Some alternative methods to supply update events are available, but they have been deprecated.
+	/// Field values should be expressed as String; the use of byte arrays is also allowed, but it has been deprecated.</para>
 	/// <para>When an Item Event instance has been sent to the listener, it is totally owned by Lightstreamer 
 	/// and it must not be furtherly changed by the Data Adapter. The Remote Server may also hold the 
 	/// object for some time after the listener call has returned. When Item Events are implemented as wrappers of 
@@ -200,21 +201,16 @@ namespace Lightstreamer.Interfaces.Data {
 	public interface IItemEventListener {
 
 		/// <summary>
-		/// <para>Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
-		/// implemented as an <see cref="IItemEvent"/> instance.</para>
-		/// <para>The Remote Adapter should ensure that, after an Unsubscribe call
-		/// for the Item has returned, no more Update calls are issued, until
-		/// requested by a new subscription for the same Item.
-		/// This assures that, upon a new subscription for the Item, no trailing
-		/// events due to the previous subscription can be received by the Remote
-		/// Server.
-		/// Note that the method is nonblocking; moreover, it only takes locks
-		/// to first order mutexes; so, it can safely be called while holding
-		/// a custom lock.</para>
+		/// Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
+		/// implemented as an <see cref="IItemEvent"/> instance.
 		/// </summary>
 		/// <param name="itemName">The name of the Item whose values are carried by the Item Event.</param>
 		/// <param name="itemEvent">An <see cref="IItemEvent"/> instance.</param>
 		/// <param name="isSnapshot">True if the Item Event carries the Item Snapshot.</param>
+		/// <remarks>
+		/// The method is deprecated. Use the IDictionary version to supply field values.
+		/// </remarks>
+		[Obsolete("The method is deprecated. Use the IDictionary version to supply field values.")]
 		void Update(string itemName, IItemEvent itemEvent, bool isSnapshot);
 
 		/// <summary>
@@ -239,21 +235,16 @@ namespace Lightstreamer.Interfaces.Data {
 		void Update(string itemName, IDictionary itemEvent, bool isSnapshot);
 
 		/// <summary>
-		/// <para>Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
-		/// implemented as an <see cref="IIndexedItemEvent"/> instance.</para>
-		/// <para>The Remote Adapter should ensure that, after an Unsubscribe call
-		/// for the Item has returned, no more Update calls are issued, until
-		/// requested by a new subscription for the same Item.
-		/// This assures that, upon a new subscription for the Item, no trailing
-		/// events due to the previous subscription can be received by the Remote
-		/// Server.
-		/// Note that the method is nonblocking; moreover, it only takes locks
-		/// to first order mutexes; so, it can safely be called while holding
-		/// a custom lock.</para>
+		/// Called by a Data Adapter to send an Item Event to Lightstreamer Kernel when the Item Event is 
+		/// implemented as an <see cref="IIndexedItemEvent"/> instance.
 		/// </summary>
 		/// <param name="itemName">The name of the Item whose values are carried by the Item Event.</param>
 		/// <param name="itemEvent">An <see cref="IIndexedItemEvent"/> instance.</param>
 		/// <param name="isSnapshot">True if the Item Event carries the Item Snapshot.</param>
+		/// <remarks>
+		/// The method is deprecated. Use the IDictionary version to supply field values.
+		/// </remarks>
+		[Obsolete("The method is deprecated. Use the IDictionary version to supply field values.")]
 		void Update(string itemName, IIndexedItemEvent itemEvent, bool isSnapshot);
 
 		/// <summary>
