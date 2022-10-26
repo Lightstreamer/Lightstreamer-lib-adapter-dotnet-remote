@@ -121,11 +121,7 @@ namespace Lightstreamer.Interfaces.Data {
 		/// reported in the Item Event. The value should be expressed as a String;
 		/// the use of a byte array, to supply a string encoded in the ISO-8859-1 (ISO-LATIN-1)
 		/// character set, is also allowed, but it has been deprecated.
-		/// Lightstreamer Kernel, through the Remote Server, will call this method
-		/// at most once for each Field (unless events logging is 
-		/// enabled) and may not call this method at all for some Fields. So, if performing any data conversion is 
-		/// required in order to extract Field values, it may be convenient to do it on demand rather than doing 
-		/// it in advance.
+		/// The Remote Server, will call this method only once for each Field.
 		/// </summary>
 		/// <param name="name">A Field name.</param>
 		/// <returns>A String containing the Field value, or null. A byte array is also accepted, but deprecated.</returns>
@@ -135,17 +131,15 @@ namespace Lightstreamer.Interfaces.Data {
 	/// <summary>
 	/// Provides to the Data Adapter an alternative interface for creating Item Events
 	/// in order to send updates to Lightstreamer Kernel.
-	/// In this event, a name-index association is defined for all fields. These 
-	/// indexes will also be used to iterate through all the fields. Some indexes may not be associated to 
+	/// In this event, a name-index association is defined for all fields. These indexes will be used
+	/// by the Remote Server to iterate through all the fields. Some indexes may not be associated to
 	/// fields in the event, but the number of such holes should be small. The name-index associations are local 
-	/// to the event and may be different even across events belonging to the same Item. Using this kind of 
-	/// events allows a particularly efficient management of events that belong to Items requested in RAW, 
-	/// DISTINCT or COMMAND <see cref="Lightstreamer.Interfaces.Metadata.Mode"/>. All implementation methods should be nonblocking.
+	/// to the event and may be different even across events belonging to the same Item.
 	/// </summary>
 	/// <remarks>
 	/// The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.
 	/// </remarks>
-	[Obsolete("The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.")]
+   [Obsolete("The class is deprecated. Use a IDictionary to supply field values to IItemEventListener's Update.")]
 	public interface IIndexedItemEvent {
 
 		/// <summary>
@@ -157,8 +151,6 @@ namespace Lightstreamer.Interfaces.Data {
 
 		/// <summary>
 		/// Returns the index of a named Field. Returns -1 if such a field is not reported in this event. 
-		/// Lightstreamer Kernel, through the Remote Server, will call this method
-        /// up to once for every distinct client request of the Item. 
 		/// So, the implementation must be very fast.
 		/// </summary>
 		/// <param name="name">A Field name.</param>

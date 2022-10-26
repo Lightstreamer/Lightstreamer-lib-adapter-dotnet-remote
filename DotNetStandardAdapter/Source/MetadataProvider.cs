@@ -945,7 +945,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// requested with publishing <see cref="Mode"/> MERGE, DISTINCT and COMMAND (in the latter case, the frequency
         /// limitation applies to the UPDATE events for each single key). If an Item is requested with publishing
         /// <see cref="Mode"/> MERGE, DISTINCT or COMMAND and unfiltered dispatching has been specified, then returning any
-        /// limited maximum frequency will cause the refusal of the request by the Kernel.</para>
+        /// limited maximum frequency will cause the refusal of the request by Lightstreamer Kernel.</para>
         /// <para>This method runs in the Server thread pool specific
         /// for the Data Adapter that supplies the involved items, if defined.</para>
         /// <br/>
@@ -1019,7 +1019,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// greater than the ItemUpdate frequencies allowed for that Item for which buffering of event bursts is
         /// desired. If an Item is requested with publishing <see cref="Mode"/> MERGE or DISTINCT and 
         /// unfiltered dispatching,
-        /// then specifying any limited source frequency will cause the refusal of the request by the Kernel.
+        /// then specifying any limited source frequency will cause the refusal of the request by Lightstreamer Kernel.
         /// This feature is just for ItemEventBuffers protection against Items with a very fast flow on the Data
         /// Adapter and a very slow flow allowed to the Clients. If this is the case, but just a few Clients need
         /// a fast or unfiltered flow for the same MERGE or DISTINCT Item, the use of two differently named Items
