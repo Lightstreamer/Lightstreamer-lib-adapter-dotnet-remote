@@ -2,9 +2,30 @@
 
 
 
+## 1.14.0 - <i>Released on xx Xxx 2022</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Extended the TableInfo bean class with new properties that provide further information on the involved subscription. Added, in particular, DataAdapter and SubscribedItems.
+Note that the change also involves the TableInfo constructor.<br/>
+**COMPATIBILITY NOTE:** *Existing Adapter code using the constructor would not be compatible with the new library; however, the constructor is just provided for descriptive purpose and was never meant to be used by Adapter code.*
+
+Modified the String encoding according to ARI protocol version 1.9.0. This ensures a more efficient transport for almost all incoming messages.
+For outgoing messages, the use of the new protocol is still unoptimized, hence no efficiency improvements are expected.<br/>
+The encoding change also extends to item update values supplied as byte arrays.
+As a consequence, the use of byte arrays to provide field values has become pointless, and, for this reason, it has been deprecated for discontinuation in a future release.
+
+Deprecated the "Update" methods of the IItemEventListener class that lean on the IItemEvent and IIndexedItemEvent classes, which have been deprecated as well.
+In fact, these alternatives to the "Update" method based on IDictionary were not very useful.
+In particular, the documentation of the IItemEvent and IIndexedItemEvent classes wrongly mentioned some benefits only pertaining to in-process Adapters.
+
+Removed a wrong documentation note for the IItemEventListener class. Actually, the objects sent to the various calls are not retained.
+
 ## 1.13.1 - <i>Released on 28 Dec 2021</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
 
 Fix dependency version for System.Configuration.ConfigurationManager (4.7.0)
 
