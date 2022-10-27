@@ -1398,11 +1398,9 @@ namespace Lightstreamer.Interfaces.Metadata {
 			NotifyUser(user, password, httpHeaders);
 		}
 
-#if ! DOCOMATIC
 		public abstract string[] GetItems(string user, string sessionID, string id);
 
 		public abstract string[] GetSchema(string user, string sessionID, string id, string schema);
-#endif // ! DOCOMATIC
 
 		/// <summary>
 		/// Called by Lightstreamer Kernel through the Remote Server to ask
