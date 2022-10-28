@@ -2,7 +2,7 @@
 
 
 
-## 1.14.0 - <i>Released on 31 Oct 2022</i>
+## 1.14.0 - <i>Released on 3 Nov 2022</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
 <i>Compatible with code developed with the previous version.</i>
@@ -21,6 +21,8 @@ In fact, these alternatives to the "Update" method based on IDictionary were not
 In particular, the documentation of the IItemEvent and IIndexedItemEvent classes wrongly mentioned some benefits only pertaining to in-process Adapters.
 
 Removed a wrong documentation note for the IItemEventListener class. Actually, the objects sent to the various calls are not retained.
+
+Fixed in the documentation a broken link to the sample configuration file for DataProviderServer and MetadataProviderServer.
 
 ## 1.13.1 - <i>Released on 28 Dec 2021</i>
 
