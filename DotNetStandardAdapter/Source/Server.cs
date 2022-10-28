@@ -610,14 +610,20 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
         public void Dispose() {
-            try { _requestStream.Close(); }
-            catch (Exception) { }
-            try { _replyStream.Close(); }
-            catch (Exception) { }
-            try { _notifyStream.Close(); }
-            catch (Exception) { }
+			if (_requestStream != null) {
+				try { _requestStream.Close(); }
+				catch (Exception) { }
+			}
+			if (_replyStream != null) {
+				try { _replyStream.Close(); }
+				catch (Exception) { }
+			}
+			if (_notifyStream != null) {
+				try { _notifyStream.Close(); }
+				catch (Exception) { }
+			}
 
-            _requestStream = null;
+			_requestStream = null;
             _replyStream = null;
             _notifyStream = null;
         }
