@@ -176,7 +176,8 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			_jan1_1970_utc_ticks= jan1_1970_utc.Ticks;
 
 			_queue= new LinkedList<string>();
-			_writer= new StreamWriter(notifyStream, Encoding.UTF8);
+			UTF8Encoding noBomEncoding = new UTF8Encoding(false);
+			_writer = new StreamWriter(notifyStream, noBomEncoding);
 			_repliesNotNotifies= repliesNotNotifies;
 			_keepaliveMillis= keepaliveMillis;
 
