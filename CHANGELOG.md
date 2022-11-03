@@ -2,7 +2,7 @@
 
 
 
-## 1.14.0 - <i>Released on 3 Nov 2022</i>
+## 1.14.1 - <i>Released on 3 Nov 2022</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
 <i>Compatible with code developed with the previous version.</i>
