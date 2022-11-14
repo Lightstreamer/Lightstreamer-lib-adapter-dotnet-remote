@@ -81,7 +81,7 @@ namespace Lightstreamer.DotNet.Server {
 			// 
 			// however, since the new encoding specifications exclude the
 			// space-to-'+' rule, we need to correct only this case manually
-			string oldEnc = DecodeStringOld(str);
+			string oldEnc = EncodeStringOld(str);
 			return oldEnc.Replace('+', ' '); // only allocates if '+' is found
 									// (i.e. space is found in the original value)
 		}
