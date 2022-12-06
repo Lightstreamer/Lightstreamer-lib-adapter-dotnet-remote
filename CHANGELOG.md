@@ -2,9 +2,19 @@
 
 
 
+## 1.14.3 - <i>Released on 6 Dec 2022</i>
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Fixed a bug introduced in version 1.14.1 which caused Metadata Adapter connection interruption upon unsubscription if NotifyTablesClose was enabled.
+
 ## 1.14.2 - <i>Released on 14 Nov 2022</i>
 
-Fixed a bug introduced in the version 1.14.1 reported with [issue #1](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/issues/1). 
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Fixed a bug introduced in version 1.14.1 reported with [issue #1](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/issues/1). 
 
 ## 1.14.1 - <i>Released on 3 Nov 2022</i>
 
