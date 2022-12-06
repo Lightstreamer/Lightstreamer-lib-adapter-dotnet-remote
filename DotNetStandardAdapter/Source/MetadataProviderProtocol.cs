@@ -1157,6 +1157,7 @@ namespace Lightstreamer.DotNet.Server {
 				int max= -1;
 				string selector= null;
 				int numItems= 0;
+				int numStats = 0;
 
 				typ = tokenizer.NextToken();
 
@@ -1312,6 +1313,24 @@ namespace Lightstreamer.DotNet.Server {
 				TableInfo table = new TableInfo(winIndex, mode, id, dataAdapter, schema, min, max, selector, itemNames);
 				tableList.Add(table);
 
+				try {
+					typ= tokenizer.NextToken();
+				} catch (IndexOutOfRangeException) {
+					throw new RemotingException("Token not found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
+				}
+				switch (typ.ToCharArray()[0]) {
+
+					case TYPE_INT:
+						numStats= Int32.Parse(tokenizer.NextToken());
+						break;
+
+					default:
+						throw new RemotingException("Unknown type '" + typ + "' found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
+				}
+
+				if (numStats != 0) {
+					throw new RemotingException("Unexpected elements found while parsing a " + METHOD_NOTIFY_TABLES_CLOSE + " request");
+				}
 			}
 
 			TableInfo [] tables= new TableInfo [(tableList.Count)];
