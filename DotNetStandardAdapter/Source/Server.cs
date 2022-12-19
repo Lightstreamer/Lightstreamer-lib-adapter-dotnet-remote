@@ -566,7 +566,9 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-        virtual public void Start() {
+		abstract public void Start();
+
+		public void Init() {
 			_log.Info("Remote Adapter " + _name + " starting with protocol version " + _maxVersion);
 			int keepaliveMillis;
 			if (_configuredKeepaliveMillis == null) {
@@ -590,10 +592,32 @@ namespace Lightstreamer.DotNet.Server {
                 _notifySender = currNotifySender;
                 _requestReceiver = currRequestReceiver;
             }
-
-            if (currNotifySender != null) currNotifySender.Start();
-            currRequestReceiver.Start();
         }
+
+		public void StartOut() {
+            RequestReceiver currRequestReceiver;
+            NotifySender currNotifySender;
+            lock (this) {
+                currRequestReceiver = _requestReceiver;
+                currNotifySender = _notifySender;
+            }
+			if (currNotifySender != null) {
+				currNotifySender.StartOut();
+			}
+            if (currRequestReceiver != null) {
+				currRequestReceiver.StartOut();
+			}
+		}
+
+		public void StartIn() {
+            RequestReceiver currRequestReceiver;
+            lock (this) {
+                currRequestReceiver = _requestReceiver;
+            }
+            if (currRequestReceiver != null) {
+				currRequestReceiver.StartIn();
+			}
+		}
 
 		public void Stop() {
             RequestReceiver currRequestReceiver;

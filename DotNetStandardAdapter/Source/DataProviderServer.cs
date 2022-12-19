@@ -164,17 +164,19 @@ namespace Lightstreamer.DotNet.Server {
 		public override void Start() {
             _log.Info("Managing Data Adapter " + Name + " with concurrency policy: " + _helper.getConcurrencyPolicy());
             
-			base.Start();
+			Init();
+			lock (this)
+			{
+				if (_notifySender == null)
+					throw new RemotingException("Notification channel not established: can't start (please check that a valid notification TCP port has been specified)");
+			}
+			StartOut();
 
 			IDictionary credentials = getCredentialParams(true);
 			if (credentials != null) {
 				SendRemoteCredentials(credentials);
 			}
-
-			lock (this) {
-                if (_notifySender == null)
-                    throw new RemotingException("Notification channel not established: can't start (please check that a valid notification TCP port has been specified)");
-            }
+			StartIn();
 		}
 
 		private void SendReply(string requestId, string reply) {

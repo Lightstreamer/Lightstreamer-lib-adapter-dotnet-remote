@@ -187,12 +187,14 @@ namespace Lightstreamer.DotNet.Server {
 		public override void Start() {
             _log.Info("Managing Metadata Adapter " + Name + " with concurrency policy: " + _concurrencyPolicy.ToString());
 
-			base.Start();
+			Init();
+			StartOut();
 
 			IDictionary credentials = getCredentialParams(true);
 			if (credentials != null) {
 				SendRemoteCredentials(credentials);
 			}
+			StartIn();
 		}
 
 		protected void SendRemoteCredentials(IDictionary credentials) {

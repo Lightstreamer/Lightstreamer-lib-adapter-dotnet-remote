@@ -2,6 +2,14 @@
 
 
 
+## [current state]
+
+<i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
+<i>Compatible with code developed with the previous version.</i>
+
+Fixed a race condition in the connection startup phase which could have caused the RAC message not to be issued first.
+This, in turn, on particular configurations, could have caused the connection attempt to fail for "protocol error".
+
 ## 1.14.3 - <i>Released on 6 Dec 2022</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>

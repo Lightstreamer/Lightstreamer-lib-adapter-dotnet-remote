@@ -69,9 +69,11 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			_replySender.ChangeKeepalive(keepaliveMillis, alsoInterrupt);
 		}
 
-		public void Start() {
-			_replySender.Start();
+		public void StartOut() {
+			_replySender.StartOut();
+		}
 
+		public void StartIn() {
 			Thread t= new Thread(new ThreadStart(Run));
 			t.Start();
 		}
@@ -215,7 +217,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			}
 		}
 
-		public void Start() {
+		public void StartOut() {
 			Thread t= new Thread(new ThreadStart(Run));
 			t.Start();
 		}
