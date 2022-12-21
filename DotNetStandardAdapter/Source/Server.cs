@@ -203,9 +203,10 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
 		/// <value>
-		/// The stream used by the Remote Adapter in order to send asyncronous
-		/// data to the Remote Adapter. Currently not used and not needed
-		/// by the Remote Metadata Adapter.
+		/// The stream used by the Remote Adapter in order to send asynchronous
+		/// data to the Proxy Adapter. If the same object provided as ReplyStream
+		/// is supplied, then the messages for the two streams will be merged properly.
+		/// Currently not used and not needed by the Remote Metadata Adapter.
 		/// </value>
 		public Stream NotifyStream
 		{
@@ -341,7 +342,8 @@ namespace Lightstreamer.DotNet.Server {
 		
 		protected RequestReceiver _requestReceiver;
 		protected NotifySender _notifySender;
-		
+		protected bool _usingSeparateStreams;
+
 		public ServerImpl() {
 			_number++;
 			_name= "#" + _number;
@@ -582,16 +584,20 @@ namespace Lightstreamer.DotNet.Server {
 				_log.Info("Keepalives for " + _name + " not set");
 			}
 
-            RequestReceiver currRequestReceiver = null;
-            currRequestReceiver = new RequestReceiver(_name, _requestStream, _replyStream, keepaliveMillis, this, this);
+			bool usingSeparateStreams = (_replyStream != _notifyStream);
+			WriteState sharedWriteState = usingSeparateStreams ? null : new WriteState();
+			
+			RequestReceiver currRequestReceiver = null;
+            currRequestReceiver = new RequestReceiver(_name, _requestStream, _replyStream, sharedWriteState, keepaliveMillis, this, this);
 
             NotifySender currNotifySender = null;
-            if (_notifyStream != null) currNotifySender = new NotifySender(_name, _notifyStream, keepaliveMillis, this);
+            if (_notifyStream != null) currNotifySender = new NotifySender(_name, _notifyStream, sharedWriteState, keepaliveMillis, this);
 
             lock (this) {
                 _notifySender = currNotifySender;
                 _requestReceiver = currRequestReceiver;
-            }
+				_usingSeparateStreams = usingSeparateStreams;
+			}
         }
 
 		public void StartOut() {

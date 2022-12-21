@@ -301,11 +301,13 @@ namespace Lightstreamer.DotNet.Server {
             String notify = DataProviderProtocol.WriteRemoteCredentials(credentials);
             NotifySender currNotifySender;
             RequestReceiver currRequestReceiver;
-            lock (this) {
+			bool usingSeparateStreams;
+			lock (this) {
                 currNotifySender = _notifySender;
                 currRequestReceiver = _requestReceiver;
-            }
-            if (currNotifySender != null) {
+				usingSeparateStreams = _usingSeparateStreams;
+			}
+			if (currNotifySender != null && usingSeparateStreams) {
                 currNotifySender.SendNotify(notify);
             }
             if (currRequestReceiver != null) {

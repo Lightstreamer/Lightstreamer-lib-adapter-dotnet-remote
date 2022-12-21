@@ -52,12 +52,12 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
 		private bool _stop;
 
-		public RequestReceiver(string name, Stream requestStream, Stream replyStream, int keepaliveMillis, IRequestListener requestListener, IExceptionListener exceptionListener) {
+		public RequestReceiver(string name, Stream requestStream, Stream replyStream, WriteState sharedWriteState, int keepaliveMillis, IRequestListener requestListener, IExceptionListener exceptionListener) {
 			_name= name;
 
 			_reader= new StreamReader(requestStream, Encoding.UTF8);
 
-			_replySender= new NotifySender(name, replyStream, true, keepaliveMillis, exceptionListener);
+			_replySender= new NotifySender(name, replyStream, sharedWriteState, true, keepaliveMillis, exceptionListener);
 
 			_requestListener= requestListener;
 			_exceptionListener= exceptionListener;
@@ -154,6 +154,10 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		}
 	}
 
+	internal class WriteState {
+		internal NotifySender lastWriter = null;
+	}
+
 	internal class NotifySender {
 		private static ILog _replog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Replies");
 		private static ILog _notlog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Notifications");
@@ -166,6 +170,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
 		private LinkedList<string> _queue;
 		private TextWriter _writer;
+		private WriteState _writeState;
 		private bool _repliesNotNotifies;
 		private volatile int _keepaliveMillis;
 
@@ -173,10 +178,10 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
 		private bool _stop;
 	
-		public NotifySender(string name, Stream notifyStream, int keepaliveMillis, IExceptionListener exceptionListener) :
-			this(name, notifyStream, false, keepaliveMillis, exceptionListener) {}
+		public NotifySender(string name, Stream notifyStream, WriteState sharedWriteState, int keepaliveMillis, IExceptionListener exceptionListener) :
+			this(name, notifyStream, sharedWriteState, false, keepaliveMillis, exceptionListener) {}
 
-		public NotifySender(string name, Stream notifyStream, bool repliesNotNotifies, int keepaliveMillis, IExceptionListener exceptionListener) {
+		public NotifySender(string name, Stream notifyStream, WriteState sharedWriteState, bool repliesNotNotifies, int keepaliveMillis, IExceptionListener exceptionListener) {
 			_name= name;
 
 			DateTime jan1_1970= new DateTime(1970, 1, 1, 1, 00, 00, 00);
@@ -186,6 +191,12 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			_queue= new LinkedList<string>();
 			UTF8Encoding noBomEncoding = new UTF8Encoding(false);
 			_writer = new StreamWriter(notifyStream, noBomEncoding);
+	        if (sharedWriteState != null) {
+		        _writeState = sharedWriteState;
+			} else {
+				_writeState = new WriteState();
+			}
+
 			_repliesNotNotifies= repliesNotNotifies;
 			_keepaliveMillis= keepaliveMillis;
 
@@ -253,25 +264,33 @@ namespace Lightstreamer.DotNet.Server.RequestReply
                     break;
 
 				try {
-					if (notifies.Count == 0) {
-						// the real timeout has fired
-						notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
-					}
+					lock (_writeState) {
+						if (notifies.Count == 0) {
+							// the real timeout has fired
+				            if (_writeState.lastWriter == null || _writeState.lastWriter == this) {
+								notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
+						    } else {
+							    // the stream is shared and someone wrote after our last write;
+								// that stream will be responsible for the next keepalive
+							    continue;
+							}
+						}
 
-					foreach (string notify in notifies) {
-                        if (getProperLogger().IsDebugEnabled) {
-                            if (notify != BaseProtocol.METHOD_KEEPALIVE) {
-                                getProperLogger().Debug(getProperType() + " line: " + notify);
-                            } else {
-                                getProperKeepaliveLogger().Debug(getProperType() + " line: " + notify);
+						foreach (string notify in notifies) {
+                            if (getProperLogger().IsDebugEnabled) {
+                                if (notify != BaseProtocol.METHOD_KEEPALIVE) {
+                                    getProperLogger().Debug(getProperType() + " line: " + notify);
+                                } else {
+                                    getProperKeepaliveLogger().Debug(getProperType() + " line: " + notify);
+                                }
                             }
-                        }
 
-						_writer.WriteLine(notify);
+							_writer.WriteLine(notify);
+						}
+
+						_writer.Flush();
+						_writeState.lastWriter = this;
 					}
-
-					_writer.Flush();
-
                 } catch (Exception e) {
                     _exceptionListener.OnException(new RemotingException("Exception caught while writing on the " + getProperType().ToLower() + " stream: " + e.Message, e));
 					break;
