@@ -212,6 +212,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 				// interrupts the current wait as though a keepalive were needed;
 				// in most cases, this keepalive will be redundant
 				lock (_queue) {
+					_queue.AddLast(BaseProtocol.METHOD_KEEPALIVE);
 					Monitor.Pulse(_queue);
 				}
 			}
@@ -239,18 +240,12 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 					if (_stop) 
                         break;
 
-                    if (_queue.Count == 0) {
-                        // the timeout (real or simulated) has fired
-                        notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
+                    while (_queue.Count > 0) {
+                        LinkedListNode<string> node = _queue.First;
+                        string reply = (string)node.Value;
+                        notifies.AddLast(reply);
 
-                    } else {
-                        while (_queue.Count > 0) {
-                            LinkedListNode<string> node = _queue.First;
-                            string reply = (string)node.Value;
-                            notifies.AddLast(reply);
-
-                            _queue.RemoveFirst();
-                        }
+                        _queue.RemoveFirst();
                     }
 				}
 
@@ -258,6 +253,11 @@ namespace Lightstreamer.DotNet.Server.RequestReply
                     break;
 
 				try {
+					if (notifies.Count == 0) {
+						// the real timeout has fired
+						notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
+					}
+
 					foreach (string notify in notifies) {
                         if (getProperLogger().IsDebugEnabled) {
                             if (notify != BaseProtocol.METHOD_KEEPALIVE) {
