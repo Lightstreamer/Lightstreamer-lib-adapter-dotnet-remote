@@ -204,8 +204,11 @@ namespace Lightstreamer.DotNet.Server {
 
 		/// <value>
 		/// The stream used by the Remote Adapter in order to send asynchronous
-		/// data to the Proxy Adapter. If the same object provided as ReplyStream
-		/// is supplied, then the messages for the two streams will be merged properly.
+		/// data to the Proxy Adapter.
+		/// Depending on the Proxy Data Adapter configuration, this stream should be
+		/// either the same object provided as ReplyStream or a different stream.
+		/// In the first case, the outbound messages pertaining to the "Reply" and
+		/// "Notify" streams will be merged properly.
 		/// Currently not used and not needed by the Remote Metadata Adapter.
 		/// </value>
 		public Stream NotifyStream
