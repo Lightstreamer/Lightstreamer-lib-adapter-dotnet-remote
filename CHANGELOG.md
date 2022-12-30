@@ -2,7 +2,7 @@
 
 
 
-## [current state]
+## 1.14.4 - <i>Released on xx Xxx xxxx</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.3.</i><br/>
 <i>Compatible with code developed with the previous version.</i>
