@@ -197,6 +197,13 @@ namespace Lightstreamer.DotNet.Server {
 			StartIn();
 		}
 
+		protected override Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream) {
+			if (notifyStream != null) {
+				throw new RemotingException("Notification stream supplied but not expected: can't start");
+			}
+			return null;
+		}
+
 		protected void SendRemoteCredentials(IDictionary credentials) {
             String notify = MetadataProviderProtocol.WriteRemoteCredentials(credentials);
             RequestReceiver currRequestReceiver;

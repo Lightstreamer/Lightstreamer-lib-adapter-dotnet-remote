@@ -165,11 +165,6 @@ namespace Lightstreamer.DotNet.Server {
             _log.Info("Managing Data Adapter " + Name + " with concurrency policy: " + _helper.getConcurrencyPolicy());
             
 			Init();
-			lock (this)
-			{
-				if (_notifySender == null)
-					throw new RemotingException("Notification channel not established: can't start (please check that a valid notification TCP port has been specified)");
-			}
 			StartOut();
 
 			IDictionary credentials = getCredentialParams(true);
@@ -177,6 +172,19 @@ namespace Lightstreamer.DotNet.Server {
 				SendRemoteCredentials(credentials);
 			}
 			StartIn();
+		}
+
+		protected override Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream) {
+			if (notifyStream == null) {
+				// normal case
+				return replyStream;
+			} else if (notifyStream == replyStream) {
+				// case not explicitly documented but accepted
+				return replyStream;
+			} else {
+				// backward compatibility case
+				return notifyStream;
+			}
 		}
 
 		private void SendReply(string requestId, string reply) {
@@ -569,6 +577,6 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-	}
+    }
 
 }

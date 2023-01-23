@@ -203,13 +203,15 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
 		/// <value>
-		/// The stream used by the Remote Adapter in order to send asynchronous
-		/// data to the Proxy Adapter.
-		/// Depending on the Proxy Data Adapter configuration, this stream should be
-		/// either the same object provided as ReplyStream or a different stream.
-		/// In the first case, the outbound messages pertaining to the "Reply" and
-		/// "Notify" streams will be merged properly.
-		/// Currently not used and not needed by the Remote Metadata Adapter.
+		/// To be used only when connecting with an old Proxy Data Adapter,
+		/// based on two-connections behavior; this allows for backward
+		/// compatibility with Server version earlier than 7.4.
+		/// Sets the stream that should be used by the Remote Data Adapter
+		/// in order to send asynchronous data to the Proxy Data Adapter.
+		/// In fact, the configuration for old Proxy Data Adapters required the
+		/// specification of a "notify" port, to which a second connection
+		/// should be opened, with its own stream.
+		/// Not used and not needed by the Remote Metadata Adapter.
 		/// </value>
 		public Stream NotifyStream
 		{
@@ -587,14 +589,22 @@ namespace Lightstreamer.DotNet.Server {
 				_log.Info("Keepalives for " + _name + " not set");
 			}
 
-			bool usingSeparateStreams = (_replyStream != _notifyStream);
-			WriteState sharedWriteState = usingSeparateStreams ? null : new WriteState();
+			Stream currNotifyStream = DetermineNotifyStream(_replyStream, _notifyStream);
+			bool usingSeparateStreams;
+			WriteState sharedWriteState;
+			if (currNotifyStream != null) {
+				usingSeparateStreams = (currNotifyStream != _replyStream);
+				sharedWriteState = usingSeparateStreams ? null : new WriteState();
+			} else {
+				usingSeparateStreams = false;
+				sharedWriteState = null;
+			}
 			
 			RequestReceiver currRequestReceiver = null;
             currRequestReceiver = new RequestReceiver(_name, _requestStream, _replyStream, sharedWriteState, keepaliveMillis, this, this);
 
             NotifySender currNotifySender = null;
-            if (_notifyStream != null) currNotifySender = new NotifySender(_name, _notifyStream, sharedWriteState, keepaliveMillis, this);
+            if (currNotifyStream != null) currNotifySender = new NotifySender(_name, currNotifyStream, sharedWriteState, keepaliveMillis, this);
 
             lock (this) {
                 _notifySender = currNotifySender;
@@ -603,7 +613,9 @@ namespace Lightstreamer.DotNet.Server {
 			}
         }
 
-		public void StartOut() {
+        protected abstract Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream);
+
+        public void StartOut() {
             RequestReceiver currRequestReceiver;
             NotifySender currNotifySender;
             lock (this) {
