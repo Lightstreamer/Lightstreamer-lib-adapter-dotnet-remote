@@ -203,33 +203,6 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
 		/// <value>
-		/// To be used only when connecting with an old Proxy Data Adapter,
-		/// based on two-connections behavior; this allows for backward
-		/// compatibility with Server version earlier than 7.4.
-		/// Sets the stream that should be used by the Remote Data Adapter
-		/// in order to send asynchronous data to the Proxy Data Adapter.
-		/// In fact, the configuration for old Proxy Data Adapters required the
-		/// specification of a "notify" port, to which a second connection
-		/// should be opened, with its own stream.
-		/// Not used and not needed by the Remote Metadata Adapter.
-		/// </value>
-		public Stream NotifyStream
-		{
-			set
-			{
-                if (startedOnce)
-                {
-                    throw new RemotingException("Reuse of Server object forbidden");
-                }
-                _impl.NotifyStream = value;
-			}
-			get
-			{
-				return _impl.NotifyStream;
-			}
-		}
-
-		/// <value>
 		/// A handler for error conditions occurring on the Remote Server.
 		/// By setting the handler, it's possible to override the default
 		/// exception handling.
@@ -321,7 +294,6 @@ namespace Lightstreamer.DotNet.Server {
 
 		private Stream _requestStream;
 		private Stream _replyStream;
-		private Stream _notifyStream;
 
 		private int? _configuredKeepaliveMillis;
 
@@ -347,7 +319,6 @@ namespace Lightstreamer.DotNet.Server {
 		
 		protected RequestReceiver _requestReceiver;
 		protected NotifySender _notifySender;
-		protected bool _usingSeparateStreams;
 
 		public ServerImpl() {
 			_number++;
@@ -355,7 +326,6 @@ namespace Lightstreamer.DotNet.Server {
 
 			_requestStream= null;
 			_replyStream= null;
-			_notifyStream= null;
 			
 			_exceptionHandler = null;
 
@@ -423,15 +393,6 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-		public Stream NotifyStream {
-			set {
-				_notifyStream= value;
-			}
-			get {
-				return _notifyStream;
-			}
-		}
-		
 		public IExceptionHandler ExceptionHandler {
 			set {
 				_exceptionHandler = value;
@@ -589,14 +550,11 @@ namespace Lightstreamer.DotNet.Server {
 				_log.Info("Keepalives for " + _name + " not set");
 			}
 
-			Stream currNotifyStream = DetermineNotifyStream(_replyStream, _notifyStream);
-			bool usingSeparateStreams;
+			Stream currNotifyStream = DetermineNotifyStream(_replyStream);
 			WriteState sharedWriteState;
 			if (currNotifyStream != null) {
-				usingSeparateStreams = (currNotifyStream != _replyStream);
-				sharedWriteState = usingSeparateStreams ? null : new WriteState();
+				sharedWriteState = new WriteState();
 			} else {
-				usingSeparateStreams = false;
 				sharedWriteState = null;
 			}
 			
@@ -609,11 +567,10 @@ namespace Lightstreamer.DotNet.Server {
             lock (this) {
                 _notifySender = currNotifySender;
                 _requestReceiver = currRequestReceiver;
-				_usingSeparateStreams = usingSeparateStreams;
 			}
         }
 
-        protected abstract Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream);
+        protected abstract Stream DetermineNotifyStream(Stream replyStream);
 
         public void StartOut() {
             RequestReceiver currRequestReceiver;
@@ -669,14 +626,9 @@ namespace Lightstreamer.DotNet.Server {
 				try { _replyStream.Close(); }
 				catch (Exception) { }
 			}
-			if (_notifyStream != null) {
-				try { _notifyStream.Close(); }
-				catch (Exception) { }
-			}
 
 			_requestStream = null;
             _replyStream = null;
-            _notifyStream = null;
         }
 
 		public abstract bool handleIOException(Exception exception);

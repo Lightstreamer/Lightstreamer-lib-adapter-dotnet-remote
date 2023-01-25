@@ -48,9 +48,9 @@ The LiteralBasedProvider can be configured through suitable initialization param
 
 ## Compatibility
 
-The library is compatible with Adapter Remoting Infrastructure since Server version 7.3.
+The library is compatible with Adapter Remoting Infrastructure since Server version 7.4.
 
-For a version of this library compatible with earlier versions of Lightstreamer Server see [this tag](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/v1.13.1).
+For a version of this library compatible with earlier versions of Lightstreamer Server see [this tag](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/v1.14.3).
 
 Full changelog: [CHANGELOG.md](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/blob/master/CHANGELOG.md)
 

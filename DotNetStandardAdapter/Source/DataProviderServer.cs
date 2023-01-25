@@ -174,17 +174,8 @@ namespace Lightstreamer.DotNet.Server {
 			StartIn();
 		}
 
-		protected override Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream) {
-			if (notifyStream == null) {
-				// normal case
-				return replyStream;
-			} else if (notifyStream == replyStream) {
-				// case not explicitly documented but accepted
-				return replyStream;
-			} else {
-				// backward compatibility case
-				return notifyStream;
-			}
+		protected override Stream DetermineNotifyStream(Stream replyStream) {
+			return replyStream;
 		}
 
 		private void SendReply(string requestId, string reply) {
@@ -307,17 +298,10 @@ namespace Lightstreamer.DotNet.Server {
 
         protected void SendRemoteCredentials(IDictionary credentials) {
             String notify = DataProviderProtocol.WriteRemoteCredentials(credentials);
-            NotifySender currNotifySender;
             RequestReceiver currRequestReceiver;
-			bool usingSeparateStreams;
 			lock (this) {
-                currNotifySender = _notifySender;
                 currRequestReceiver = _requestReceiver;
-				usingSeparateStreams = _usingSeparateStreams;
 			}
-			if (currNotifySender != null && usingSeparateStreams) {
-                currNotifySender.SendNotify(notify);
-            }
             if (currRequestReceiver != null) {
                 currRequestReceiver.SendUnsolicitedMessage(DataProviderProtocol.AUTH_REQUEST_ID, notify, _log);
             }

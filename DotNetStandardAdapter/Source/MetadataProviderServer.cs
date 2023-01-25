@@ -197,10 +197,7 @@ namespace Lightstreamer.DotNet.Server {
 			StartIn();
 		}
 
-		protected override Stream DetermineNotifyStream(Stream replyStream, Stream notifyStream) {
-			if (notifyStream != null) {
-				throw new RemotingException("Notification stream supplied but not expected: can't start");
-			}
+		protected override Stream DetermineNotifyStream(Stream replyStream) {
 			return null;
 		}
 
