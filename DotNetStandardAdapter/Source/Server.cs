@@ -536,7 +536,7 @@ namespace Lightstreamer.DotNet.Server {
 
 		abstract public void Start();
 
-		public void Init() {
+		public void Init(bool withNotifies) {
 			_log.Info("Remote Adapter " + _name + " starting with protocol version " + _maxVersion);
 			int keepaliveMillis;
 			if (_configuredKeepaliveMillis == null) {
@@ -550,9 +550,8 @@ namespace Lightstreamer.DotNet.Server {
 				_log.Info("Keepalives for " + _name + " not set");
 			}
 
-			Stream currNotifyStream = DetermineNotifyStream(_replyStream);
 			WriteState sharedWriteState;
-			if (currNotifyStream != null) {
+			if (withNotifies) {
 				sharedWriteState = new WriteState();
 			} else {
 				sharedWriteState = null;
@@ -562,15 +561,13 @@ namespace Lightstreamer.DotNet.Server {
             currRequestReceiver = new RequestReceiver(_name, _requestStream, _replyStream, sharedWriteState, keepaliveMillis, this, this);
 
             NotifySender currNotifySender = null;
-            if (currNotifyStream != null) currNotifySender = new NotifySender(_name, currNotifyStream, sharedWriteState, keepaliveMillis, this);
+            if (withNotifies) currNotifySender = new NotifySender(_name, _replyStream, sharedWriteState, keepaliveMillis, this);
 
             lock (this) {
                 _notifySender = currNotifySender;
                 _requestReceiver = currRequestReceiver;
 			}
         }
-
-        protected abstract Stream DetermineNotifyStream(Stream replyStream);
 
         public void StartOut() {
             RequestReceiver currRequestReceiver;
