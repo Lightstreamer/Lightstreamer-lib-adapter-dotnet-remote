@@ -12,6 +12,7 @@ Introduced the support for a single stream instead of two for the communication 
 In fact, since Server version 7.4, the Proxy Data Adapter can (and should) be configured to use a single connection for the communication.
 Hence, the NotifyStream property of the Server class has been removed.
 **COMPATIBILITY NOTE:** *If a Remote Server launches a Remote Data Adapter, it cannot be upgraded to this SDK version, unless recompiled. This also requires a change in the source code to open a single connection to the Proxy Data Adapter and remove every use of the NotifyStream property. This, in turn, requires the configuration of a single port on the Proxy Data Adapter, which is only possible with Lightstreamer Server 7.4 or later.*
+**COMPATIBILITY NOTE:** *If a Remote Server only launches Remote Metadata Adapters, the compatibility with Server version 7.3 is kept.*
 
 Fixed a race condition in the connection startup phase which could have caused the RAC message not to be issued first.
 This, in turn, on particular configurations, could have caused the connection attempt to fail for "protocol error".

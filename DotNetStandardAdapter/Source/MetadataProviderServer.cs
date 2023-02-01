@@ -184,6 +184,19 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 		
+		protected override string getSupportedVersion(string proxyVersion) {
+			Debug.Assert(_maxVersion.Equals("1.9.1")); // to be kept aligned when upgrading
+
+			if (proxyVersion != null && proxyVersion.Equals("1.9.0")) {
+				// the protocols are compatible, but this identifies an old Server version
+				// which doesn't support single connection for Data Adapters;
+				// since this does not affect Metadata Adapters, we can accept
+				_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for Metadata Adapter " + Name + ": compatible.");
+				return _maxVersion;
+			}
+			return base.getSupportedVersion(proxyVersion);
+		}
+
 		public override void Start() {
             _log.Info("Managing Metadata Adapter " + Name + " with concurrency policy: " + _concurrencyPolicy.ToString());
 

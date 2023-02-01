@@ -290,7 +290,7 @@ namespace Lightstreamer.DotNet.Server {
 
 		private string _name;
 
-		protected string _maxVersion = "1.9.0";
+		protected string _maxVersion = "1.9.1";
 
 		private Stream _requestStream;
 		private Stream _replyStream;
@@ -402,11 +402,11 @@ namespace Lightstreamer.DotNet.Server {
 			}
 		}
 
-        protected string getSupportedVersion(string proxyVersion) {
-			Debug.Assert(_maxVersion.Equals("1.9.0")); // to be kept aligned when upgrading
+        protected virtual string getSupportedVersion(string proxyVersion) {
+			Debug.Assert(_maxVersion.Equals("1.9.1")); // to be kept aligned when upgrading
 
 			if (proxyVersion == null) {
-				// protocol version 1.8.0 or earlier, not supported and not negotiable
+				// protocol version 1.8.0 or earlier, not supported
 				throw new Exception("Unsupported protocol version");
 			}
 			else {
@@ -415,17 +415,12 @@ namespace Lightstreamer.DotNet.Server {
                 // and hope that the proxy supports it as well;
                 // if we supported a higher version, we could fail here,
                 // but we can still advertise it and let the proxy refuse
-				if (proxyVersion.Equals("1.8.0")) {
-					throw new Exception("Unexpected protocol version number: " + proxyVersion);
-					// note: in principle, we should also refuse for inconsistency
-					// any protocol lower than 1.8.0 received through a remote init
-				} else if (proxyVersion.Equals("1.8.1")) {
-					// temporary version that was used internally but never published
-					throw new Exception("Unsupported reserved protocol version number: " + proxyVersion);
-	            } else if (proxyVersion.Equals("1.8.2") || proxyVersion.Equals("1.8.3")) {
+				if (proxyVersion.StartsWith("1.8.")) {
 	                _log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": no longer supported.");
-	                return _maxVersion;
-	                    // the upgrade will probably be refused by the caller
+					throw new Exception("Unsupported protocol version");
+				} else if (proxyVersion.Equals("1.9.0")) {
+					Debug.Assert(false); // must have been handled by the subclass
+					return null;
 				} else if (proxyVersion.Equals(_maxVersion)) {
 					_log.Info("Received Proxy Adapter protocol version as " + proxyVersion + " for " + _name + ": versions match.");
 					return _maxVersion;
