@@ -188,22 +188,22 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
 		private void SendReply(string requestId, string reply) {
-			RequestReceiver currRequestReceiver;
+			RequestManager currRequestManager;
 			lock (this) {
-				currRequestReceiver = _requestReceiver;
+				currRequestManager = _requestManager;
 			}
-			if (currRequestReceiver != null) {
-				currRequestReceiver.SendReply(requestId, reply, _log);
+			if (currRequestManager != null) {
+				currRequestManager.SendReply(requestId, reply, _log);
 			}
 		}
 
 		private void SendNotify(string notify) {
-			NotifySender currNotifySender;
+			MessageSender currNotifySender;
 			lock (this) {
 				currNotifySender = _notifySender;
 			}
 			if (currNotifySender != null) {
-				currNotifySender.SendNotify(notify);
+				currNotifySender.SendMessage(notify);
 			}
 		}
 
@@ -306,13 +306,13 @@ namespace Lightstreamer.DotNet.Server {
 		};
 
         protected void SendRemoteCredentials(IDictionary credentials) {
-            String notify = DataProviderProtocol.WriteRemoteCredentials(credentials);
-            RequestReceiver currRequestReceiver;
+            String message = DataProviderProtocol.WriteRemoteCredentials(credentials);
+            RequestManager currRequestManager;
 			lock (this) {
-                currRequestReceiver = _requestReceiver;
+                currRequestManager = _requestManager;
 			}
-            if (currRequestReceiver != null) {
-                currRequestReceiver.SendUnsolicitedMessage(DataProviderProtocol.AUTH_REQUEST_ID, notify, _log);
+            if (currRequestManager != null) {
+                currRequestManager.SendUnsolicitedMessage(DataProviderProtocol.AUTH_REQUEST_ID, message, _log);
             }
         }
 

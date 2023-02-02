@@ -317,8 +317,8 @@ namespace Lightstreamer.DotNet.Server {
 
 		private IExceptionHandler _exceptionHandler;
 		
-		protected RequestReceiver _requestReceiver;
-		protected NotifySender _notifySender;
+		protected RequestManager _requestManager;
+		protected MessageSender _notifySender;
 
 		public ServerImpl() {
 			_number++;
@@ -329,7 +329,7 @@ namespace Lightstreamer.DotNet.Server {
 			
 			_exceptionHandler = null;
 
-			_requestReceiver= null;
+			_requestManager= null;
 			_notifySender= null;
 
             System.Collections.Specialized.NameValueCollection appSettings = ConfigurationManager.AppSettings;
@@ -450,17 +450,17 @@ namespace Lightstreamer.DotNet.Server {
         }
 
 		private void ChangeKeepalive(int keepaliveTime) {
-			NotifySender currNotifySender;
-			RequestReceiver currRequestReceiver;
+			MessageSender currNotifySender;
+			RequestManager currRequestManager;
 			lock(this) {
 				currNotifySender = _notifySender;
-				currRequestReceiver = _requestReceiver;
+				currRequestManager = _requestManager;
 			}
 			if (currNotifySender != null) {
 				currNotifySender.ChangeKeepalive(keepaliveTime, true);
 			}
-			if (currRequestReceiver != null) {
-				currRequestReceiver.ChangeKeepalive(keepaliveTime, false);
+			if (currRequestManager != null) {
+				currRequestManager.ChangeKeepalive(keepaliveTime, false);
 				// interruption not needed, since in this context we are about to reply
 			}
 		}
@@ -552,55 +552,55 @@ namespace Lightstreamer.DotNet.Server {
 				sharedWriteState = null;
 			}
 			
-			RequestReceiver currRequestReceiver = null;
-            currRequestReceiver = new RequestReceiver(_name, _requestStream, _replyStream, sharedWriteState, keepaliveMillis, this, this);
+			RequestManager currRequestManager = null;
+            currRequestManager = new RequestManager(_name, _requestStream, _replyStream, sharedWriteState, keepaliveMillis, this, this);
 
-            NotifySender currNotifySender = null;
-            if (withNotifies) currNotifySender = new NotifySender(_name, _replyStream, sharedWriteState, keepaliveMillis, this);
+            MessageSender currNotifySender = null;
+            if (withNotifies) currNotifySender = new MessageSender(_name, _replyStream, sharedWriteState, keepaliveMillis, this);
 
             lock (this) {
                 _notifySender = currNotifySender;
-                _requestReceiver = currRequestReceiver;
+                _requestManager = currRequestManager;
 			}
         }
 
         public void StartOut() {
-            RequestReceiver currRequestReceiver;
-            NotifySender currNotifySender;
+            RequestManager currRequestManager;
+            MessageSender currNotifySender;
             lock (this) {
-                currRequestReceiver = _requestReceiver;
+                currRequestManager = _requestManager;
                 currNotifySender = _notifySender;
             }
 			if (currNotifySender != null) {
 				currNotifySender.StartOut();
 			}
-            if (currRequestReceiver != null) {
-				currRequestReceiver.StartOut();
+            if (currRequestManager != null) {
+				currRequestManager.StartOut();
 			}
 		}
 
 		public void StartIn() {
-            RequestReceiver currRequestReceiver;
+            RequestManager currRequestManager;
             lock (this) {
-                currRequestReceiver = _requestReceiver;
+                currRequestManager = _requestManager;
             }
-            if (currRequestReceiver != null) {
-				currRequestReceiver.StartIn();
+            if (currRequestManager != null) {
+				currRequestManager.StartIn();
 			}
 		}
 
 		public void Stop() {
-            RequestReceiver currRequestReceiver;
-            NotifySender currNotifySender;
+            RequestManager currRequestManager;
+            MessageSender currNotifySender;
             lock (this) {
-                currRequestReceiver = _requestReceiver;
-			    _requestReceiver = null;
+                currRequestManager = _requestManager;
+			    _requestManager = null;
                 currNotifySender = _notifySender;
                 _notifySender = null;
             }
 
-            if (currRequestReceiver != null) {
-                try { currRequestReceiver.Quit(); } 
+            if (currRequestManager != null) {
+                try { currRequestManager.Quit(); } 
 			    catch (Exception) {}
 		    }
             if (currNotifySender != null) {

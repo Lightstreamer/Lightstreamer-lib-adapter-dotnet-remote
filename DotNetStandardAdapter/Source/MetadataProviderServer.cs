@@ -211,13 +211,13 @@ namespace Lightstreamer.DotNet.Server {
 		}
 
 		protected void SendRemoteCredentials(IDictionary credentials) {
-            String notify = MetadataProviderProtocol.WriteRemoteCredentials(credentials);
-            RequestReceiver currRequestReceiver;
+            String message = MetadataProviderProtocol.WriteRemoteCredentials(credentials);
+            RequestManager currRequestManager;
             lock (this) {
-                currRequestReceiver = _requestReceiver;
+                currRequestManager = _requestManager;
             }
-            if (currRequestReceiver != null) {
-                currRequestReceiver.SendUnsolicitedMessage(MetadataProviderProtocol.AUTH_REQUEST_ID, notify, _log);
+            if (currRequestManager != null) {
+                currRequestManager.SendUnsolicitedMessage(MetadataProviderProtocol.AUTH_REQUEST_ID, message, _log);
             }
         }
 
@@ -547,12 +547,12 @@ namespace Lightstreamer.DotNet.Server {
         
         private void sendReply(string requestId, string reply) {
             try {
-                RequestReceiver currRequestReceiver;
+                RequestManager currRequestManager;
                 lock (this) {
-                    currRequestReceiver = _requestReceiver;
+                    currRequestManager = _requestManager;
                 }
-                if (currRequestReceiver != null) {
-                    currRequestReceiver.SendReply(requestId, reply, _log);
+                if (currRequestManager != null) {
+                    currRequestManager.SendReply(requestId, reply, _log);
                 }
             } catch (Exception e) {
                 OnException(e);

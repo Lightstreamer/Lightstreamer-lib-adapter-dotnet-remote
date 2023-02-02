@@ -38,26 +38,26 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		void OnException(Exception exception);
 	}
 	
-	internal class RequestReceiver {
+	internal class RequestManager {
 		private static ILog _log= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Requests");
 
 		private string _name;
 		
 		private TextReader _reader;
 
-		private NotifySender _replySender;
+		private MessageSender _replySender;
 
 		private IRequestListener _requestListener;
 		private IExceptionListener _exceptionListener;
 
 		private bool _stop;
 
-		public RequestReceiver(string name, Stream requestStream, Stream replyStream, WriteState sharedWriteState, int keepaliveMillis, IRequestListener requestListener, IExceptionListener exceptionListener) {
+		public RequestManager(string name, Stream requestStream, Stream replyStream, WriteState sharedWriteState, int keepaliveMillis, IRequestListener requestListener, IExceptionListener exceptionListener) {
 			_name= name;
 
 			_reader= new StreamReader(requestStream, Encoding.UTF8);
 
-			_replySender= new NotifySender(name, replyStream, sharedWriteState, true, keepaliveMillis, exceptionListener);
+			_replySender= new MessageSender(name, replyStream, sharedWriteState, true, keepaliveMillis, exceptionListener);
 
 			_requestListener= requestListener;
 			_exceptionListener= exceptionListener;
@@ -126,7 +126,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			reply= identifiedReply.ToString();
 			properLogger.Debug("Processed request: " + requestId);
 
-			_replySender.SendNotify(reply);
+			_replySender.SendMessage(reply);
 		}
 
 		public void SendUnsolicitedMessage(string virtualRequestId, string msg, ILog properLogger) {
@@ -138,7 +138,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			msg= identifiedReply.ToString();
 			properLogger.Debug("Sending unsolicited message");
 
-			_replySender.SendNotify(msg);
+			_replySender.SendMessage(msg);
 		}
 
 		private void OnRequestReceived(string request) {
@@ -155,10 +155,10 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 	}
 
 	internal class WriteState {
-		internal NotifySender lastWriter = null;
+		internal MessageSender lastWriter = null;
 	}
 
-	internal class NotifySender {
+	internal class MessageSender {
 		private static ILog _replog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Replies");
 		private static ILog _notlog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Notifications");
 		private static ILog _repKlog = LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Replies.Keepalives");
@@ -171,17 +171,17 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		private LinkedList<string> _queue;
 		private TextWriter _writer;
 		private WriteState _writeState;
-		private bool _repliesNotNotifies;
+		private bool _forReplies;
 		private volatile int _keepaliveMillis;
 
 		private IExceptionListener _exceptionListener;
 
 		private bool _stop;
 	
-		public NotifySender(string name, Stream notifyStream, WriteState sharedWriteState, int keepaliveMillis, IExceptionListener exceptionListener) :
-			this(name, notifyStream, sharedWriteState, false, keepaliveMillis, exceptionListener) {}
+		public MessageSender(string name, Stream stream, WriteState sharedWriteState, int keepaliveMillis, IExceptionListener exceptionListener) :
+			this(name, stream, sharedWriteState, false, keepaliveMillis, exceptionListener) {}
 
-		public NotifySender(string name, Stream notifyStream, WriteState sharedWriteState, bool repliesNotNotifies, int keepaliveMillis, IExceptionListener exceptionListener) {
+		public MessageSender(string name, Stream stream, WriteState sharedWriteState, bool forReplies, int keepaliveMillis, IExceptionListener exceptionListener) {
 			_name= name;
 
 			DateTime jan1_1970= new DateTime(1970, 1, 1, 1, 00, 00, 00);
@@ -190,14 +190,14 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
 			_queue= new LinkedList<string>();
 			UTF8Encoding noBomEncoding = new UTF8Encoding(false);
-			_writer = new StreamWriter(notifyStream, noBomEncoding);
+			_writer = new StreamWriter(stream, noBomEncoding);
 	        if (sharedWriteState != null) {
 		        _writeState = sharedWriteState;
 			} else {
 				_writeState = new WriteState();
 			}
 
-			_repliesNotNotifies= repliesNotNotifies;
+			_forReplies= forReplies;
 			_keepaliveMillis= keepaliveMillis;
 
 			_exceptionListener= exceptionListener;
@@ -206,15 +206,15 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		}
 
         private ILog getProperLogger() {
-            return _repliesNotNotifies ? _replog : _notlog;
+            return _forReplies ? _replog : _notlog;
         }
 
         private ILog getProperKeepaliveLogger() {
-            return _repliesNotNotifies ? _repKlog : _notKlog;
+            return _forReplies ? _repKlog : _notKlog;
         }
 
         private String getProperType() {
-            return _repliesNotNotifies ? "Reply" : "Notify";
+            return _forReplies ? "Reply" : "Notify";
         }
 
 		public void ChangeKeepalive(int keepaliveMillis, bool alsoInterrupt) {
@@ -237,7 +237,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 		public void Run() {
             getProperLogger().Info(getProperType() + " sender '" + _name + "' starting...");
 
-			LinkedList<string> notifies= new LinkedList<string>();
+			LinkedList<string> messages= new LinkedList<string>();
 			do {
 				lock (_queue) {
                     if (_queue.Count == 0) {
@@ -253,8 +253,8 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
                     while (_queue.Count > 0) {
                         LinkedListNode<string> node = _queue.First;
-                        string reply = (string)node.Value;
-                        notifies.AddLast(reply);
+                        string msg = (string)node.Value;
+                        messages.AddLast(msg);
 
                         _queue.RemoveFirst();
                     }
@@ -265,10 +265,10 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
 				try {
 					lock (_writeState) {
-						if (notifies.Count == 0) {
+						if (messages.Count == 0) {
 							// the real timeout has fired
 				            if (_writeState.lastWriter == null || _writeState.lastWriter == this) {
-								notifies.AddLast(BaseProtocol.METHOD_KEEPALIVE);
+								messages.AddLast(BaseProtocol.METHOD_KEEPALIVE);
 						    } else {
 							    // the stream is shared and someone wrote after our last write;
 								// that stream will be responsible for the next keepalive
@@ -276,16 +276,16 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 							}
 						}
 
-						foreach (string notify in notifies) {
+						foreach (string msg in messages) {
                             if (getProperLogger().IsDebugEnabled) {
-                                if (notify != BaseProtocol.METHOD_KEEPALIVE) {
-                                    getProperLogger().Debug(getProperType() + " line: " + notify);
+                                if (msg != BaseProtocol.METHOD_KEEPALIVE) {
+                                    getProperLogger().Debug(getProperType() + " line: " + msg);
                                 } else {
-                                    getProperKeepaliveLogger().Debug(getProperType() + " line: " + notify);
+                                    getProperKeepaliveLogger().Debug(getProperType() + " line: " + msg);
                                 }
                             }
 
-							_writer.WriteLine(notify);
+							_writer.WriteLine(msg);
 						}
 
 						_writer.Flush();
@@ -296,7 +296,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 					break;
 				}
 
-                notifies.Clear();
+                messages.Clear();
 				
 			} while (!_stop);
 
@@ -311,20 +311,20 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 			}
 		}
 
-		public void SendNotify(string notify) {
-			if (!_repliesNotNotifies) {
+		public void SendMessage(string msg) {
+			if (!_forReplies) {
 				long millis= (DateTime.UtcNow.Ticks - _jan1_1970_utc_ticks) / 10000;
 				
 				StringBuilder timedNotify= new StringBuilder();
 				timedNotify.Append(millis);
 				timedNotify.Append(RemotingProtocol.SEP);
-				timedNotify.Append(notify);
+				timedNotify.Append(msg);
 
-				notify= timedNotify.ToString();
+				msg= timedNotify.ToString();
 			}
 
 			lock (_queue) {
-				_queue.AddLast(notify);
+				_queue.AddLast(msg);
 				
 				Monitor.Pulse(_queue);
 			}
