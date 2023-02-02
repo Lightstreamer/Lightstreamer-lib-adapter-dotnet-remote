@@ -161,8 +161,7 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 	internal class MessageSender {
 		private static ILog _replog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Replies");
 		private static ILog _notlog= LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Notifications");
-		private static ILog _repKlog = LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Replies.Keepalives");
-		private static ILog _notKlog = LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Notifications.Keepalives");
+		private static ILog _keeplog = LogManager.GetLogger("Lightstreamer.DotNet.Server.RequestReply.Keepalives");
 
 		private string _name;
 
@@ -207,10 +206,6 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 
         private ILog getProperLogger() {
             return _forReplies ? _replog : _notlog;
-        }
-
-        private ILog getProperKeepaliveLogger() {
-            return _forReplies ? _repKlog : _notKlog;
         }
 
         private String getProperType() {
@@ -277,11 +272,13 @@ namespace Lightstreamer.DotNet.Server.RequestReply
 						}
 
 						foreach (string msg in messages) {
-                            if (getProperLogger().IsDebugEnabled) {
-                                if (msg != BaseProtocol.METHOD_KEEPALIVE) {
+                            if (msg != BaseProtocol.METHOD_KEEPALIVE) {
+                                if (getProperLogger().IsDebugEnabled) {
                                     getProperLogger().Debug(getProperType() + " line: " + msg);
-                                } else {
-                                    getProperKeepaliveLogger().Debug(getProperType() + " line: " + msg);
+                                }
+                            } else {
+                                if (_keeplog.IsDebugEnabled) {
+                                    _keeplog.Debug(getProperType() + " line: " + msg);
                                 }
                             }
 
