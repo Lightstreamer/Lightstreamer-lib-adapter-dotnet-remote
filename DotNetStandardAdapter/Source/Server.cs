@@ -271,9 +271,13 @@ namespace Lightstreamer.DotNet.Server {
 		/// used to propagate internal logging. Providing a new provider to the library permits to consume the log produced through
 		/// custom ILogger implementation.</para>
 		/// <para>As soon as a new <see cref="ILoggerProvider"/> is provided all the instances of <see cref="ILogger"/> already in use in the
-		/// library are discarded and substituted with instanced obtained from this new instance. If a null value is provided,
-		/// the default consumers, that discard all the log, are enabled.
-		/// </para>
+		/// library are discarded and substituted with instances obtained from this new object. If a null value is provided,
+		/// the default consumers, that discard all the log, are enabled.</para>
+		/// <para>The following categories are available to be consumed:</para>
+		/// <para>Lightstreamer.DotNet.Server: with various subloggers, logs the activity of this class and its subclasses;
+		/// at INFO level, adapter lifecycle events are logged; at DEBUG level, request handling is logged.</para>
+		/// <para>Lightstreamer.DotNet.RequestReply: with various subloggers, logs the message exchange activity;
+		/// at INFO level, connection handling lifecycle events are logged; at DEBUG level, inbound and outbound message details are logged.</para>
 		/// </summary>
 		/// <param name="loggerProvider">Will be responsible to provide <see cref="ILogger"/> instances to the various classes of the library.</param>
 		public static void SetLoggerProvider(ILoggerProvider loggerProvider)
