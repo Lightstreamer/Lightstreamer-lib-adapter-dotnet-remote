@@ -214,7 +214,16 @@ namespace Lightstreamer.DotNet.Server {
 			try
 			{
 				bool snapshotAvailable = _adapter.IsSnapshotAvailable(data.ItemName);
-				if (!snapshotAvailable) EndOfSnapshot(data.ItemName);
+				if (!snapshotAvailable)
+				{
+					// we have to send an empty snapshot;
+					// this should be done before letting the Data Adapter start the subscription,
+					// to ensure that the snapshot precedes the real time updates;
+					// note that it also precedes the reply to the subscribe request,
+					// hence it may even precede an unsuccessful reply,
+					// but this is not forbidden by the ARI protocol
+					EndOfSnapshot(data.ItemName);
+				}
 				_adapter.Subscribe(data.ItemName);
 				reply = DataProviderProtocol.WriteSubscribe();
 				success = true;
