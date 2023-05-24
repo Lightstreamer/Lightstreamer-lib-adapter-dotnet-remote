@@ -309,6 +309,8 @@ namespace Lightstreamer.DotNet.Server {
         public static string USER_PARAM = "user";
         public static string PASSWORD_PARAM = "password";
 		public static string OUTCOME_PARAM = "enableClosePacket";
+		public static string SDK_PARAM = "SDK";
+		public static string SDK_NAME = ".Net Standard Adapter SDK";
 
 		public static int MIN_KEEPALIVE_MILLIS = 1000;
 			// protection limit; it might be made configurable;
@@ -436,21 +438,18 @@ namespace Lightstreamer.DotNet.Server {
         }
 
         protected IDictionary getCredentialParams(bool requestOutcome) {
-            if (_remoteUser != null || _remotePassword != null || requestOutcome) {
-                IDictionary _proxyParams = new Hashtable();
-                if (_remoteUser != null) {
-                    _proxyParams.Add(USER_PARAM, _remoteUser);
-                }
-                if (_remotePassword != null) {
-                    _proxyParams.Add(PASSWORD_PARAM, _remotePassword);
-                }
-                if (requestOutcome) {
-                    _proxyParams.Add(OUTCOME_PARAM, "true");
-                }
-                return _proxyParams;
-            } else { 
-                return null;
+            IDictionary _proxyParams = new Hashtable();
+            if (_remoteUser != null) {
+                _proxyParams.Add(USER_PARAM, _remoteUser);
             }
+            if (_remotePassword != null) {
+                _proxyParams.Add(PASSWORD_PARAM, _remotePassword);
+            }
+            if (requestOutcome) {
+                _proxyParams.Add(OUTCOME_PARAM, "true");
+            }
+			_proxyParams.Add(SDK_PARAM, SDK_NAME);
+			return _proxyParams;
         }
 
 		private void ChangeKeepalive(int keepaliveTime) {
