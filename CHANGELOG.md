@@ -17,6 +17,9 @@ Hence, the NotifyStream property of the Server class has been removed.
 Fixed a race condition in the connection startup phase which could have caused the RAC message not to be issued first.
 This, in turn, on particular configurations, could have caused the connection attempt to fail for "protocol error".
 
+Clarified the meaning of a null value for a "userMsg" argument supplied in a CreditsException: an empty string should be sent to the client.
+**COMPATIBILITY NOTE:** *Previously, the Server used to send the "null" string as a placeholder. Adapters relying on this behavior should now supply "null" explicitly.*
+
 Slightly revised the loggers used for library log and documented them in the SetLoggerProvider doc.
 
 ## 1.14.3 - <i>Released on 6 Dec 2022</i>
