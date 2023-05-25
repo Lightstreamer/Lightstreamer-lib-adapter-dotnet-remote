@@ -78,9 +78,10 @@ namespace Lightstreamer.Interfaces.Metadata {
 		/// be a negative integer, or zero to mean an unspecified problem.</param>
 		/// <param name="msg">The detail message.</param>
 		/// <param name="userMsg">A detail message to be forwarded to the Client. It can
-        /// be null, in which case an empty string message will be assumed.
-        /// The message should be in simple ASCII, otherwise it might be altered in order to be sent to the client;
-        /// multiline text is also not allowed.</param>
+		/// be null, in which case an empty string message will be assumed.
+		/// The message is free, but if it is not in simple ASCII or if it is
+		/// multiline, it might be altered in order to be sent to very old
+		/// non-TLCP clients.</param>
 		public CreditsException(int clientErrorCode, string msg, string userMsg) : base(msg) {
 			_clientErrorCode= clientErrorCode;
 			_clientErrorMsg= userMsg;
