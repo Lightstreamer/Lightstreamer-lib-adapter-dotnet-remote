@@ -2,6 +2,12 @@
 
 
 
+## Current state
+
+Fixed docs of IMetadataProvider, IDataProvider, and IDataProvider.Init, where some class names were stripped off.
+
+Fixed missing doc comment for class MpnSubscriptionInfo.
+
 ## 1.15.0 - <i>Released on 14 Jul 2023</i>
 
 <i>Compatible with Adapter Remoting Infrastructure since Server version 7.4.</i><br/>
