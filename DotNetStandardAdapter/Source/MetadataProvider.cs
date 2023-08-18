@@ -583,7 +583,6 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// <para>Specifies a Push Notifications subscription, used with MPN-related requests of the MetadataProvider.</para>
     /// <para>For the actual description of the subscription we rely on a generic descriptor accessible
     /// via the NotificationFormat property, where the structure of the descriptor depends on the platform.</para>
-    /// </summary>
     /// <br/>
     /// <para><B>Edition Note:</B> Push Notifications is an optional feature,
     /// available depending on Edition and License Type.
