@@ -720,7 +720,7 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// management of the client requests should be properly set, through the
     /// "server_pool_max_size" flag, in the Server configuration file.</para>
     /// <para>Alternatively, a dedicated pool, properly sized, can be defined
-    /// for the involved Adapter Set in �adapters.xml�. Still more restricted
+    /// for the involved Adapter Set in "adapters.xml". Still more restricted
     /// dedicated pools can be defined for the authorization-related calls
     /// and for each Data Adapter in the Adapter Set. The latter pool would also
     /// run any Metadata Adapter method related to the items supplied by the
@@ -796,7 +796,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// <para>For headers defined multiple times, a unique name-value pair is reported,
 		/// where the value is a concatenation of all the supplied header values,
 		/// separated by a ",".</para>
-        /// <para>One pair is added by Lightstreamer Server; the name is �REQUEST_ID�
+        /// <para>One pair is added by Lightstreamer Server; the name is "REQUEST_ID"
         /// and the value is a unique id assigned to the client request.</para>
         /// </param>
         /// <exception cref="AccessException">
@@ -1133,7 +1133,7 @@ namespace Lightstreamer.Interfaces.Metadata {
         /// can be thrown, in which the ID of the other Session must be
         /// specified.
         /// In this case, a second invocation of the method with the same
-        /// �REQUEST_ID� and a different Session ID will be received.
+        /// "REQUEST_ID" and a different Session ID will be received.
         /// </exception>
         /// <exception cref="NotificationException">
         /// in case something is wrong in the parameters, such as the ID
