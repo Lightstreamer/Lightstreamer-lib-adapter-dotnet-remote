@@ -309,7 +309,7 @@ namespace Lightstreamer.Interfaces.Data {
 	/// through the launch of a Remote Server, based on configured class name and parameters.
 	/// For this purpose, any Remote Data Adapter must provide a void constructor.
 	/// Alternatively, an instance of a Remote Data Adapter is supplied to Lightstreamer
-	/// programmatically through a <see cref="DataProviderServer"/> instance.
+	/// programmatically through a <see cref="Lightstreamer.DotNet.Server.DataProviderServer"/> instance.
 	/// After initialization, Lightstreamer sets itself
 	/// as the Remote Data Adapter listener, by calling the setListener method.</para>
 	/// <para>Data Providers are used by Lightstreamer Kernel to obtain all data to be
@@ -363,8 +363,8 @@ namespace Lightstreamer.Interfaces.Data {
 		/// <para>- If the Remote Server is launched through the provided DotNetServer executable:
 		/// in the command line, as arguments of the form name=value;</para>
 		/// <para>- If the Remote Server consists in a custom application that creates an instance
-		/// of the <see cref="DataProviderServer"/> class: through the "AdapterParams" dictionary property
-		/// of the <see cref="DataProviderServer"/> instance used.</para>
+		/// of the <see cref="Lightstreamer.DotNet.Server.DataProviderServer"/> class: through the "AdapterParams" dictionary property
+		/// of the <see cref="Lightstreamer.DotNet.Server.DataProviderServer"/> instance used.</para>
 		/// <para>In both cases more parameters can be added by leveraging the "init_remote" parameter
 		/// in the Proxy Adapter configuration.</para>
 		/// </param>
@@ -377,8 +377,8 @@ namespace Lightstreamer.Interfaces.Data {
 		/// in the command line, with two consecutive arguments, respectively valued with "/config"
 		/// and the file path;</para>
 		/// <para>- If the Remote Server consists in a custom application that creates an instance
-		/// of the <see cref="DataProviderServer"/> class: by assigning the "AdapterConfig" property of the
-		/// <see cref="DataProviderServer"/> instance used.</para>
+		/// of the <see cref="Lightstreamer.DotNet.Server.DataProviderServer"/> class: by assigning the "AdapterConfig" property of the
+		/// <see cref="Lightstreamer.DotNet.Server.DataProviderServer"/> instance used.</para>
 		/// </param>
 		/// <exception cref="DataProviderException">
 		/// in case an error occurs that prevents the correct behavior of the Data Adapter.

@@ -694,7 +694,7 @@ namespace Lightstreamer.Interfaces.Metadata {
     /// through the launch of a Remote Server, based on configured class name and parameters.
     /// For this purpose, any Remote Metadata Adapter must provide a void constructor.
     /// Alternatively, an instance of a Remote Metadata Adapter is supplied to Lightstreamer
-    /// programmatically through a <see cref="MetadataProviderServer"/> instance.</para>
+    /// programmatically through a <see cref="Lightstreamer.DotNet.Server.MetadataProviderServer"/> instance.</para>
 	/// <para>A Metadata Provider is used by Lightstreamer Kernel
 	/// in combination with one or multiple Data Providers, uniquely associated with it; it is consulted
 	/// in order to manage the push Requests intended for the associated Data Providers.
