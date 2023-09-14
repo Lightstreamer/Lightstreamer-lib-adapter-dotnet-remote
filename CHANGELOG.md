@@ -2,7 +2,7 @@
 
 
 
-## Current state
+## 1.15.1 - <i>Released on 15 Sep 2023</i>
 
 Fixed docs of IMetadataProvider, IDataProvider, and IDataProvider.Init, where some class names were stripped off.
 
