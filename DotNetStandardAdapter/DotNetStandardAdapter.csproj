@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.15.1</Version>
+    <PackageId>Lightstreamer.DotNetStandard.Adapters</PackageId>
+    <Authors>support@lightstreamer.com</Authors>
+    <Product />
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Lightstreamer.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Logging\" />
+    <Folder Include="Source_Generic_Adapters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>

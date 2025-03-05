@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Lightstreamer.DotNetStandard.Adapters</id>
+    <version>1.15.1</version>
+    <title>Lightstreamer Remote Adapters .NET Standard</title>
+    <authors>support@lightstreamer.com</authors>
+    <owners>support@lightstreamer.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://lightstreamer.com/</projectUrl>
+    <icon>images\icon.png</icon>
+	  <repository type="git" url="https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote"/>
+    <description>These packages include the resources needed to write Remote Data Adapters and Remote Metadata Adapters for Lightstreamer Server with .Net.
+    Each Lightstreamer session requires the presence of an Adapter Set, which is made up of one Metadata Adapter and one or multiple Data Adapters. Multiple Adapter Sets can be plugged onto Lightstreamer Server.
+    Please refer to the provided "General Concepts.pdf" document for further details about the role of the Adapters in Lightstreamer, and in particular to this documentation https://lightstreamer.com/docs/ls-server/latest/Adapter%20Remoting%20Infrastructure.pdf for Remote Adapters deploying.
+    The full API references are available from https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.1/api/index.html</description>
+    <releaseNotes>This is a .NET Standard 2.0 class library and can be used in .NET Framework (>=4.6), .NET Standard, and .NET Core applications.</releaseNotes>
+    <copyright> Copyright (c) Lightstreamer Srl.</copyright>
+    <tags>Lightstreamer Realtime real-time Pub/Sub Messaging Publish Subscribe realtime streaming</tags>
+    <dependencies>
+        <dependency id="System.Configuration.ConfigurationManager" version="4.5.0" />
+    </dependencies>
+  </metadata>
+  <files>
+	  <file src="bin\Debug\netstandard2.0\DotNetStandardAdapter.dll" target="lib\netstandard2.0\DotNetStandardAdapter.dll" />
+    <file src="bin\Debug\netstandard2.0\DotNetStandardAdapter.pdb" target="lib\netstandard2.0\DotNetStandardAdapter.pdb" />
+    <file src="..\docfx\images\icon.png" target="images\" />
+  </files>
+</package>
