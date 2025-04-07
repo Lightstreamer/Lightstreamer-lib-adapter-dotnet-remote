@@ -40,10 +40,10 @@ To build the library, follow below steps:
 This project includes a simple full implementation of Remote Metadata Adapter in C# made available as sample for inspiration and/or extension.
 
 The [LiteralBasedProvider](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-dotnet-remote/tree/master/DotNetStandardAdapter/Source_Generic_Adapters) is the .NET Remote equivalent of the *LiteralBasedProvider* Metadata Adapter in [Lightstreamer Java In-Process Adapter SDK](https://github.com/Lightstreamer/Lightstreamer-lib-adapter-java-inprocess#literalbasedprovider-metadata-adapter).
-It extends the [MetadataProviderAdapter](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.1/api/api/Lightstreamer.Interfaces.Metadata.MetadataProviderAdapter.html) abstract class (which in turn implements the [IMetadataProvider](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.1/api/api/Lightstreamer.Interfaces.Metadata.IMetadataProvider.html) interface).
+It extends the [MetadataProviderAdapter](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.2/api/api/Lightstreamer.Interfaces.Metadata.MetadataProviderAdapter.html) abstract class (which in turn implements the [IMetadataProvider](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.2/api/api/Lightstreamer.Interfaces.Metadata.IMetadataProvider.html) interface).
 It is used in Lightstreamer examples and demos based on the .NET Remote Adapter SDK, in combination with suitable Data Adapters and Clients.
 
-The LiteralBasedProvider can be configured through suitable initialization parameters. See the [class documentation](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.1/api/api/Lightstreamer.Adapters.Metadata.LiteralBasedProvider.html) for details.
+The LiteralBasedProvider can be configured through suitable initialization parameters. See the [class documentation](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.2/api/api/Lightstreamer.Adapters.Metadata.LiteralBasedProvider.html) for details.
 
 
 ## Compatibility
@@ -60,7 +60,7 @@ Full changelog: [CHANGELOG.md](https://github.com/Lightstreamer/Lightstreamer-li
 
 - [Examples](https://demos.lightstreamer.com/?p=lightstreamer&t=adapter&ladapter=dotnet_adapter)
 
-- [API Reference](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.1/api/index.html)
+- [API Reference](https://lightstreamer.com/sdks/ls-dotnetstandard-adapter/1.15.2/api/index.html)
 
 - [Adapter Remoting Infrastructure Network Protocol Specification](https://lightstreamer.com/api/ls-generic-adapter/latest/ARI%20Protocol.pdf)
 
