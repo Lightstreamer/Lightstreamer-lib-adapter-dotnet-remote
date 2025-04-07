@@ -1,5 +1,8 @@
 # Lightstreamer Changelog - SDK for .NET Standard Adapters
 
+## 1.15.2 - <i>Released on 7 Apr 2025</i>
+
+Clarified that the package is licensed under Apache License, Version 2.0.
 
 
 ## 1.15.1 - <i>Released on 15 Sep 2023</i>
